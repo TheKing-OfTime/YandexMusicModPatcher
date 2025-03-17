@@ -1,0 +1,196 @@
+* {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    font-family: 'Roboto', 'Arial', Tahoma, Geneva, Verdana, sans-serif;
+    text-rendering: geometricPrecision;
+}
+
+main {
+    padding: 20px;
+}
+
+body {
+    background-color: #343434;
+    position: absolute;
+    display: block;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+}
+
+.TitleBar {
+    inset-block-start: 0;
+    inset-inline-end: 0;
+    inset-inline-start: 0;
+    justify-content: flex-end;
+    display: flex;
+    user-select: none;
+    -webkit-app-region: drag;
+    overflow: hidden;
+    border-bottom-width: 1px;
+    border-bottom-style: solid;
+    border-bottom-color: rgba(255, 255, 255, 0.2);
+}
+
+.TitleBar div {
+    display: flex;
+}
+
+.TitleBar_icon {
+    color: #fff
+}
+
+.TitleBar_Button, .TitleBar_QuitButton {
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -ms-flex-direction: column;
+    flex-direction: column;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+    margin: 0;
+    outline: 0;
+    border: 0;
+    background: transparent;
+    cursor: pointer;
+    padding: 0;
+    width: 46px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    -webkit-app-region: no-drag;
+}
+
+.TitleBar_Button:hover {
+    background-color: hsla(0, 0%, 100%, .2);
+}
+
+.TitleBar_QuitButton:hover {
+    background-color: #f23f42
+}
+
+.App {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 32px;
+    bottom: 0;
+}
+
+.App_container {
+    height: 100%;
+    padding: 20px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.ProgressBar_root, .Main, .ActionsBar_root {
+    display: flex;
+    justify-content: center;
+    align-items: normal;
+    align-self: flex-start;
+    border-radius: 10px;
+    width: 100%;
+}
+
+.ProgressBar_root {
+    height: 90px;
+    background-color: #1E1E1E;
+    padding: 20px;
+    flex-direction: column;
+    width: -webkit-fill-available;
+    justify-content: space-between;
+}
+
+.Main {
+    min-height: 75px;
+    flex-grow: 1;
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+
+.ActionsBar_root {
+    height: 40px;
+    align-self: end;
+    gap: 20px;
+    flex-direction: row;
+    display: flex;
+    justify-content: start;
+    background-color: #343434;
+
+}
+
+.ActionsBar_SettingsButton, .ActionsBar_DepatchButton, .ActionsBar_PatchButton {
+    height: 100%;
+    width: 150px;
+    font-size: 26px;
+    border: none;
+    border-radius: 10px;
+    box-shadow: 0px 2px 2px black;
+}
+
+.ActionsBar_SettingsButton:enabled, .ActionsBar_DepatchButton:enabled, .ActionsBar_PatchButton:enabled {
+    cursor: pointer;
+}
+
+.ActionsBar_SettingsButton {
+    background-color: #6D6D6B;
+    color: #fff;
+}
+
+.ActionsBar_DepatchButton, .ActionsBar_PatchButton {
+    background-color: #E4CF0E;
+}
+
+.ActionsBar_DepatchButton {
+    margin-left: auto;
+}
+
+
+.ActionsBar_SettingsButton:enabled:hover {
+    background-color: #8D8D8B;
+}
+
+.ActionsBar_DepatchButton:enabled:hover, .ActionsBar_PatchButton:enabled:hover {
+    background-color: #FFE814;
+}
+
+.ActionsBar_SettingsButton:enabled:active:hover {
+    background-color: #6D6D6B;
+    box-shadow: none;
+}
+
+.ActionsBar_DepatchButton:enabled:active:hover, .ActionsBar_PatchButton:enabled:active:hover {
+    background-color: #E4CF0E;
+    box-shadow: none;
+}
+
+.ProgressBar_container {
+    width: 100%;
+    height: 20px;
+    background-color: #343434;
+    border-radius: 20px;
+}
+
+.ProgressBar_ProgressBar {
+    width: 50%;
+    height: 20px;
+    background-color: #E4CF0E;
+    border-radius: 20px;
+    transition: width 1s ease-in-out;
+}
+
+.ProgressBar_labelsContainer {
+    display: flex;
+    justify-content: space-between;
+}
+
+.ProgressBar_TaskLabel, .ProgressBar_LogLabel {
+    font-size: 15px;
+    color: #FFF;
+}
