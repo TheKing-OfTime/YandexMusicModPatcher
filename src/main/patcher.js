@@ -28,7 +28,7 @@ let shouldDecompress = false;
 
 await createDirIfNotExist(TMP_PATH);
 
-export default async function installMod(callback, customPathToYMAsar=undefined) {
+export async function installMod(callback, customPathToYMAsar=undefined) {
     callback(0, 'Preparing to install...');
     const asarPath = customPathToYMAsar ?? getYMAsarDefaultPath();
 
@@ -111,7 +111,7 @@ async function decompressFile(target, dest) {
     await fso.promises.writeFile(dest, decompressedData);
 }
 
-async function getReleaseMetadata(releaseUrl=undefined) {
+export async function getReleaseMetadata(releaseUrl=undefined) {
     return await (await fetch(releaseUrl ?? LATEST_RELEASE_URL)).json();
 }
 

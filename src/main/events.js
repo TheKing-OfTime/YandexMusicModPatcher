@@ -1,5 +1,5 @@
 import electron from "electron";
-import installMod from "./patcher.js";
+import { installMod, getReleaseMetadata } from "./patcher.js";
 
 /**
  *
@@ -20,15 +20,25 @@ export const handleApplicationEvents = (window) => {
         window.maximize();
     });
     electron.ipcMain.on('PATCH', async () => {
+
+        const metadata = await getReleaseMetadata();
+        const version = metadata.name;
+
+
         const callback = (progress, logLabel) => {
             sendPatchProgress(window, {
                 progress: progress,
-                taskLabel: 'Installing YandexMusicModClient...',
+                taskLabel: `Installing YandexMusicModClient ${version}...`,
                 logLabel: logLabel,
             })
         }
-        await installMod(callback);
 
+        await installMod(callback);
+        sendPatchProgress(window, {
+            progress: 0,
+            taskLabel: `YandexMusicModClient ${version} installed`,
+            logLabel: '',
+        })
     });
 }
 

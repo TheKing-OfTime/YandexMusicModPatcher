@@ -18,6 +18,15 @@ function ActionsBar() {
         setIsPatching(true);
     }, [])
 
+    React.useEffect(() => {
+        window.desktopEvents.on('PATCH_PROGRESS', (event, args) => {
+            if (args.progress === 1) {
+                setIsPatching(false);
+                setIsPatched(true);
+            }
+        })
+    }, [])
+
     return (
         <div className="ActionsBar_root">
             <button className="ActionsBar_SettingsButton"
@@ -28,12 +37,12 @@ function ActionsBar() {
             <button className="ActionsBar_DepatchButton"
                     onClick={onDepatchClick}
                     disabled={isDepatching || isPatching || !isPatched}>
-                <span>{isDepatching ? "Depatching..." : (!isPatched ? "Depatched" : "Depatch")}</span>
+                <span>{isDepatching ? "Depatching" : (!isPatched ? "Depatched" : "Depatch")}</span>
             </button>
             <button className="ActionsBar_PatchButton"
                     onClick={onPatchClick}
                     disabled={isDepatching || isPatching || isPatched}>
-                <span>{isPatching ? "Patching..." : (isPatched ? "Patched" : "Patch")}</span>
+                <span>{isPatching ? "Patching" : (isPatched ? "Patched" : "Patch")}</span>
             </button>
         </div>
     )
