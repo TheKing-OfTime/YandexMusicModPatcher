@@ -1,12 +1,6 @@
 # YandexMusicModPatcher
 
-[![OS - Windows](https://img.shields.io/badge/OS-Windows-blue?logo=windows&logoColor=white)](https://github.com/TheKing-OfTime/YandexMusicModClient/releases "Download")
-
-<p align="left">
-	<a href="https://discord.gg/HGNKDxwHEH">
-      <img height="35.48" alt="Сервер" src="https://github.com/user-attachments/assets/b7c8a272-b48c-411f-aca3-6512086a9a18">
-   </a>
-</p>
+[![Discord Server](https://img.shields.io/discord/1271568115662061730?logo=discord&label=Сервер)](https://discord.gg/HGNKDxwHEH) [![OS - Windows](https://img.shields.io/badge/OS-Windows-blue?logo=windows&logoColor=white)](https://github.com/TheKing-OfTime/YandexMusicModClient/releases "Download")
 
 ## Это установщик для модификации на Яндекс Музыку [YandexMusicModClient](https://github.com/TheKing-OfTime/YandexMusicModClient)
 ### YandexMusicModClient, YandexMusicModPatcher и его разработчик не связаны с Яндексом или какой-либо из их компаний, сотрудников и т.д.
