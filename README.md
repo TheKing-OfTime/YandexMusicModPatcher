@@ -33,6 +33,9 @@
 ## Спонсоры
 Большое спасибо спонсорам, которые позволяют мне активно работать над этим проектом.
 <p align="left">
+   <a href="https://github.com/ajioe1111">
+      <img width="50" alt="ajioe1111" src="https://avatars.githubusercontent.com/u/39803571?v=4">
+   </a>
    <a href="https://github.com/xab4er">
       <img width="50" alt="xab4er" src="https://avatars.githubusercontent.com/u/60750449?v=4">
    </a>
@@ -83,6 +86,9 @@
    </a>
    <a href="https://github.com/alex2810com">
       <img width="50" alt="alex2810com" src="https://avatars.githubusercontent.com/u/187911293?v=4">
+   </a>
+   <a href="https://github.com/ellatuk">
+      <img width="50" alt="ellatuk" src="https://avatars.githubusercontent.com/u/87390648?v=4">
    </a>
 </p>
 
