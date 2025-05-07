@@ -1,5 +1,5 @@
 import electron from "electron";
-import { installMod, getReleaseMetadata } from "./patcher.js";
+import {installMod, getReleaseMetadata, isInstallPossible, updatePaths} from "./patcher.js";
 
 /**
  *
@@ -40,8 +40,39 @@ export const handleApplicationEvents = (window) => {
             logLabel: '',
         })
     });
+    electron.ipcMain.on('IS_INSTALL_POSSIBLE', async () => {
+        const callback = (progress, logLabel) => {
+            sendPatchProgress(window, {
+                progress: 0,
+                taskLabel: `Checking if install possible...`,
+                logLabel: logLabel,
+            })
+        }
+
+        const isPossible = isInstallPossible(callback);
+        sendPatchProgress(window, {
+            progress: 0,
+            taskLabel: `Idle`,
+            logLabel: '',
+        })
+
+        sendIsModInstallPossible(window, {isPossible: isPossible.status});
+
+    });
+
+    electron.ipcMain.on('UPDATE_YM_PATH', async (event, args) => {
+        updatePaths(args.ymPath)
+    })
 }
 
 export const sendPatchProgress = (window, args) => {
     window.webContents.send('PATCH_PROGRESS', args);
+}
+
+export const sendIsModInstallPossible = (window, args) => {
+    window.webContents.send('IS_INSTALL_POSSIBLE_RESPONSE', args);
+}
+
+export const requestYmPath = (window, args) => {
+    window.webContents.send('REQUEST_YM_PATH', args);
 }

@@ -8,6 +8,13 @@ import * as fso from 'original-fs';
 import * as zlib from "node:zlib";
 import * as fs from 'fs';
 import * as fsp from 'fs/promises'
+import { execSync } from "child_process";
+import asar from '@electron/asar';
+import plist from 'plist';
+
+const isMAC = process.platform === 'darwin';
+const isWIN = process.platform === 'win32';
+const isLINUX = process.platform === 'linux';
 
 const unzipPromise = promisify(zlib.unzip);
 
@@ -18,10 +25,31 @@ const LATEST_RELEASE_URL = `https://api.github.com/repos/TheKing-OfTime/YandexMu
 const YM_RELEASE_METADATA_URL = 'http://music-desktop-application.s3.yandex.net/stable/latest.yml';
 const YM_RELEASE_DOWNLOAD_URL = 'http://music-desktop-application.s3.yandex.net/stable/download.json';
 
-const DEFAULT_YM_ASAR_PATH = {
-    darwin: '',
+const DEFAULT_YM_PATH = {
+    darwin: path.join('Applications', 'Яндекс Музыка.app'),
     linux: '',
-    win32: path.join(process?.env?.LOCALAPPDATA , 'Programs', 'YandexMusic', 'resources', 'app.asar'),
+    win32: path.join(process?.env?.LOCALAPPDATA , 'Programs', 'YandexMusic'),
+}
+
+const resolveAsarPath = (appPath, platform) => {
+    if (platform === 'darwin') {
+        return path.join(appPath, 'Contents', 'Resources', 'app.asar');
+    } else if (platform === 'win32') {
+        return path.join(appPath, 'resources', 'app.asar');
+    } else if (platform === 'linux') {
+        return path.join(appPath, 'resources', 'app.asar');
+    }
+}
+
+const EXTRACTED_ENTITLEMENTS_PATH = path.join(TMP_PATH, 'entitlements.plist');
+let YM_PATH = DEFAULT_YM_PATH[os.platform];
+let INFO_PLIST_PATH = path.join(YM_PATH, 'Contents', 'Info.plist');
+let YM_ASAR_PATH = resolveAsarPath(YM_PATH, os.platform());
+
+export const updatePaths = (ymPath) => {
+    YM_PATH = ymPath;
+    INFO_PLIST_PATH = path.join(YM_PATH, 'Contents', 'Info.plist');
+    YM_ASAR_PATH = resolveAsarPath(YM_PATH, os.platform());
 }
 
 let shouldDecompress = false;
@@ -120,5 +148,100 @@ async function getYandexMusicMetadata() {
 }
 
 function getYMAsarDefaultPath() {
-    return (fs.existsSync(DEFAULT_YM_ASAR_PATH[os.platform()]) ? DEFAULT_YM_ASAR_PATH[os.platform()] : undefined);
+    return (fs.existsSync(YM_ASAR_PATH) ? YM_ASAR_PATH : undefined);
+}
+
+function calcASARHeaderHash(archivePath) {
+    const headerString = asar.getRawHeader(archivePath).headerString;
+    const hash = crypto.createHash('sha256').update(headerString).digest('hex');
+    return { algorithm: 'SHA256', hash };
+}
+
+function dumpEntitlements(appPath, callback) {
+    try {
+        execSync(`codesign -d --entitlements :- '${appPath}' > '${EXTRACTED_ENTITLEMENTS_PATH}'`);
+        callback(0.8, `Entitlements dumped from ${appPath} to ${EXTRACTED_ENTITLEMENTS_PATH}`);
+    } catch (error) {
+        callback(-1, `Unable dump entitlements from ${appPath} to ${EXTRACTED_ENTITLEMENTS_PATH}.`, error);
+    }
+}
+
+function checkIfElectronAsarIntegrityIsUsed() {
+    try {
+        execSync(`plutil -p '${INFO_PLIST_PATH}' | grep -q ElectronAsarIntegrity`);
+        return true;
+    } catch {
+        return false;
+    }
+}
+
+function checkIfSystemIntegrityProtectionEnabled() {
+    try {
+        const response = execSync(`csrutil status`);
+        return response.includes('enabled');
+    } catch {
+        return false;
+    }
+}
+
+export function isInstallPossible(callback) {
+    if(isMAC && checkIfSystemIntegrityProtectionEnabled()) {
+        callback(0, "System Integrity Protection enabled. Bypass is not possible, please disable SIP for File System and try again.");
+        return {status: false, request: ''};
+    }
+
+    if(isLINUX) {
+        callback(0, "Linux is not supported yet.");
+        return {status: false, request: ''};
+    }
+
+    const ymAsarPath = getYMAsarDefaultPath();
+    if(!ymAsarPath) {
+        callback(0, "Can't find Yandex Music application in default path: " + YM_ASAR_PATH);
+        return {status: false, request: 'REQUEST_YM_PATH'};
+    }
+
+    callback(0, "Yandex Music application found: " + ymAsarPath);
+    return {status: true, request: null}
+}
+
+async function bypassAsarIntegrity(appPath, callback) {
+    if (process.platform !== 'darwin') {
+        callback(-1, "Failed to bypass asar integrity: Available only for macOS");
+        return false;
+    }
+
+    if (checkIfSystemIntegrityProtectionEnabled()) {
+        callback(-1, "System Integrity Protection enabled. Bypass is not possible, please disable SIP for File System and try again.");
+        return false;
+    }
+
+    try {
+        if (checkIfElectronAsarIntegrityIsUsed()) {
+            callback(0.99, "Asar integrity enabled. Bypassing...");
+            const newHash = calcASARHeaderHash(DIRECT_DIST_PATH).hash;
+            callback(0.99, `Modified asar hash: ${newHash}`);
+            callback(0.99, "Replacing hash in Info.plist");
+
+            const plistContent = fs.readFileSync(INFO_PLIST_PATH, 'utf8');
+            const plistData = plist.parse(plistContent);
+            plistData.ElectronAsarIntegrity["Resources/app.asar"].hash = newHash;
+            fs.writeFileSync(INFO_PLIST_PATH, plist.build(plistData));
+        }
+
+        callback(0.99, "Replacing sign");
+        dumpEntitlements(appPath, callback);
+
+        execSync(`codesign --force --entitlements ${EXTRACTED_ENTITLEMENTS_PATH} --sign - '${appPath}'`);
+        fs.unlinkSync(EXTRACTED_ENTITLEMENTS_PATH);
+        callback(0.99, "Cache cleared");
+
+        callback(0.99, "Asar integrity bypassed successfully");
+
+    } catch (error) {
+        callback(-1, "Asar integrity bypass failed", error);
+        fs.unlinkSync(EXTRACTED_ENTITLEMENTS_PATH);
+        callback(-1, "Cache cleared");
+    }
+
 }

@@ -126,6 +126,8 @@ body {
 }
 
 .LogEntry {
+    white-space: nowrap;
+    overflow: hidden;
     text-align: left;
     color: white;
     font-size: 1rem;

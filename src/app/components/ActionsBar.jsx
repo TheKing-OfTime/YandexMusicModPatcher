@@ -5,6 +5,7 @@ function ActionsBar() {
     const [isPatched, setIsPatched] = React.useState(false);
     const [isPatching, setIsPatching] = React.useState(false);
     const [isDepatching, setIsDepatching] = React.useState(false);
+    const [canInstall, setCanInstall] = React.useState(false);
 
     const onSettingsClick = React.useCallback(() => {
 
@@ -25,6 +26,10 @@ function ActionsBar() {
                 setIsPatched(true);
             }
         })
+        window.desktopEvents.on('IS_INSTALL_POSSIBLE_RESPONSE', (event, args) => {
+            setCanInstall(args.isPossible);
+        })
+        window.desktopEvents.send('IS_INSTALL_POSSIBLE');
     }, [])
 
     return (
@@ -36,12 +41,12 @@ function ActionsBar() {
             </button>
             <button className="ActionsBar_DepatchButton"
                     onClick={onDepatchClick}
-                    disabled={isDepatching || isPatching || !isPatched}>
+                    disabled={isDepatching || isPatching || !isPatched || !canInstall}>
                 <span>{isDepatching ? "Depatching" : (!isPatched ? "Depatched" : "Depatch")}</span>
             </button>
             <button className="ActionsBar_PatchButton"
                     onClick={onPatchClick}
-                    disabled={isDepatching || isPatching || isPatched}>
+                    disabled={isDepatching || isPatching || isPatched || !canInstall}>
                 <span>{isPatching ? "Patching" : (isPatched ? "Patched" : "Patch")}</span>
             </button>
         </div>
