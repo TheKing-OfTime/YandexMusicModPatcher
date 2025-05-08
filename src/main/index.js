@@ -1,11 +1,17 @@
-const {app, BrowserWindow} = require('electron');
+const { app, BrowserWindow } = require('electron');
 const path = require('node:path');
 import { handleApplicationEvents } from './events.js'
+import { getNativeImg } from './utils.js';
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require('electron-squirrel-startup')) {
     app.quit();
 }
+
+const icon = getNativeImg('icons/icon.ico').resize({
+    width: 128,
+    height: 128,
+})
 
 const createWindow = () => {
     // Create the browser window.
@@ -17,6 +23,7 @@ const createWindow = () => {
         minHeight: 600,
         // maxWidth: 650,
         // maxHeight: 800,
+        icon,
         webPreferences: {
             devTools: true,
             webSecurity: true,
