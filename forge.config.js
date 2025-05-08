@@ -5,6 +5,7 @@ module.exports = {
     packagerConfig: {
         asar: true,
         icon: './assets/icons/icon.ico',
+        executableName: 'YandexMusicModPatcher',
     },
     rebuildConfig: {},
     makers: [
