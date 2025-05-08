@@ -3,6 +3,7 @@ import path from "path";
 import { promisify } from "util";
 import axios from "axios";
 import os from "os";
+import crypto from "crypto";
 import * as fso from 'original-fs';
 
 import * as zlib from "node:zlib";
@@ -22,13 +23,13 @@ const TMP_PATH = path.join(electron.app.getPath('userData'), '/temp');
 const ASAR_TMP_PATH = path.join(TMP_PATH, 'app.asar');
 const ASAR_GZ_TMP_PATH = path.join(TMP_PATH, 'app.asar.gz');
 const LATEST_RELEASE_URL = `https://api.github.com/repos/TheKing-OfTime/YandexMusicModClient/releases/latest`;
-const YM_RELEASE_METADATA_URL = 'http://music-desktop-application.s3.yandex.net/stable/latest.yml';
-const YM_RELEASE_DOWNLOAD_URL = 'http://music-desktop-application.s3.yandex.net/stable/download.json';
+const YM_RELEASE_METADATA_URL = 'https://music-desktop-application.s3.yandex.net/stable/latest.yml';
+const YM_RELEASE_DOWNLOAD_URL = 'https://music-desktop-application.s3.yandex.net/stable/download.json';
 
 const DEFAULT_YM_PATH = {
-    darwin: path.join('Applications', 'Яндекс Музыка.app'),
+    darwin: path.join('/Applications', 'Яндекс Музыка.app'),
     linux: '',
-    win32: path.join(process?.env?.LOCALAPPDATA , 'Programs', 'YandexMusic'),
+    win32: path.join(process?.env?.LOCALAPPDATA ?? '' , 'Programs', 'YandexMusic'),
 }
 
 const resolveAsarPath = (appPath, platform) => {
@@ -41,7 +42,7 @@ const resolveAsarPath = (appPath, platform) => {
     }
 }
 
-const EXTRACTED_ENTITLEMENTS_PATH = path.join(TMP_PATH, 'entitlements.plist');
+const EXTRACTED_ENTITLEMENTS_PATH = path.join(TMP_PATH, 'extracted_entitlements.xml');
 let YM_PATH = DEFAULT_YM_PATH[os.platform];
 let INFO_PLIST_PATH = path.join(YM_PATH, 'Contents', 'Info.plist');
 let YM_ASAR_PATH = resolveAsarPath(YM_PATH, os.platform());
@@ -122,8 +123,8 @@ async function downloadAsar(callback) {
 
     await downloadFile(url, path.join(TMP_PATH, (shouldDecompress ? 'app.asar.gz' : 'app.asar')),
         (progress, label) => {
-        callback(progress*0.8, label);
-    }
+            callback(progress*0.8, label);
+        }
     );
 
 }
@@ -241,7 +242,7 @@ async function bypassAsarIntegrity(appPath, callback) {
         callback(0.95, "Replacing sign");
         dumpEntitlements(appPath, callback);
 
-        execSync(`codesign --force --entitlements ${EXTRACTED_ENTITLEMENTS_PATH} --sign - '${appPath}'`);
+        execSync(`codesign --force --entitlements '${EXTRACTED_ENTITLEMENTS_PATH}' --sign - '${appPath}'`);
         fs.unlinkSync(EXTRACTED_ENTITLEMENTS_PATH);
         callback(0.99, "Cache cleared");
 
