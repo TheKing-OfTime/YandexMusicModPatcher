@@ -67,14 +67,19 @@ export async function installMod(callback, customPathToYMAsar=undefined) {
     await downloadAsar(callback);
 
     if (shouldDecompress) {
-        callback(1, 'Decompressing...');
+        callback(0.8, 'Decompressing...');
         await decompressFile(ASAR_GZ_TMP_PATH, ASAR_TMP_PATH)
-        callback(1, 'Decompressed');
+        callback(0.9, 'Decompressed');
     }
 
-    callback(1, 'Installing...');
+    callback(0.9, 'Replacing ASAR...');
     await copyFile(ASAR_TMP_PATH, asarPath);
-    callback(1, 'Installed!');
+
+    let isAsarIntegrityBypassed = false;
+
+    if (isMAC) isAsarIntegrityBypassed = await bypassAsarIntegrity(YM_PATH, callback);
+
+    isAsarIntegrityBypassed && callback(1, 'Installed!');
 
 }
 
@@ -115,7 +120,11 @@ async function downloadAsar(callback) {
         }
     }
 
-    await downloadFile(url, path.join(TMP_PATH, (shouldDecompress ? 'app.asar.gz' : 'app.asar')), callback);
+    await downloadFile(url, path.join(TMP_PATH, (shouldDecompress ? 'app.asar.gz' : 'app.asar')),
+        (progress, label) => {
+        callback(progress*0.8, label);
+    }
+    );
 
 }
 
@@ -206,7 +215,7 @@ export function isInstallPossible(callback) {
 }
 
 async function bypassAsarIntegrity(appPath, callback) {
-    if (process.platform !== 'darwin') {
+    if (!isMAC) {
         callback(-1, "Failed to bypass asar integrity: Available only for macOS");
         return false;
     }
@@ -218,10 +227,10 @@ async function bypassAsarIntegrity(appPath, callback) {
 
     try {
         if (checkIfElectronAsarIntegrityIsUsed()) {
-            callback(0.99, "Asar integrity enabled. Bypassing...");
-            const newHash = calcASARHeaderHash(DIRECT_DIST_PATH).hash;
-            callback(0.99, `Modified asar hash: ${newHash}`);
-            callback(0.99, "Replacing hash in Info.plist");
+            callback(0.9, "Asar integrity enabled. Bypassing...");
+            const newHash = calcASARHeaderHash(YM_ASAR_PATH).hash;
+            callback(0.9, `Modified asar hash: ${newHash}`);
+            callback(0.9, "Replacing hash in Info.plist");
 
             const plistContent = fs.readFileSync(INFO_PLIST_PATH, 'utf8');
             const plistData = plist.parse(plistContent);
@@ -229,7 +238,7 @@ async function bypassAsarIntegrity(appPath, callback) {
             fs.writeFileSync(INFO_PLIST_PATH, plist.build(plistData));
         }
 
-        callback(0.99, "Replacing sign");
+        callback(0.95, "Replacing sign");
         dumpEntitlements(appPath, callback);
 
         execSync(`codesign --force --entitlements ${EXTRACTED_ENTITLEMENTS_PATH} --sign - '${appPath}'`);
@@ -237,6 +246,7 @@ async function bypassAsarIntegrity(appPath, callback) {
         callback(0.99, "Cache cleared");
 
         callback(0.99, "Asar integrity bypassed successfully");
+        return true;
 
     } catch (error) {
         callback(-1, "Asar integrity bypass failed", error);
