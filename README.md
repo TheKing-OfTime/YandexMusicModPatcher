@@ -1,26 +1,31 @@
 # YandexMusicModPatcher
 
-[![Discord Server](https://img.shields.io/discord/1271568115662061730?logo=discord&label=Сервер)](https://discord.gg/HGNKDxwHEH) [![OS - Windows](https://img.shields.io/badge/OS-Windows-blue?logo=windows&logoColor=white)](https://github.com/TheKing-OfTime/YandexMusicModClient/releases "Download")
+[![Discord Server](https://img.shields.io/discord/1271568115662061730?logo=discord&label=Сервер)](https://discord.gg/HGNKDxwHEH) [![OS - Windows](https://img.shields.io/badge/OS-Windows-blue)](https://ymmc-api.artem-matvienko0.workers.dev/patcher/download "Download") [![OS - MacOS](https://img.shields.io/badge/OS-Mac-blue)](https://ymmc-api.artem-matvienko0.workers.dev/patcher/download "Download")
 
 ## Это установщик для модификации на Яндекс Музыку [YandexMusicModClient](https://github.com/TheKing-OfTime/YandexMusicModClient)
 ### YandexMusicModClient, YandexMusicModPatcher и его разработчик не связаны с Яндексом или какой-либо из их компаний, сотрудников и т.д.
 
+## Установка
+1. Загрузите установщик патчера по [ссылке](https://ymmc-api.artem-matvienko0.workers.dev/patcher/download) или со страницы последнего [релиза](https://github.com/TheKing-OfTime/YandexMusicModPatcher/releases/latest)
+2. Запустите установщик и дождитесь установки.
+3. Готово!
+
+
+## Статус реализации основного функционала
 > [!WARNING]  
 > Учтите, что настоятельно НЕ РЕКОМЕНДУЕТСЯ пользоваться патчером, пока основной функционал ниже не реализован для вашей OS.
 > Пользуйтесь методом установки описанным в репозитории [YandexMusicModClient](https://github.com/TheKing-OfTime/YandexMusicModClient)
 
-## Статус реализации основного функционала
 - [ ] Установка ЯМ если приложение не было установленно
 - [x] Установка модификации на уже установленную ЯМ
   - [x] Windows
-  - [ ] MacOS
+  - [x] MacOS
   - [ ] Linux ([cucumber-sp/yandex-music-linux](https://github.com/cucumber-sp/yandex-music-linux))
   - [ ] Linux (Official client)
 - [ ] Управление обновлениями
   - [ ] Модификация
   - [ ] Яндекс Музыка
 - [ ] Автоматическое обновление патчера
-
 
 ## Поддержка
 Если вам действительно понравился новый опыт использования Яндекс Музыки с этой модификацией, вы можете поддержать мою работу над ней:
