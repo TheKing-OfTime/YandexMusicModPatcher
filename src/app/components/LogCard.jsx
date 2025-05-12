@@ -32,7 +32,7 @@ function LogCard() {
     }, [])
 
     return (
-        <div className="LogCard"><ul>{
+        <div className="LogCard scroll_enabled"><ul>{
             logEntries.map((log, index) => (
                 <li key={index}>
                     <LogMessage message={log.message} timestamp={log.timestamp} />

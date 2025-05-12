@@ -5,6 +5,28 @@
     font-family: 'Segoe UI', 'Roboto', 'Arial', Tahoma, Geneva, Verdana, sans-serif;
     text-rendering: geometricPrecision;
 }
+.scroll_enabled {
+    overflow: scroll;
+}
+
+.scroll_enabled::-webkit-scrollbar {
+    width: 20px;
+    height: 20px;
+}
+.scroll_enabled::-webkit-scrollbar-corner {
+    background: rgba(0,0,0,0);
+}
+.scroll_enabled::-webkit-scrollbar-thumb {
+    background-color: #343434;
+    border-radius: 10px;
+    border: 5px solid rgba(0,0,0,0);
+    background-clip: padding-box;
+    min-width: 32px;
+    min-height: 32px;
+}
+.scroll_enabled::-webkit-scrollbar-track {
+    background-color: rgba(0,0,0,0);
+}
 
 main {
     padding: 20px;
@@ -108,6 +130,7 @@ body {
 }
 
 .LogCard {
+    overflow: scroll;
     min-height: 75px;
     flex-grow: 1;
     padding: 20px;
@@ -127,7 +150,6 @@ body {
 
 .LogEntry {
     white-space: nowrap;
-    overflow: hidden;
     text-align: left;
     color: white;
     font-size: 1rem;
