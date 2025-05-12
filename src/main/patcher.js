@@ -186,6 +186,7 @@ function checkIfElectronAsarIntegrityIsUsed() {
 }
 
 function checkIfSystemIntegrityProtectionEnabled() {
+    return false; // TODO Переделать проверку на SIP
     try {
         const response = execSync(`csrutil status`);
         return response.includes('enabled');
