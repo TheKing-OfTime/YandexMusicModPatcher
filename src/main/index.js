@@ -1,3 +1,5 @@
+import installExtension, { REACT_DEVELOPER_TOOLS } from 'electron-devtools-installer';
+
 const { app, BrowserWindow } = require('electron');
 const path = require('node:path');
 import { handleApplicationEvents } from './events.js'
@@ -17,8 +19,8 @@ const createWindow = () => {
     // Create the browser window.
     const mainWindow = new BrowserWindow({
         frame: false,
-        width: 550,
-        height: 700,
+        width: 800,
+        height: 800,
         minWidth: 450,
         minHeight: 600,
         // maxWidth: 650,
@@ -47,6 +49,10 @@ const createWindow = () => {
 // Some APIs can only be used after this event occurs.
 app.whenReady().then(() => {
     const window = createWindow();
+
+    if(installExtension) installExtension(REACT_DEVELOPER_TOOLS)
+        .then((ext) => console.log(`Added Extension:  ${ext.name}`))
+        .catch((err) => console.log('An error occurred: ', err));
 
     handleApplicationEvents(window);
 

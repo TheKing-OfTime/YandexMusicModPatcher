@@ -1,0 +1,25 @@
+.TextInput {
+    width: 100%;
+    padding: 8px 12px;
+    font-size: 1rem;
+    border: 1px solid #444;
+    border-radius: 8px;
+    background: #232323;
+    color: #fff;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    box-sizing: border-box;
+}
+
+.TextInput:focus {
+    border-color: #E4CF0E;
+    box-shadow: 0 0 0 2px rgba(228, 207, 14, 0.2);
+}
+
+.TextInput:disabled {
+    background: #2d2d2d;
+    color: #888;
+    border-color: #333;
+    cursor: default;
+    opacity: 0.7;
+}
