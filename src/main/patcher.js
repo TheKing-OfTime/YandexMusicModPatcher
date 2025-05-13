@@ -1,4 +1,4 @@
-import electron from "electron";
+import electron, { shell } from "electron";
 import path from "path";
 import { promisify } from "util";
 import axios from "axios";
@@ -63,6 +63,15 @@ export async function installMod(callback, customPathToYMAsar=undefined) {
 
     if (!asarPath) {
         return callback(-1, 'No install destination');
+    }
+    
+    if (isMAC) {
+        try {
+            await copyFile(asarPath, asarPath);
+        } catch(e) {
+            shell.openExternal("x-apple.systempreferences:com.apple.preference.security?Privacy_AppBundles");
+            return callback(-1, 'Please grant App management or Full disk access to the app in System Preferences > Security & Privacy');
+        }
     }
 
     await downloadAsar(callback);

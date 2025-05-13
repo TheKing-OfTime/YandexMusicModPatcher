@@ -6,6 +6,7 @@ module.exports = {
         asar: true,
         icon: './assets/icons/icon.ico',
         executableName: 'yandexmusicmodpatcher',
+        extendInfo: 'Info.plist'
     },
     rebuildConfig: {},
     makers: [

@@ -25,25 +25,31 @@ export const handleApplicationEvents = (window) => {
     });
     electron.ipcMain.on('PATCH', async () => {
         console.log('Received PATCH');
+        try {
+            const metadata = await getReleaseMetadata();
+            const version = metadata.name;
 
-        const metadata = await getReleaseMetadata();
-        const version = metadata.name;
+            const callback = (progress, logLabel) => {
+                sendPatchProgress(window, {
+                    progress: progress,
+                    taskLabel: progress == -1 ? `Error installing YandexMusicModClient ` : `Installing YandexMusicModClient ${version}...`,
+                    logLabel: logLabel,
+                })
+            }
 
-
-        const callback = (progress, logLabel) => {
+            await installMod(callback);
             sendPatchProgress(window, {
-                progress: progress,
-                taskLabel: `Installing YandexMusicModClient ${version}...`,
-                logLabel: logLabel,
+                progress: 0,
+                taskLabel: `YandexMusicModClient ${version} installed`,
+                logLabel: '',
+            })
+        } catch(e) {
+            sendPatchProgress(window, {
+                progress: -1,
+                taskLabel: `Error installing YandexMusicModClient`,
+                logLabel: e.message,
             })
         }
-
-        await installMod(callback);
-        sendPatchProgress(window, {
-            progress: 0,
-            taskLabel: `YandexMusicModClient ${version} installed`,
-            logLabel: '',
-        })
     });
     electron.ipcMain.on('IS_INSTALL_POSSIBLE', async () => {
         console.log('Received IS_INSTALL_POSSIBLE');
