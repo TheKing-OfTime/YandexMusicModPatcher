@@ -7,19 +7,24 @@ import {installMod, getReleaseMetadata, isInstallPossible, updatePaths} from "./
  */
 export const handleApplicationEvents = (window) => {
     electron.ipcMain.on('QUIT', ()=>{
+        console.log('Received QUIT');
         electron.app.quit();
     });
     electron.ipcMain.on('RESTART', ()=>{
+        console.log('Received RESTART');
         electron.app.relaunch();
         electron.app.quit();
     });
     electron.ipcMain.on('MINIMIZE', ()=>{
+        console.log('Received MINIMIZE');
         window.minimize();
     });
     electron.ipcMain.on('MAXIMIZE', ()=>{
+        console.log('Received MAXIMIZE');
         window.maximize();
     });
     electron.ipcMain.on('PATCH', async () => {
+        console.log('Received PATCH');
 
         const metadata = await getReleaseMetadata();
         const version = metadata.name;
@@ -41,6 +46,7 @@ export const handleApplicationEvents = (window) => {
         })
     });
     electron.ipcMain.on('IS_INSTALL_POSSIBLE', async () => {
+        console.log('Received IS_INSTALL_POSSIBLE');
         const callback = (progress, logLabel) => {
             sendPatchProgress(window, {
                 progress: 0,
@@ -57,22 +63,64 @@ export const handleApplicationEvents = (window) => {
         })
 
         sendIsModInstallPossible(window, {isPossible: isPossible.status});
+        if(isPossible.request) {
+            switch(isPossible.request) {
+                case 'REQUEST_YM_PATH':
+                    requestYmPath(window, {});
+                    break;
+                case 'REQUEST_MAC_PERMISSIONS':
+                    requestMacPermissions(window, {});
+                    break;
+                default:
+                    break;
+            }
+        }
 
     });
 
-    electron.ipcMain.on('UPDATE_YM_PATH', async (event, args) => {
-        updatePaths(args.ymPath)
+    electron.ipcMain.on('SET_CUSTOM_YM_PATH', async (event, args) => {
+        console.log('Received SET_CUSTOM_YM_PATH', args);
+        updatePaths(args.path)
+        electron.ipcMain.emit('IS_INSTALL_POSSIBLE', {})
+    })
+
+    electron.ipcMain.on('OPEN_EXPLORER_DIALOG', (event, args) => {
+        console.log('Received OPEN_EXPLORER_DIALOG', args);
+        electron.dialog.showOpenDialog(window, {
+            properties: ['openDirectory'],
+            title: 'Select Yandex Music Folder',
+        }).then((result) => {
+            if (result.canceled) {
+                return;
+            }
+            explorerDialogResponse(window,{path: result.filePaths[0]});
+        }).catch((err) => {
+            console.error(err);
+        });
     })
 }
 
 export const sendPatchProgress = (window, args) => {
     window.webContents.send('PATCH_PROGRESS', args);
+    console.log('Sent PATCH_PROGRESS', args);
 }
 
 export const sendIsModInstallPossible = (window, args) => {
     window.webContents.send('IS_INSTALL_POSSIBLE_RESPONSE', args);
+    console.log('Sent IS_INSTALL_POSSIBLE_RESPONSE', args);
 }
 
 export const requestYmPath = (window, args) => {
     window.webContents.send('REQUEST_YM_PATH', args);
+    console.log('Sent REQUEST_YM_PATH', args);
+}
+
+export const requestMacPermissions = (window, args) => {
+    window.webContents.send('REQUEST_MAC_PERMISSIONS', args);
+    console.log('Sent REQUEST_MAC_PERMISSIONS', args);
+}
+
+export const explorerDialogResponse = (window, args) => {
+    window.webContents.send('EXPLORER_DIALOG_RESPONSE', args);
+    console.log('Sent EXPLORER_DIALOG_RESPONSE', args);
 }

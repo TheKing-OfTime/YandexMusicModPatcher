@@ -181,8 +181,9 @@ body {
 }
 
 .ActionsBar_SettingsButton {
-    background-color: #6D6D6B;
+    background: #343434;
     color: #fff;
+    border: 1px solid #555;
 }
 
 .ActionsBar_DepatchButton, .ActionsBar_PatchButton {
@@ -195,7 +196,7 @@ body {
 
 
 .ActionsBar_SettingsButton:enabled:hover {
-    background-color: #8D8D8B;
+    background-color: #444;;
 }
 
 .ActionsBar_DepatchButton:enabled:hover, .ActionsBar_PatchButton:enabled:hover {
@@ -203,7 +204,7 @@ body {
 }
 
 .ActionsBar_SettingsButton:enabled:active:hover {
-    background-color: #6D6D6B;
+    background-color: #303030;
     box-shadow: none;
 }
 

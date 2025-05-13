@@ -1,0 +1,120 @@
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateY(-20px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+.Modal_overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: fadeIn 0.3s ease-out;
+}
+
+.Modal_content {
+    background: #232323;
+    color: #fff;
+    border-radius: 12px;
+    min-width: 320px;
+    max-width: 70vw;
+    min-height: 120px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
+    padding: 24px 28px 20px 28px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    animation: slideIn 0.3s ease-out;
+}
+
+.Modal_header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 8px;
+    h2 {
+        margin: 0;
+    }
+}
+
+.Modal_closeButton {
+    background: transparent;
+    border: none;
+    color: #fff;
+    font-size: 2rem;
+    cursor: pointer;
+    line-height: 1;
+    padding: 0 8px;
+    transition: color 0.2s;
+}
+
+.Modal_closeButton:hover {
+    color: #f23f42;
+}
+
+.Modal_body {
+    display: flex;
+    flex-direction: column;
+    font-size: 1rem;
+    color: #fff;
+    word-break: break-word;
+    gap: 10px;
+}
+.Modal_footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    margin-top: 16px;
+}
+
+.Modal_cancelButton,
+.Modal_submitButton {
+    min-width: 100px;
+    padding: 8px 20px;
+    font-size: 1rem;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s;
+    font-weight: 500;
+}
+
+.Modal_cancelButton {
+    background: #343434;
+    color: #fff;
+    border: 1px solid #555;
+}
+
+.Modal_cancelButton:hover {
+    background: #444;
+}
+
+.Modal_submitButton {
+    background: #E4CF0E;
+    color: #232323;
+    border: 1px solid #E4CF0E;
+}
+
+.Modal_submitButton:hover {
+    background: #FFE814;
+    color: #232323;
+    border-color: #FFE814;
+}
