@@ -5,6 +5,7 @@ import MainProgressBar from './MainProgressBar.jsx'
 import ActionsBar from "./ActionsBar.jsx";
 import LogCard from './LogCard.jsx';
 import CustomPathModal from "./CustomPathModal.jsx";
+import MacPermissionsModal from "./MacPermissionsModal.jsx";
 
 function App() {
 
@@ -17,6 +18,7 @@ function App() {
                 <ActionsBar/>
             </main>
             <CustomPathModal/>
+            <MacPermissionsModal/>
         </>
     );
 }

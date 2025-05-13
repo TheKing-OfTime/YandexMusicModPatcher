@@ -65,13 +65,8 @@ export async function installMod(callback, customPathToYMAsar=undefined) {
         return callback(-1, 'No install destination');
     }
     
-    if (isMAC) {
-        try {
-            await copyFile(asarPath, asarPath);
-        } catch(e) {
-            shell.openExternal("x-apple.systempreferences:com.apple.preference.security?Privacy_AppBundles");
-            return callback(-1, 'Please grant App management or Full disk access to the app in System Preferences > Security & Privacy');
-        }
+    if (!(await checkMacPermissions())) {
+        return callback(-1, 'Please grant App management or Full disk access to the app in System Preferences > Security & Privacy');
     }
 
     await downloadAsar(callback);
@@ -204,10 +199,21 @@ function checkIfSystemIntegrityProtectionEnabled() {
     }
 }
 
-export function isInstallPossible(callback) {
-    if(isMAC && checkIfSystemIntegrityProtectionEnabled()) {
-        callback(0, "System Integrity Protection enabled. Bypass is not possible, please disable SIP for File System and try again.");
-        return {status: false, request: ''};
+export async function checkMacPermissions() {
+    if(isMAC) return true
+    const asarPath = getYMAsarDefaultPath();
+    try {
+        await copyFile(asarPath, asarPath);
+        return true;
+    } catch(e) {
+        return false
+    }
+}
+
+export async function isInstallPossible(callback) {
+    if(!(await checkMacPermissions())) {
+        callback(0, 'Please grant App management or Full disk access to the app in System Preferences > Security & Privacy');
+        return {status: false, request: 'REQUEST_MAC_PERMISSIONS'};
     }
 
     if(isLINUX) {

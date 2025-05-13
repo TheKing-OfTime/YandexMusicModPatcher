@@ -1,5 +1,5 @@
-import electron from "electron";
-import {installMod, getReleaseMetadata, isInstallPossible, updatePaths} from "./patcher.js";
+import electron, {shell} from "electron";
+import {installMod, getReleaseMetadata, isInstallPossible, updatePaths, checkMacPermissions} from "./patcher.js";
 
 /**
  *
@@ -61,7 +61,7 @@ export const handleApplicationEvents = (window) => {
             })
         }
 
-        const isPossible = isInstallPossible(callback);
+        const isPossible = await isInstallPossible(callback);
         sendPatchProgress(window, {
             progress: 0,
             taskLabel: `Idle`,
@@ -69,6 +69,7 @@ export const handleApplicationEvents = (window) => {
         })
 
         sendIsModInstallPossible(window, {isPossible: isPossible.status});
+        requestMacPermissions(window, {});
         if(isPossible.request) {
             switch(isPossible.request) {
                 case 'REQUEST_YM_PATH':
@@ -103,6 +104,16 @@ export const handleApplicationEvents = (window) => {
         }).catch((err) => {
             console.error(err);
         });
+    })
+
+    electron.ipcMain.on('OPEN_EXTERNAL_PERMISSIONS_SETTINGS', async (event, args) => {
+        console.log('Received OPEN_EXTERNAL_PERMISSIONS_SETTINGS', args);
+        if(!(await checkMacPermissions())) {
+            shell.openExternal("x-apple.systempreferences:com.apple.preference.security?Privacy_AppBundles").then().catch((err) => {
+                console.error(err);
+            });
+            electron.ipcMain.emit('IS_INSTALL_POSSIBLE', {})
+        }
     })
 }
 
