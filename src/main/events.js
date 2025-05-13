@@ -69,7 +69,6 @@ export const handleApplicationEvents = (window) => {
         })
 
         sendIsModInstallPossible(window, {isPossible: isPossible.status});
-        requestMacPermissions(window, {});
         if(isPossible.request) {
             switch(isPossible.request) {
                 case 'REQUEST_YM_PATH':
