@@ -84,7 +84,7 @@ export async function installMod(callback, customPathToYMAsar=undefined) {
 
     if (isMAC) isAsarIntegrityBypassed = await bypassAsarIntegrity(YM_PATH, callback);
 
-    isAsarIntegrityBypassed && callback(1, 'Installed!');
+    (!isMAC || isAsarIntegrityBypassed) && callback(1, 'Installed!');
 
 }
 
