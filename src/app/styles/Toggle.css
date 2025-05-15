@@ -1,0 +1,69 @@
+.Toggle {
+    display: inline-block;
+}
+
+.Toggle_label {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    user-select: none;
+    padding: 8px;
+    justify-content: space-between;
+    gap: 8px
+}
+
+.Toggle_disabled {
+    cursor: default;
+}
+
+.Toggle_input {
+    display: none;
+}
+
+.Toggle_slider {
+    position: relative;
+    width: 44px;
+    height: 24px;
+    background: #444;
+    border-radius: 24px;
+    transition: background 0.2s;
+    box-sizing: border-box;
+    display: inline-block;
+}
+
+.Toggle_input:checked + .Toggle_slider {
+    background: #E4CF0E;
+}
+
+.Toggle_slider::before {
+    content: "";
+    position: absolute;
+    left: 3px;
+    top: 3px;
+    width: 18px;
+    height: 18px;
+    background: #fff;
+    border-radius: 50%;
+    transition: transform 0.2s;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.15);
+}
+
+.Toggle_input:checked + .Toggle_slider::before {
+    transform: translateX(20px);
+}
+
+.Toggle_input:disabled + .Toggle_slider {
+    background: #333333;
+}
+
+.Toggle_input:disabled + .Toggle_slider::before {
+    background: #777777;
+}
+
+.Toggle_text {
+    font-size: 1rem;
+    color: #fff;
+    user-select: none;
+    font-weight: 500;
+    letter-spacing: 0.01em;
+}

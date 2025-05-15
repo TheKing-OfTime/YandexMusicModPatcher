@@ -1,12 +1,11 @@
 .Dropdown {
     position: relative;
     display: inline-block;
-    width: 200px;
     font-family: inherit;
 }
 
 .Dropdown_toggle {
-    width: 100%;
+    width: 200px;
     padding: 10px 12px;
     font-size: 1rem;
     background: #232323;
@@ -35,8 +34,8 @@
 .Dropdown_menu {
     position: absolute;
     top: 110%;
-    left: 0;
-    width: 100%;
+    right: 8px;
+    width: 200px;
     background: #232323;
     border: 1px solid #444;
     border-radius: 8px;
@@ -68,4 +67,37 @@
 
 .Dropdown_placeholder {
     color: #888;
+}
+
+.Dropdown_label {
+    font-size: 1rem;
+    color: #fff;
+    user-select: none;
+    font-weight: 500;
+    letter-spacing: 0.01em;
+}
+
+
+.Dropdown_container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 8px;
+    justify-content: space-between;
+    gap: 8px
+}
+
+.Dropdown_label_container {
+    display: flex;
+    flex-direction: column;
+    gap: 2px
+}
+
+.Dropdown_description {
+    font-size: 0.8rem;
+    color: #999;
+    user-select: none;
+    font-weight: 400;
+    letter-spacing: 0.01em;
+    word-break: break-all;
 }

@@ -1,5 +1,4 @@
 .SettingsPage {
-    overflow: scroll;
     min-height: 75px;
     flex-grow: 1;
     padding: 20px;

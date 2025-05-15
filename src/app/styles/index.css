@@ -6,7 +6,7 @@
     text-rendering: geometricPrecision;
 }
 .scroll_enabled {
-    overflow: scroll;
+    overflow: auto;
 }
 
 .scroll_enabled::-webkit-scrollbar {
@@ -236,4 +236,8 @@ body {
 .ProgressBar_TaskLabel, .ProgressBar_LogLabel {
     font-size: 15px;
     color: #FFF;
+}
+
+.width100percent {
+    width: 100%;
 }
