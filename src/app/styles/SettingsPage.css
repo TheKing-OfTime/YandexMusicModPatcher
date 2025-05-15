@@ -6,13 +6,21 @@
     background-color: #1E1E1E;
     margin-bottom: 20px;
     margin-top: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: normal;
+    align-self: flex-start;
+    border-radius: 10px;
+    width: 100%;
 
-    ul {
-        align-content: end;
-        list-style: none;
-        width: 100%;
-        height: 100%;
-        padding: 0;
-        margin: 0;
-    }
+
+}
+
+.SettingItemList {
+    align-content: start;
+    list-style: none;
+    width: 100%;
+    height: 100%;
+    padding: 0;
+    margin: 0;
 }
