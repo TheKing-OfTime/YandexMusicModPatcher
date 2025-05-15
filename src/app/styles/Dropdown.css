@@ -7,7 +7,7 @@
 
 .Dropdown_toggle {
     width: 100%;
-    padding: 8px 12px;
+    padding: 10px 12px;
     font-size: 1rem;
     background: #232323;
     color: #fff;
@@ -43,7 +43,7 @@
     box-shadow: 0 4px 16px rgba(0,0,0,0.2);
     z-index: 10;
     margin: 0;
-    padding: 4px 0;
+    padding: 0;
     list-style: none;
     animation: dropdownFadeIn 0.2s;
 }
@@ -54,7 +54,7 @@
 }
 
 .Dropdown_item {
-    padding: 8px 12px;
+    padding: 10px 12px;
     color: #fff;
     cursor: pointer;
     transition: background 0.15s, color 0.15s;
