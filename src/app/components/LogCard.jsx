@@ -1,5 +1,4 @@
-import * as React from 'react';
-import {useEffect, useState} from "react";
+import React, { useEffect, useState, useCallback } from 'react';
 
 function LogMessage({ message, timestamp }) {
     const formatDate = (date) => {
@@ -12,23 +11,31 @@ function LogMessage({ message, timestamp }) {
     );
 }
 
-function LogCard() {
-    const [logEntries, setLogEntries] = useState([]);
+function LogCard({ logEntries, setLogEntries }) {
+
     const addLogEntry = (logEntry) => {
         setLogEntries(prevEntries => [...prevEntries, {
             message: logEntry,
             timestamp: new Date()
-        }]);
-    }
+        }])
+    };
+
+    const handlePatchProgressEvent = (event, args) => {
+        if (args.logLabel) addLogEntry(args.logLabel);
+    };
+
+    const handleLogEntryCreateEvent = (event, args) => {
+        addLogEntry(args.logLabel);
+    };
 
     useEffect(() => {
-        window.desktopEvents.on('PATCH_PROGRESS', (event, args) => {
-            if (args.logLabel) addLogEntry(args.logLabel);
-        })
-        window.desktopEvents.on('LOG_ENTRY_CREATE', (event, args) => {
-            addLogEntry(args.logLabel);
-        })
-        addLogEntry('Patcher ready');
+        const offPatchProgressListener = window.desktopEvents.on('PATCH_PROGRESS', handlePatchProgressEvent)
+        const offLogEntryCreateEListener = window.desktopEvents.on('LOG_ENTRY_CREATE', handleLogEntryCreateEvent)
+
+        return () => {
+            offPatchProgressListener();
+            offLogEntryCreateEListener();
+        }
     }, [])
 
     return (

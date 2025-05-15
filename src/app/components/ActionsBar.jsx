@@ -1,25 +1,25 @@
-import * as React from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 
-function ActionsBar() {
+function ActionsBar({ isSettingsOpen, setIsSettingsOpen }) {
 
-    const [isPatched, setIsPatched] = React.useState(false);
-    const [isPatching, setIsPatching] = React.useState(false);
-    const [isDepatching, setIsDepatching] = React.useState(false);
-    const [canInstall, setCanInstall] = React.useState(false);
+    const [isPatched, setIsPatched] = useState(false);
+    const [isPatching, setIsPatching] = useState(false);
+    const [isDepatching, setIsDepatching] = useState(false);
+    const [canInstall, setCanInstall] = useState(false);
 
-    const onSettingsClick = React.useCallback(() => {
-
+    const onSettingsClick = useCallback(() => {
+        setIsSettingsOpen(prev => !prev);
     }, [])
-    const onDepatchClick = React.useCallback(() => {
+    const onDepatchClick = useCallback(() => {
         window.desktopEvents.send('DEPATCH');
         setIsDepatching(true);
     }, [])
-    const onPatchClick = React.useCallback(() => {
+    const onPatchClick = useCallback(() => {
         window.desktopEvents.send('PATCH');
         setIsPatching(true);
     }, [])
 
-    React.useEffect(() => {
+    useEffect(() => {
         window.desktopEvents.on('PATCH_PROGRESS', (event, args) => {
             if (args.progress === 1) {
                 setIsPatching(false);
@@ -37,7 +37,7 @@ function ActionsBar() {
             <button className="ActionsBar_SettingsButton"
                     onClick={onSettingsClick}
                     disabled={isDepatching || isPatching}>
-                <span>Settings</span>
+                <span>{isSettingsOpen ? 'Main' : 'Settings'}</span>
             </button>
             <button className="ActionsBar_DepatchButton"
                     onClick={onDepatchClick}
