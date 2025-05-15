@@ -12,7 +12,6 @@ function MainProgressBar() {
     useEffect(() => {
         window.desktopEvents.on('PATCH_PROGRESS', (event, args) => {
             setProgress((previousProgress)=>{
-                console.log(previousProgress, args.progress);
                 if (previousProgress<=args.progress) {
                     setIsDecreasing(false);
                     return args.progress;
