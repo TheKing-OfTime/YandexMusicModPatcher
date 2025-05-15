@@ -17,7 +17,7 @@ function MainProgressBar() {
                     return args.progress;
                 } else {
                     setIsDecreasing(true);
-                    setTimeout(()=>setProgress(args.progress), 600);
+                    setTimeout(()=>setProgress(args.progress), 1000);
                     return previousProgress;
                 }
             });
@@ -30,7 +30,7 @@ function MainProgressBar() {
         <div className="ProgressBar_root">
             <div className="ProgressBar_container">
                 <div className="ProgressBar_ProgressBar" id="progressBar" style={isDecreasing ? {
-                    width: progress*100 + '%', opacity: 0, transition: "opacity 0.3s ease-in-out 0.3s, width 0.3s ease-in"
+                    width: progress*100 + '%', opacity: 0, transition: "opacity 0.3s ease-in-out 0.7s, width 0.3s ease-in"
                 } : {
                     width: progress*100 + '%', opacity: 1
                 }}/>
