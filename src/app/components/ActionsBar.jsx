@@ -37,7 +37,7 @@ function ActionsBar({ isSettingsOpen, setIsSettingsOpen }) {
             <button className="ActionsBar_SettingsButton"
                     onClick={onSettingsClick}
                     disabled={isDepatching || isPatching}>
-                <span>{isSettingsOpen ? 'Main' : 'Settings'}</span>
+                <span>{isSettingsOpen ? 'Back' : 'Settings'}</span>
             </button>
             <button className="ActionsBar_DepatchButton"
                     onClick={onDepatchClick}
