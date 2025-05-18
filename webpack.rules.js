@@ -22,7 +22,16 @@ module.exports = [
             loader: 'babel-loader',
             options: {
                 exclude: /node_modules/,
-                presets: ['@babel/preset-react']
+                presets: [
+                    ['@babel/preset-env', {
+                        targets: {
+                            electron: '35.0'
+                        },
+                        useBuiltIns: false,
+                        modules: false
+                    }],
+                    '@babel/preset-react'
+                ]
             }
         }
     },
