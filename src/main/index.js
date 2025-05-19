@@ -4,6 +4,7 @@ const { app, BrowserWindow } = require('electron');
 const path = require('node:path');
 import { handleApplicationEvents } from './events.js'
 import { getNativeImg } from './utils.js';
+import { initState } from "./state.js";
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require('electron-squirrel-startup')) {
@@ -43,6 +44,8 @@ const createWindow = () => {
     //mainWindow.webContents.openDevTools();
     return mainWindow;
 };
+
+const state = initState();
 
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
