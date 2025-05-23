@@ -21,7 +21,7 @@ export const handleApplicationEvents = (window) => {
     });
     electron.ipcMain.on('MAXIMIZE', ()=>{
         console.log('Received MAXIMIZE');
-        window.maximize();
+        window.isMaximized() ? window.unmaximize() : window.maximize();
     });
     electron.ipcMain.on('PATCH', async () => {
         console.log('Received PATCH');
