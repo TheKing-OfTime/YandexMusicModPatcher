@@ -41,57 +41,6 @@ body {
     margin: 0;
 }
 
-.TitleBar {
-    inset-block-start: 0;
-    inset-inline-end: 0;
-    inset-inline-start: 0;
-    justify-content: flex-end;
-    display: flex;
-    user-select: none;
-    -webkit-app-region: drag;
-    overflow: hidden;
-    border-bottom-width: 1px;
-    border-bottom-style: solid;
-    border-bottom-color: rgba(255, 255, 255, 0.2);
-}
-
-.TitleBar div {
-    display: flex;
-}
-
-.TitleBar_icon {
-    color: #fff
-}
-
-.TitleBar_Button, .TitleBar_QuitButton {
-    -webkit-box-orient: vertical;
-    -webkit-box-direction: normal;
-    -ms-flex-direction: column;
-    flex-direction: column;
-    -webkit-box-pack: center;
-    -ms-flex-pack: center;
-    justify-content: center;
-    margin: 0;
-    outline: 0;
-    border: 0;
-    background: transparent;
-    cursor: pointer;
-    padding: 0;
-    width: 46px;
-    height: 32px;
-    display: flex;
-    align-items: center;
-    -webkit-app-region: no-drag;
-}
-
-.TitleBar_Button:hover {
-    background-color: hsla(0, 0%, 100%, .2);
-}
-
-.TitleBar_QuitButton:hover {
-    background-color: #f23f42
-}
-
 .App {
     display: flex;
     flex-direction: column;

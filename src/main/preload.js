@@ -1,5 +1,9 @@
 import electron from "electron";
 
+electron.contextBridge.exposeInMainWorld('CONSTANTS', {
+    PLATFORM: process.platform,
+});
+
 electron.contextBridge.exposeInMainWorld('desktopEvents', {
     send(name, ...args) {
         console.log('Message sent', name, ...args);

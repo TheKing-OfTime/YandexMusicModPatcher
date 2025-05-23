@@ -15,7 +15,7 @@ function App() {
 
     return (
         <>
-            <TitleBar/>
+            <TitleBar platform={window.PLATFORM}/>
             <main className="App">
                 <MainProgressBar/>
                 {
