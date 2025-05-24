@@ -200,7 +200,7 @@ function checkIfSystemIntegrityProtectionEnabled() {
 }
 
 export async function checkMacPermissions() {
-    if(isMAC) return true
+    if (!isMAC) return true
     const asarPath = getYMAsarDefaultPath();
     try {
         await copyFile(asarPath, asarPath);
