@@ -29,8 +29,8 @@ const createWindow = () => {
         icon,
         titleBarStyle: 'hidden',
         trafficLightPosition: {
-            x: 16,
-            y: 10
+            x: 20,
+            y: 8
         },
         webPreferences: {
             devTools: true,
