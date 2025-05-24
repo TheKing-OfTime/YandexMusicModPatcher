@@ -8,15 +8,13 @@ function TitleBar() {
         justifyContent: 'flex-start',
         padding: '8px',
         display: 'flex',
+        height: '33px',
     }
 
     if (platform === 'darwin') {
         return (
             <header className="TitleBar" style={macStyle}>
-                <div style={{gap: '4px'}}>
-                    <TitleBarButton variant="quit" platform={platform}/>
-                    <TitleBarButton variant="minimize" platform={platform}/>
-                    <TitleBarButton variant="maximize" platform={platform}/>
+                <div>
                 </div>
             </header>
         )
@@ -25,9 +23,9 @@ function TitleBar() {
     return (
         <header className="TitleBar">
             <div>
-                <TitleBarButton variant="minimize" platform={platform}/>
-                <TitleBarButton variant="maximize" platform={platform}/>
-                <TitleBarButton variant="quit" platform={platform}/>
+                <TitleBarButton variant="minimize" />
+                <TitleBarButton variant="maximize" />
+                <TitleBarButton variant="quit" />
             </div>
         </header>
     )

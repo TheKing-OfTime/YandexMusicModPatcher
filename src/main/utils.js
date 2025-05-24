@@ -1,7 +1,7 @@
 import path from "path";
 import { app, nativeImage } from "electron";
 
-const getNativeImg = (relativePath) => {
+export const getNativeImg = (relativePath) => {
     const basePath = app.isPackaged
         ? path.join(process.resourcesPath, 'app.asar', '.webpack', 'renderer', 'static', 'assets')
         : path.join(__dirname, '..', '..', 'assets')
@@ -10,4 +10,5 @@ const getNativeImg = (relativePath) => {
         console.log(`File path is undefined for relative path: ${filePath}`);
     return nativeImage.createFromPath(filePath)
 }
-export { getNativeImg }
+
+

@@ -19,7 +19,7 @@ const icon = getNativeImg('icons/icon.ico').resize({
 const createWindow = () => {
     // Create the browser window.
     const mainWindow = new BrowserWindow({
-        frame: false,
+        frame: true,
         width: 800,
         height: 800,
         minWidth: 530,
@@ -27,6 +27,11 @@ const createWindow = () => {
         // maxWidth: 650,
         // maxHeight: 800,
         icon,
+        titleBarStyle: 'hidden',
+        trafficLightPosition: {
+            x: 16,
+            y: 10
+        },
         webPreferences: {
             devTools: true,
             webSecurity: true,
