@@ -1,7 +1,6 @@
-import electron, { shell } from "electron";
+import electron from "electron";
 import path from "path";
-import { promisify } from "util";
-import axios from "axios";
+import {promisify} from "util";
 import os from "os";
 import crypto from "crypto";
 import * as fso from 'original-fs';
@@ -9,9 +8,10 @@ import * as fso from 'original-fs';
 import * as zlib from "node:zlib";
 import * as fs from 'fs';
 import * as fsp from 'fs/promises'
-import { execSync } from "child_process";
+import {execSync} from "child_process";
 import asar from '@electron/asar';
 import plist from 'plist';
+import { downloadFile } from "./utils.js";
 
 const isMAC = process.platform === 'darwin';
 const isWIN = process.platform === 'win32';
@@ -86,27 +86,6 @@ export async function installMod(callback, customPathToYMAsar=undefined) {
 
     (!isMAC || isAsarIntegrityBypassed) && callback(1, 'Installed!');
 
-}
-
-async function downloadFile(url, path, callback) {
-    const response = await axios.get(url,{
-        responseType: 'stream',
-        onDownloadProgress: progress => {
-            callback(progress.progress, 'Downloading ASAR...');
-        }
-    })
-    response.data.pipe(fs.createWriteStream(path));
-
-    return new Promise((resolve, reject) => {
-        response.data.on('end', () => {
-            resolve()
-        })
-
-        response.data.on('error', (error) => {
-            callback(-1, 'Download error: ' + error);
-            reject()
-        })
-    })
 }
 
 async function downloadAsar(callback) {

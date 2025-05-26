@@ -2,6 +2,8 @@ import path from "path";
 import { promisify } from 'util'
 import { exec, execSync } from 'child_process'
 import { app, nativeImage } from "electron";
+import axios from "axios";
+import fs from "fs";
 
 const execAsync = promisify(exec);
 
@@ -70,4 +72,25 @@ export async function closeYandexMusic() {
             console.error(`Error terminating process ${proc.pid}:`, error)
         }
     }
+}
+
+export async function downloadFile(url, path, callback) {
+    const response = await axios.get(url, {
+        responseType: 'stream',
+        onDownloadProgress: progress => {
+            callback(progress.progress, 'Downloading ASAR...');
+        }
+    })
+    response.data.pipe(fs.createWriteStream(path));
+
+    return new Promise((resolve, reject) => {
+        response.data.on('end', () => {
+            resolve()
+        })
+
+        response.data.on('error', (error) => {
+            callback(-1, 'Download error: ' + error);
+            reject()
+        })
+    })
 }
