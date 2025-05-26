@@ -11,7 +11,7 @@ import * as fsp from 'fs/promises'
 import {execSync} from "child_process";
 import asar from '@electron/asar';
 import plist from 'plist';
-import { downloadFile } from "./utils.js";
+import { downloadFile, isYandexMusicRunning, closeYandexMusic, launchYandexMusic } from "./utils.js";
 
 const isMAC = process.platform === 'darwin';
 const isWIN = process.platform === 'win32';
@@ -77,6 +77,17 @@ export async function installMod(callback, customPathToYMAsar=undefined) {
         callback(0.9, 'Decompressed');
     }
 
+
+    let wasYmClosed = false;
+
+    if (await isYandexMusicRunning()) {
+        callback(0.9, 'Yandex Music is running. Closing it...');
+        await closeYandexMusic();
+        wasYmClosed = true;
+        callback(0.9, 'Yandex Music closed.');
+    }
+
+
     callback(0.9, 'Replacing ASAR...');
     await copyFile(ASAR_TMP_PATH, asarPath);
 
@@ -85,6 +96,17 @@ export async function installMod(callback, customPathToYMAsar=undefined) {
     if (isMAC) isAsarIntegrityBypassed = await bypassAsarIntegrity(YM_PATH, callback);
 
     (!isMAC || isAsarIntegrityBypassed) && callback(1, 'Installed!');
+
+    if (await isYandexMusicRunning() && wasYmClosed) {
+        callback(0, 'Yandex Music was closed while mod install. Launching it...');
+        try {
+            await launchYandexMusic();
+        } catch (e) {
+            callback(-1, 'Failed to launch Yandex Music: ' + e.message);
+        } finally {
+            callback(0, 'Yandex Music launched.');
+        }
+    }
 
 }
 

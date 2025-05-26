@@ -1,11 +1,12 @@
 import path from "path";
 import { promisify } from 'util'
-import { exec, execSync } from 'child_process'
-import { app, nativeImage } from "electron";
+import { exec, execSync, spawn } from 'child_process'
+import {app, nativeImage, shell} from "electron";
 import axios from "axios";
 import fs from "fs";
 
 const execAsync = promisify(exec);
+const spawnAsync = promisify(spawn);
 
 export const getNativeImg = (relativePath) => {
     const basePath = app.isPackaged
@@ -72,6 +73,27 @@ export async function closeYandexMusic() {
             console.error(`Error terminating process ${proc.pid}:`, error)
         }
     }
+}
+
+export async function launchYandexMusic() {
+    await openExternalDetached('yandexmusic://');
+}
+
+async function openExternalDetached(url) {
+    let command, args;
+
+    if (process.platform === 'win32') {
+        command = 'cmd.exe';
+        args = ['/c', 'start', '', url];
+    } else if (process.platform === 'darwin') {
+        command = 'open';
+        args = [url];
+    } else {
+        command = 'xdg-open';
+        args = [url];
+    }
+
+    (await spawnAsync(command, args, { detached: true, stdio: 'ignore', })).unref();
 }
 
 export async function downloadFile(url, path, callback) {
