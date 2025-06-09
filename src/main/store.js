@@ -62,7 +62,7 @@ const schema = {
     },
     ignoreLegacyYM: {
         type: 'boolean',
-        default: true,
+        default: false,
         description: 'Ignore legacy Yandex Music app'
     },
 };

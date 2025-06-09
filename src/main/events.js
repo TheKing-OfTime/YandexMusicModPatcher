@@ -1,5 +1,9 @@
 import electron, {shell} from "electron";
-import {installMod, getReleaseMetadata, isInstallPossible, updatePaths, checkMacPermissions} from "./patcher.js";
+import { installMod, getReleaseMetadata, isInstallPossible, updatePaths, checkMacPermissions } from "./patcher.js";
+import { deleteLegacyYM } from "./utils.js";
+import { getState } from "./state.js";
+
+const state = getState();
 
 /**
  *
@@ -77,6 +81,9 @@ export const handleApplicationEvents = (window) => {
                 case 'REQUEST_MAC_PERMISSIONS':
                     requestMacPermissions(window, {});
                     break;
+                case 'REQUEST_LEGACY_YM_APP_DELETION':
+                    requestLegacyYmAppDeletion(window, {});
+                    break;
                 default:
                     break;
             }
@@ -114,6 +121,11 @@ export const handleApplicationEvents = (window) => {
             electron.ipcMain.emit('IS_INSTALL_POSSIBLE', {})
         }
     })
+    electron.ipcMain.on('DELETE_LEGACY_YM_APP', async (event, args) => {
+        console.log('Received DELETE_LEGACY_YM_APP', args);
+        await deleteLegacyYM()
+        electron.ipcMain.emit('IS_INSTALL_POSSIBLE', {})
+    })
 }
 
 export const sendPatchProgress = (window, args) => {
@@ -134,6 +146,11 @@ export const requestYmPath = (window, args) => {
 export const requestMacPermissions = (window, args) => {
     window.webContents.send('REQUEST_MAC_PERMISSIONS', args);
     console.log('Sent REQUEST_MAC_PERMISSIONS', args);
+}
+
+export const requestLegacyYmAppDeletion = (window, args) => {
+    window.webContents.send('REQUEST_LEGACY_YM_APP_DELETION', args);
+    console.log('Sent REQUEST_LEGACY_YM_APP_DELETION', args);
 }
 
 export const explorerDialogResponse = (window, args) => {

@@ -122,6 +122,7 @@ export async function downloadFile(url, path, callback) {
 }
 
 export async function checkIfLegacyYMInstalled() {
+    if (!isWin) return false;
     const command = `powershell -Command "Get-AppxPackage *yandex.music* | Select-Object -ExpandProperty Name"`;
 
     try {
