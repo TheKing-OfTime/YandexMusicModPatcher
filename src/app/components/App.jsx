@@ -6,6 +6,7 @@ import ActionsBar from "./ActionsBar.jsx";
 import LogCard from './LogCard.jsx';
 import CustomPathModal from "./CustomPathModal.jsx";
 import MacPermissionsModal from "./MacPermissionsModal.jsx";
+import WindowsLegacyAppModal from "./WindowsLegacyAppModal.jsx";
 import SettingsPage from "./SettingsPage.jsx";
 
 function App() {
@@ -27,6 +28,7 @@ function App() {
             </main>
             <CustomPathModal/>
             <MacPermissionsModal/>
+            <WindowsLegacyAppModal/>
         </>
     );
 }
