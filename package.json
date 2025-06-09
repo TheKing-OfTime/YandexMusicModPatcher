@@ -45,6 +45,7 @@
     "copy-webpack-plugin": "^13.0.0",
     "electron-squirrel-startup": "^1.0.1",
     "electron-store": "^10.0.1",
+    "js-yaml": "^4.1.0",
     "original-fs": "^1.2.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0"

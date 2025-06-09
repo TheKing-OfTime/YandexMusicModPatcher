@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import { createRoot } from 'react-dom/client';
 import TitleBar from './TitleBar.jsx'
 import MainProgressBar from './MainProgressBar.jsx'
@@ -8,14 +8,19 @@ import CustomPathModal from "./CustomPathModal.jsx";
 import MacPermissionsModal from "./MacPermissionsModal.jsx";
 import WindowsLegacyAppModal from "./WindowsLegacyAppModal.jsx";
 import SettingsPage from "./SettingsPage.jsx";
+import { StateProvider } from "./StateContext.jsx";
 
 function App() {
 
     const [ isSettingsOpen, setIsSettingsOpen ] = useState(false);
     const [ logEntries, setLogEntries ] = useState([]);
 
+    useEffect(() => {
+        window.desktopEvents.send('READY', {})
+    }, []);
+
     return (
-        <>
+        <StateProvider>
             <TitleBar platform={window.PLATFORM}/>
             <main className="App">
                 <MainProgressBar/>
@@ -29,7 +34,7 @@ function App() {
             <CustomPathModal/>
             <MacPermissionsModal/>
             <WindowsLegacyAppModal/>
-        </>
+        </StateProvider>
     );
 }
 

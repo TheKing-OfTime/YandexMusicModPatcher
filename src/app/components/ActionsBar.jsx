@@ -1,6 +1,9 @@
-import React, { useEffect, useState, useCallback } from 'react';
+import React, {useEffect, useState, useCallback, useContext, use} from 'react';
+import { StateContext } from "./StateContext.jsx";
 
 function ActionsBar({ isSettingsOpen, setIsSettingsOpen }) {
+
+    const State = useContext(StateContext);
 
     const [isPatched, setIsPatched] = useState(false);
     const [isPatching, setIsPatching] = useState(false);
@@ -31,6 +34,10 @@ function ActionsBar({ isSettingsOpen, setIsSettingsOpen }) {
         })
         window.desktopEvents.send('IS_INSTALL_POSSIBLE');
     }, [])
+
+    useEffect(() => {
+        State?.lastPatchInfo?.patchType !== State?.patchType && setIsPatched(false);
+    }, [State]);
 
     return (
         <div className="ActionsBar_root">

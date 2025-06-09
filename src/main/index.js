@@ -5,6 +5,7 @@ const path = require('node:path');
 import { handleApplicationEvents } from './events.js'
 import { getNativeImg } from './utils.js';
 import { getState } from "./state.js";
+import { sendStateInitiated } from "./events.js";
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require('electron-squirrel-startup')) {
@@ -15,6 +16,8 @@ const icon = getNativeImg('icons/icon.ico').resize({
     width: 128,
     height: 128,
 })
+
+export let mainWindow = null;
 
 const createWindow = () => {
     // Create the browser window.
@@ -50,20 +53,18 @@ const createWindow = () => {
 
 const state = getState();
 
-
 app.whenReady().then(() => {
     const window = createWindow();
-
+    mainWindow = window;
     if(installExtension) installExtension(REACT_DEVELOPER_TOOLS)
         .then((ext) => console.log(`Added Extension:  ${ext.name}`))
         .catch((err) => console.log('An error occurred: ', err));
 
     handleApplicationEvents(window);
 
-
     app.on('activate', () => {
         if (BrowserWindow.getAllWindows().length === 0) {
-            createWindow();
+            mainWindow = createWindow();
         }
     });
 });

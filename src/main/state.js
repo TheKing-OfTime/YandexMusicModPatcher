@@ -1,4 +1,5 @@
 import { getStore } from "./store.js";
+import { sendStateUpdated } from "./events.js";
 
 
 class State {
@@ -26,9 +27,9 @@ class State {
         }
         obj[keys[keys.length - 1]] = value;
 
-        if (keys[0] === 'store') {
-            this.store.set(keys.slice(1).join('.'), value);
-        }
+        this.store.set(key, value);
+
+        sendStateUpdated(undefined, this.state)
     }
 }
 

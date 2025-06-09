@@ -1,9 +1,10 @@
-import electron, {shell} from "electron";
+import electron, { shell } from "electron";
 import { installMod, getReleaseMetadata, isInstallPossible, updatePaths, checkMacPermissions } from "./patcher.js";
 import { deleteLegacyYM } from "./utils.js";
 import { getState } from "./state.js";
+import { mainWindow } from "./index.js";
 
-const state = getState();
+const State = getState();
 
 /**
  *
@@ -126,34 +127,49 @@ export const handleApplicationEvents = (window) => {
         await deleteLegacyYM()
         electron.ipcMain.emit('IS_INSTALL_POSSIBLE', {})
     })
+    electron.ipcMain.on('UPDATE_STATE', (event, args) => {
+        State.set(args.key, args.value);
+    })
+    electron.ipcMain.on('READY', (event, args) => {
+        console.log('Received READY', args);
+        sendStateInitiated(undefined, State.state);
+    })
 }
 
-export const sendPatchProgress = (window, args) => {
+export const sendPatchProgress = (window= mainWindow, args) => {
     window.webContents.send('PATCH_PROGRESS', args);
     console.log('Sent PATCH_PROGRESS', args);
 }
 
-export const sendIsModInstallPossible = (window, args) => {
+export const sendIsModInstallPossible = (window= mainWindow, args) => {
     window.webContents.send('IS_INSTALL_POSSIBLE_RESPONSE', args);
     console.log('Sent IS_INSTALL_POSSIBLE_RESPONSE', args);
 }
 
-export const requestYmPath = (window, args) => {
+export const requestYmPath = (window= mainWindow, args) => {
     window.webContents.send('REQUEST_YM_PATH', args);
     console.log('Sent REQUEST_YM_PATH', args);
 }
 
-export const requestMacPermissions = (window, args) => {
+export const requestMacPermissions = (window= mainWindow, args) => {
     window.webContents.send('REQUEST_MAC_PERMISSIONS', args);
     console.log('Sent REQUEST_MAC_PERMISSIONS', args);
 }
 
-export const requestLegacyYmAppDeletion = (window, args) => {
+export const requestLegacyYmAppDeletion = (window= mainWindow, args) => {
     window.webContents.send('REQUEST_LEGACY_YM_APP_DELETION', args);
     console.log('Sent REQUEST_LEGACY_YM_APP_DELETION', args);
 }
 
-export const explorerDialogResponse = (window, args) => {
+export const explorerDialogResponse = (window= mainWindow, args) => {
     window.webContents.send('EXPLORER_DIALOG_RESPONSE', args);
     console.log('Sent EXPLORER_DIALOG_RESPONSE', args);
+}
+export const sendStateUpdated = (window= mainWindow, state) => {
+    window.webContents.send('STATE_UPDATED', state);
+    console.log('Sent STATE_UPDATED', state);
+}
+export const sendStateInitiated = (window= mainWindow, state) => {
+    window.webContents.send('STATE_INITIATED', state);
+    console.log('Sent STATE_INITIATED', state);
 }

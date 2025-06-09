@@ -4,7 +4,7 @@ import { promisify } from "util";
 import os from "os";
 import crypto from "crypto";
 import * as fso from 'original-fs';
-
+import yaml from 'js-yaml';
 import * as zlib from "node:zlib";
 import * as fs from 'fs';
 import * as fsp from 'fs/promises'
@@ -14,7 +14,7 @@ import plist from 'plist';
 import { downloadFile, isYandexMusicRunning, closeYandexMusic, launchYandexMusic, isMac, isWin, isLinux, checkIfLegacyYMInstalled } from "./utils.js";
 import { getState } from "./state.js";
 
-const state = getState();
+const State = getState();
 
 const unzipPromise = promisify(zlib.unzip);
 
@@ -53,10 +53,12 @@ export const updatePaths = (ymPath) => {
 }
 
 let shouldDecompress = false;
+let modVersion = undefined;
 
 await createDirIfNotExist(TMP_PATH);
 
 export async function installMod(callback, customPathToYMAsar=undefined) {
+    const ymMetadata = await getYandexMusicMetadata();
     callback(0, 'Preparing to install...');
     const asarPath = customPathToYMAsar ?? getYMAsarDefaultPath();
 
@@ -96,6 +98,14 @@ export async function installMod(callback, customPathToYMAsar=undefined) {
 
     (!isMac || isAsarIntegrityBypassed) && callback(1, 'Installed!');
 
+    State.set('lastPatchInfo', {
+        modVersion: modVersion,
+        ymVersion: ymMetadata.version,
+        patchType: State.get('patchType'),
+        date: new Date().toISOString(),
+    });
+    console.log(State.get('lastPatchInfo'));
+
     if (await isYandexMusicRunning() && wasYmClosed) {
         callback(0, 'Yandex Music was closed while mod install. Launching it...');
         try {
@@ -110,16 +120,21 @@ export async function installMod(callback, customPathToYMAsar=undefined) {
 }
 
 async function downloadAsar(callback) {
-    const priorityFiles = ["app.asar.gz", "app.asar"];
+    const filenamePrefix = State.get('patchType') === 'default' ? 'app.asar' : 'appDevTools.asar';
+    const priorityFiles = [filenamePrefix];
+    if (State.get('useZIP')) {
+        priorityFiles.unshift(`${filenamePrefix}.gz`)
+    }
 
     const metadata = (await getReleaseMetadata(LATEST_RELEASE_URL))?.assets;
+    modVersion = metadata.name;
 
     let url = undefined;
 
     for (const filename of priorityFiles) {
         const asset = metadata.find((a) => a.name === filename);
         if (asset) {
-            if (filename === "app.asar.gz") shouldDecompress = true;
+            if (filename === `${filenamePrefix}.gz`) shouldDecompress = true;
             url = asset.browser_download_url;
             break;
         }
@@ -158,7 +173,7 @@ export async function getReleaseMetadata(releaseUrl=undefined) {
 }
 
 async function getYandexMusicMetadata() {
-    return await (await fetch(YM_RELEASE_METADATA_URL)).json();
+    return yaml.load(await (await fetch(YM_RELEASE_METADATA_URL)).text());
 }
 
 function getYMAsarDefaultPath() {
@@ -223,7 +238,7 @@ export async function isInstallPossible(callback) {
 
     const isLegacyYMInstalled = await checkIfLegacyYMInstalled();
 
-    if (isLegacyYMInstalled && !state.get('ignoreLegacyYM')) {
+    if (isLegacyYMInstalled && !State.get('ignoreLegacyYM')) {
         return { status: false, request: 'REQUEST_LEGACY_YM_APP_DELETION' };
     }
 

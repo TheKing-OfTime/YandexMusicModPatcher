@@ -3,7 +3,7 @@ import { promisify } from 'util'
 import { exec, execSync, spawn } from 'child_process'
 import {app, nativeImage, shell} from "electron";
 import axios from "axios";
-import fs from "fs";
+import fs from "original-fs";
 
 const execAsync = promisify(exec);
 const spawnAsync = promisify(spawn);
