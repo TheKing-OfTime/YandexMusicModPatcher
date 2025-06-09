@@ -8,6 +8,10 @@ import fs from "fs";
 const execAsync = promisify(exec);
 const spawnAsync = promisify(spawn);
 
+export const isWin = process.platform === 'win32';
+export const isMac = process.platform === 'darwin';
+export const isLinux = process.platform === 'linux';
+
 export const getNativeImg = (relativePath) => {
     const basePath = app.isPackaged
         ? path.join(process.resourcesPath, 'app.asar', '.webpack', 'renderer', 'static', 'assets')

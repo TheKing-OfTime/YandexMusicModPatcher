@@ -1,6 +1,6 @@
 import electron from "electron";
 import path from "path";
-import {promisify} from "util";
+import { promisify } from "util";
 import os from "os";
 import crypto from "crypto";
 import * as fso from 'original-fs';
@@ -8,14 +8,11 @@ import * as fso from 'original-fs';
 import * as zlib from "node:zlib";
 import * as fs from 'fs';
 import * as fsp from 'fs/promises'
-import {execSync} from "child_process";
+import { execSync } from "child_process";
 import asar from '@electron/asar';
 import plist from 'plist';
-import { downloadFile, isYandexMusicRunning, closeYandexMusic, launchYandexMusic } from "./utils.js";
+import { downloadFile, isYandexMusicRunning, closeYandexMusic, launchYandexMusic, isMac, isWin, isLinux } from "./utils.js";
 
-const isMAC = process.platform === 'darwin';
-const isWIN = process.platform === 'win32';
-const isLINUX = process.platform === 'linux';
 
 const unzipPromise = promisify(zlib.unzip);
 
@@ -64,7 +61,7 @@ export async function installMod(callback, customPathToYMAsar=undefined) {
     if (!asarPath) {
         return callback(-1, 'No install destination');
     }
-    
+
     if (!(await checkMacPermissions())) {
         return callback(-1, 'Please grant App management or Full disk access to the app in System Preferences > Security & Privacy');
     }
@@ -93,9 +90,9 @@ export async function installMod(callback, customPathToYMAsar=undefined) {
 
     let isAsarIntegrityBypassed = false;
 
-    if (isMAC) isAsarIntegrityBypassed = await bypassAsarIntegrity(YM_PATH, callback);
+    if (isMac) isAsarIntegrityBypassed = await bypassAsarIntegrity(YM_PATH, callback);
 
-    (!isMAC || isAsarIntegrityBypassed) && callback(1, 'Installed!');
+    (!isMac || isAsarIntegrityBypassed) && callback(1, 'Installed!');
 
     if (await isYandexMusicRunning() && wasYmClosed) {
         callback(0, 'Yandex Music was closed while mod install. Launching it...');
@@ -201,7 +198,7 @@ function checkIfSystemIntegrityProtectionEnabled() {
 }
 
 export async function checkMacPermissions() {
-    if (!isMAC) return true
+    if (!isMac) return true
     const asarPath = getYMAsarDefaultPath();
     try {
         await copyFile(asarPath, asarPath);
@@ -217,7 +214,7 @@ export async function isInstallPossible(callback) {
         return {status: false, request: 'REQUEST_MAC_PERMISSIONS'};
     }
 
-    if(isLINUX) {
+    if(isLinux) {
         callback(0, "Linux is not supported yet.");
         return {status: false, request: ''};
     }
@@ -233,7 +230,7 @@ export async function isInstallPossible(callback) {
 }
 
 async function bypassAsarIntegrity(appPath, callback) {
-    if (!isMAC) {
+    if (!isMac) {
         callback(-1, "Failed to bypass asar integrity: Available only for macOS");
         return false;
     }
