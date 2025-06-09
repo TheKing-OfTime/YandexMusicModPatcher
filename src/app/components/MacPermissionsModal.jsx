@@ -4,7 +4,7 @@ import TextBox from "./TextBox.jsx";
 import TextInput from "./TextInput.jsx";
 import InlineButton from "./InlineButton.jsx";
 
-function CustomPathModal() {
+function MacPermissionsModal() {
 
     const [isModalOpen, setModalOpen] = useState(false);
     const isModalOpenRef = React.useRef(isModalOpen);
@@ -46,4 +46,4 @@ function CustomPathModal() {
     )
 }
 
-export default CustomPathModal;
+export default MacPermissionsModal;
