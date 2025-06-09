@@ -60,6 +60,11 @@ const schema = {
         default: true,
         description: 'Auto update Yandex Music and the mod'
     },
+    ignoreLegacyYM: {
+        type: 'boolean',
+        default: true,
+        description: 'Ignore legacy Yandex Music app'
+    },
 };
 
 class Store {
@@ -84,7 +89,7 @@ class Store {
     }
 }
 
-export const initStore = (() => {
+export const getStore = (() => {
     let store;
     return () => {
         if (!store) {
@@ -92,4 +97,4 @@ export const initStore = (() => {
         }
         return store;
     }
-});
+})();

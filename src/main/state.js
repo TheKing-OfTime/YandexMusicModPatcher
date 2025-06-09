@@ -1,16 +1,13 @@
-import { initStore } from "./store.js";
+import { getStore } from "./store.js";
 
-// const defaultState = {
-//
-// };
 
 class State {
     constructor() {
-        this.store = initStore();
+        this.store = getStore();
         this.state = {
-            //...defaultState,
-            store: this.store,
+            ...this.store.getAll(),
         };
+        console.log('State initialized with:', this.state);
     }
 
     get(key) {
@@ -36,7 +33,7 @@ class State {
 }
 
 
-export const initState = (() => {
+export const getState = (() => {
     let state;
     return () => {
         if (!state) {
@@ -44,4 +41,4 @@ export const initState = (() => {
         }
         return state;
     }
-});
+})();
