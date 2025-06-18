@@ -112,6 +112,10 @@
    <a href="https://github.com/Dimas-VM">
       <img width="50" alt="LockMea" src="https://avatars.githubusercontent.com/u/179121916?v=4">
    </a>
+   <a href="https://github.com/Danila0986">
+      <img width="50" alt="Danila0986" src="https://avatars.githubusercontent.com/u/157834445?v=4">
+   </a>
+
 </p>
 
 > Список обновляется вручную
