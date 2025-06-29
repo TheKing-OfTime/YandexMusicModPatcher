@@ -6,7 +6,7 @@
 ### YandexMusicModClient, YandexMusicModPatcher и его разработчик не связаны с Яндексом или какой-либо из их компаний, сотрудников и т.д.
 
 ## Установка
-1. Загрузите установщик патчера по [ссылке](https://ymmc-api.artem-matvienko0.workers.dev/patcher/download) или со страницы последнего [релиза](https://github.com/TheKing-OfTime/YandexMusicModPatcher/releases/latest)
+1. Загрузите установщик патчера по <a href="https://ymmc-api.artem-matvienko0.workers.dev/patcher/download" target="_blank">ссылке</a> или со страницы последнего [релиза](https://github.com/TheKing-OfTime/YandexMusicModPatcher/releases/latest)
 2. Запустите установщик и дождитесь установки.
 3. Готово!
 
@@ -115,7 +115,9 @@
    <a href="https://github.com/Danila0986">
       <img width="50" alt="Danila0986" src="https://avatars.githubusercontent.com/u/157834445?v=4">
    </a>
-
+   <a href="https://github.com/Cheafiss">
+      <img width="50" alt="Cheafiss" src="https://avatars.githubusercontent.com/u/125489408?v=4">
+   </a>
 </p>
 
 > Список обновляется вручную
