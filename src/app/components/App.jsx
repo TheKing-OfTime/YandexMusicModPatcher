@@ -7,6 +7,7 @@ import LogCard from './LogCard.jsx';
 import SettingsPage from "./SettingsPage.jsx";
 import ModalsContainer from "./ModalsContainer.jsx";
 import { StateProvider } from "./StateContext.jsx";
+import { useSendReady } from "./Events.jsx";
 
 function App() {
 
@@ -14,7 +15,7 @@ function App() {
     const [ logEntries, setLogEntries ] = useState([]);
 
     useEffect(() => {
-        window.desktopEvents.send('READY', {})
+        useSendReady({});
     }, []);
 
     return (

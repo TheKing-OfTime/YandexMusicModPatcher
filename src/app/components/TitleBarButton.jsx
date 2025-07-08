@@ -1,5 +1,6 @@
 import * as React from 'react';
 import '../styles/TitleBar.css';
+import { useSendQuit, useSendMinimize, useSendMaximize } from "./Events.jsx";
 
 
 function TitleBarButtonIcon({ variant }) {
@@ -42,21 +43,21 @@ function TitleBarButton({ variant }) {
             btnVariant.id = 'quit';
             btnVariant.className = 'TitleBar_QuitButton';
             btnVariant.callback = React.useCallback(()=>{
-                window.desktopEvents.send('QUIT');
+                useSendQuit();
             },[])
             break;
         case 'minimize':
             btnVariant.id = 'minimize';
             btnVariant.className = 'TitleBar_Button';
             btnVariant.callback = React.useCallback(()=>{
-                window.desktopEvents.send('MINIMIZE');
+                useSendMinimize();
             },[])
             break;
         case 'maximize':
             btnVariant.id = 'maximize';
             btnVariant.className = 'TitleBar_Button';
             btnVariant.callback = React.useCallback(()=>{
-                window.desktopEvents.send('MAXIMIZE');
+                useSendMaximize();
             },[])
             break;
     }

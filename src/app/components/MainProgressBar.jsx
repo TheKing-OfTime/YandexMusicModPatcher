@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useCallback } from 'react';
+import { useOnPatchProgress } from './Events.jsx';
 
 function MainProgressBar() {
 
@@ -10,7 +11,7 @@ function MainProgressBar() {
 
 
     useEffect(() => {
-        window.desktopEvents.on('PATCH_PROGRESS', (event, args) => {
+        const OffPatchProgress = useOnPatchProgress((event, args) => {
             setProgress((previousProgress)=>{
                 if (previousProgress<=args.progress) {
                     setIsDecreasing(false);
@@ -24,6 +25,11 @@ function MainProgressBar() {
             setLogLabel(args.logLabel);
             setTaskLabel(args.taskLabel);
         })
+
+        return () => {
+            OffPatchProgress();
+        }
+
     }, [])
 
     return (

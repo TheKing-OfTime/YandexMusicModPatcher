@@ -4,6 +4,7 @@ import '../styles/SettingsPage.css';
 import Dropdown from "./Dropdown.jsx";
 import Toggle from "./Toggle.jsx";
 import { StateContext } from "./StateContext.jsx";
+import { useSendUpdateState } from "./Events.jsx";
 
 function SettingsPage() {
 
@@ -21,25 +22,25 @@ function SettingsPage() {
 
     const handleSelect = useCallback((option) => {
         setSelectedType(option);
-        window.desktopEvents.send('UPDATE_STATE', {key: 'patchType', value: option.id});
+        useSendUpdateState({key: 'patchType', value: option.id});
         console.log('Selected:', option);
     }, []);
 
     const handleUpdatesControlToggle = useCallback((enabled) => {
         setUpdatesControl(enabled);
-        window.desktopEvents.send('UPDATE_STATE', {key: 'controlYMUpdates', value: enabled});
+        useSendUpdateState({key: 'controlYMUpdates', value: enabled});
         console.log('Toggled:', enabled);
     }, []);
 
     const handleUpdatePatcherToggle = useCallback((enabled) => {
         setUpdatePatcher(enabled);
-        window.desktopEvents.send('UPDATE_STATE', {key: 'autoUpdate', value: enabled});
+        useSendUpdateState({key: 'autoUpdate', value: enabled});
         console.log('Toggled:', enabled);
     }, []);
 
     const handleUpdateUseZipToggle = useCallback((enabled) => {
         setUseZip(enabled);
-        window.desktopEvents.send('UPDATE_STATE', {key: 'useZIP', value: enabled});
+        useSendUpdateState({key: 'useZIP', value: enabled});
         console.log('Toggled:', enabled);
     }, []);
 

@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useCallback } from 'react';
+import { useOnPatchProgress, useOnLogEntryCreate } from "./Events.jsx";
 
 function LogMessage({ message, timestamp }) {
     const formatDate = (date) => {
@@ -29,8 +30,8 @@ function LogCard({ logEntries, setLogEntries }) {
     };
 
     useEffect(() => {
-        const offPatchProgressListener = window.desktopEvents.on('PATCH_PROGRESS', handlePatchProgressEvent)
-        const offLogEntryCreateEListener = window.desktopEvents.on('LOG_ENTRY_CREATE', handleLogEntryCreateEvent)
+        const offPatchProgressListener = useOnPatchProgress(handlePatchProgressEvent);
+        const offLogEntryCreateEListener = useOnLogEntryCreate(handleLogEntryCreateEvent);
 
         return () => {
             offPatchProgressListener();

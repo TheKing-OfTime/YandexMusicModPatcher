@@ -1,6 +1,7 @@
 import Modal from "./Modal.jsx";
 import React, { useEffect, useState, useCallback } from "react";
 import TextBox from "./TextBox.jsx";
+import { useSendOpenExternalPermissionsSettings, useOnRequestMacPermissions } from "./Events.jsx";
 
 function MacPermissionsModal() {
 
@@ -9,7 +10,7 @@ function MacPermissionsModal() {
 
 
     const sendOpenPermissionsSettings = useCallback(() => {
-        window.desktopEvents.send('OPEN_EXTERNAL_PERMISSIONS_SETTINGS');
+        useSendOpenExternalPermissionsSettings();
     }, [])
 
     const handleRequestMacPermissions = useCallback(() => {
@@ -21,7 +22,10 @@ function MacPermissionsModal() {
     }, [isModalOpen]);
 
     useEffect(() => {
-        window.desktopEvents.on('REQUEST_MAC_PERMISSIONS', handleRequestMacPermissions);
+        const offRequestMacPermissions = useOnRequestMacPermissions(handleRequestMacPermissions);
+        return () => {
+            offRequestMacPermissions();
+        }
     }, []);
 
     useEffect(() => {

@@ -1,5 +1,6 @@
-import React, {useEffect, useState, useCallback, useContext, use} from 'react';
+import React, {useEffect, useState, useCallback, useContext} from 'react';
 import { StateContext } from "./StateContext.jsx";
+import { useSendDepatch, useSendPatch, useSendIsInstallPossible, useOnPatchProgress, useOnIsInstallPossibleResponse } from "./Events.jsx";
 
 function ActionsBar({ isSettingsOpen, setIsSettingsOpen }) {
 
@@ -14,25 +15,30 @@ function ActionsBar({ isSettingsOpen, setIsSettingsOpen }) {
         setIsSettingsOpen(prev => !prev);
     }, [])
     const onDepatchClick = useCallback(() => {
-        window.desktopEvents.send('DEPATCH');
+        useSendDepatch();
         setIsDepatching(true);
     }, [])
     const onPatchClick = useCallback(() => {
-        window.desktopEvents.send('PATCH');
+        useSendPatch();
         setIsPatching(true);
     }, [])
 
     useEffect(() => {
-        window.desktopEvents.on('PATCH_PROGRESS', (event, args) => {
+        const OffPatchProgress = useOnPatchProgress((event, args) => {
             if (args.progress === 1) {
                 setIsPatching(false);
                 setIsPatched(true);
             }
         })
-        window.desktopEvents.on('IS_INSTALL_POSSIBLE_RESPONSE', (event, args) => {
+        const OffIsInstallPossible = useOnIsInstallPossibleResponse((event, args) => {
             setCanInstall(args.isPossible);
         })
-        window.desktopEvents.send('IS_INSTALL_POSSIBLE');
+        useSendIsInstallPossible();
+
+        return () => {
+            OffPatchProgress();
+            OffIsInstallPossible();
+        }
     }, [])
 
     useEffect(() => {

@@ -3,6 +3,7 @@ import React, { useEffect, useState, useCallback } from "react";
 import TextBox from "./TextBox.jsx";
 import TextInput from "./TextInput.jsx";
 import InlineButton from "./InlineButton.jsx";
+import { useSendDeleteLegacyYmApp, useOnRequestLegacyYmAppDeletion } from "./Events.jsx";
 
 function WindowsLegacyAppModal() {
 
@@ -11,7 +12,7 @@ function WindowsLegacyAppModal() {
 
 
     const sendDeleteLegacyYmApp = useCallback(() => {
-        window.desktopEvents.send('DELETE_LEGACY_YM_APP');
+        useSendDeleteLegacyYmApp();
     }, [])
 
     const handleRequestLegacyYmAppDeletion = useCallback(() => {
@@ -23,7 +24,10 @@ function WindowsLegacyAppModal() {
     }, [isModalOpen]);
 
     useEffect(() => {
-        window.desktopEvents.on('REQUEST_LEGACY_YM_APP_DELETION', handleRequestLegacyYmAppDeletion);
+        const offRequestLegacyYmAppDeletion = useOnRequestLegacyYmAppDeletion(handleRequestLegacyYmAppDeletion);
+        return () => {
+            offRequestLegacyYmAppDeletion();
+        }
     }, []);
 
     useEffect(() => {

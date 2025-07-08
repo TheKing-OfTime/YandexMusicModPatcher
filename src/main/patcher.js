@@ -14,6 +14,8 @@ import plist from 'plist';
 import { downloadFile, isYandexMusicRunning, closeYandexMusic, launchYandexMusic, isMac, isWin, isLinux, checkIfLegacyYMInstalled } from "./utils.js";
 import { getState } from "./state.js";
 
+import Events from "./types/Events.js";
+
 const State = getState();
 
 const unzipPromise = promisify(zlib.unzip);
@@ -228,7 +230,7 @@ export async function checkMacPermissions() {
 export async function isInstallPossible(callback) {
     if (!(await checkMacPermissions())) {
         callback(0, 'Please grant App management or Full disk access to the app in System Preferences > Security & Privacy');
-        return { status: false, request: 'REQUEST_MAC_PERMISSIONS' };
+        return { status: false, request: Events.REQUEST_MAC_PERMISSIONS };
     }
 
     if (isLinux) {
@@ -239,13 +241,13 @@ export async function isInstallPossible(callback) {
     const isLegacyYMInstalled = await checkIfLegacyYMInstalled();
 
     if (isLegacyYMInstalled && !State.get('ignoreLegacyYM')) {
-        return { status: false, request: 'REQUEST_LEGACY_YM_APP_DELETION' };
+        return { status: false, request: Events.REQUEST_LEGACY_YM_APP_DELETION };
     }
 
     const ymAsarPath = getYMAsarDefaultPath();
     if(!ymAsarPath) {
         callback(0, "Can't find Yandex Music application in default path: " + YM_ASAR_PATH);
-        return { status: false, request: 'REQUEST_YM_PATH' };
+        return { status: false, request: Events.REQUEST_YM_PATH };
     }
 
     callback(0, "Yandex Music application found: " + ymAsarPath);

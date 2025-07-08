@@ -1,4 +1,5 @@
 import React, { createContext, useState, useEffect } from 'react';
+import { useOnStateUpdated, useOnStateInitiated } from "./Events.jsx";
 
 export const StateContext = createContext(null);
 
@@ -10,12 +11,12 @@ export const StateProvider = ({ children }) => {
             setState(args);
         };
 
-        const remove1 = window.desktopEvents.on('STATE_UPDATED', handleStateUpdated);
-        const remove2 = window.desktopEvents.on('STATE_INITIATED', handleStateUpdated);
+        const OffStateUpdated = useOnStateUpdated(handleStateUpdated);
+        const OffStateInitiated = useOnStateInitiated(handleStateUpdated);
 
         return () => {
-            remove1();
-            remove2();
+            OffStateUpdated();
+            OffStateInitiated();
         };
     }, []);
 

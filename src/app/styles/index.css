@@ -70,7 +70,7 @@ body {
 }
 
 .ProgressBar_root {
-    height: 90px;
+    height: 100px;
     background-color: #1E1E1E;
     padding: 20px;
     flex-direction: column;

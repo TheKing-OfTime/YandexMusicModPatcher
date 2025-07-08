@@ -3,6 +3,7 @@ import React, { useEffect, useState, useCallback } from "react";
 import TextBox from "./TextBox.jsx";
 import TextInput from "./TextInput.jsx";
 import InlineButton from "./InlineButton.jsx";
+import { useSendSetCustomYmPath, useSendOpenExplorerDialog, useOnRequestYmPath, useOnExplorerDialogResponse } from "./Events.jsx";
 
 function CustomPathModal() {
 
@@ -13,11 +14,11 @@ function CustomPathModal() {
 
     const sendCustomPath = useCallback((path) => {
         if (!path) return;
-        window.desktopEvents.send('SET_CUSTOM_YM_PATH', { path });
+        useSendSetCustomYmPath({ path });
     }, [])
 
     const sendOpenExploreDialog = useCallback(() => {
-        window.desktopEvents.send('OPEN_EXPLORER_DIALOG');
+        useSendOpenExplorerDialog();
     }, [])
 
     const handleRequestYmPath = useCallback(() => {
@@ -37,8 +38,12 @@ function CustomPathModal() {
     }, [isModalOpen]);
 
     useEffect(() => {
-        window.desktopEvents.on('REQUEST_YM_PATH', handleRequestYmPath);
-        window.desktopEvents.on('EXPLORER_DIALOG_RESPONSE', handleExplorerDialogResponse);
+        const offRequestYmPath = useOnRequestYmPath(handleRequestYmPath);
+        const offExplorerDialogResponse = useOnExplorerDialogResponse(handleExplorerDialogResponse);
+        return () => {
+            offRequestYmPath();
+            offExplorerDialogResponse();
+        }
     }, []);
 
     useEffect(() => {
