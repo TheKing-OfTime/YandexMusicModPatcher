@@ -3,7 +3,7 @@ import { installMod, getReleaseMetadata, isInstallPossible, updatePaths, checkMa
 import { deleteLegacyYM } from "./utils.js";
 import { getState } from "./state.js";
 import { mainWindow } from "./index.js";
-import Events from "./types/events.js";
+import Events from "./types/Events.js";
 
 const State = getState();
 
