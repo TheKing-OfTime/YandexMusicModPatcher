@@ -118,6 +118,9 @@
    <a href="https://github.com/Cheafiss">
       <img width="50" alt="Cheafiss" src="https://avatars.githubusercontent.com/u/125489408?v=4">
    </a>
+   <a href="https://github.com/raxemus">
+      <img width="50" alt="raxemus" src="https://avatars.githubusercontent.com/u/6419721?v=4">
+   </a>
 </p>
 
 > Список обновляется вручную
