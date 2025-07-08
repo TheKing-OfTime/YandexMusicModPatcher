@@ -22,7 +22,7 @@ function MainProgressBar() {
                     return previousProgress;
                 }
             });
-            setLogLabel(args.logLabel);
+            setLogLabel(args.subTaskLabel);
             setTaskLabel(args.taskLabel);
         })
 

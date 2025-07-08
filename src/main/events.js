@@ -35,11 +35,36 @@ export const handleApplicationEvents = (window) => {
             const metadata = await getReleaseMetadata();
             const version = metadata.name;
 
-            const callback = (progress, logLabel) => {
+            const callback = (progress, logLabel, subTaskLabel = undefined) => {
+                let taskLabel = "";
+
+                switch (progress) {
+                    case -1:
+                        taskLabel = `Error installing YandexMusicModClient`;
+                        subTaskLabel = '';
+                        break;
+
+                    case 1:
+                        taskLabel = `YandexMusicModClient ${version} installed`;
+                        subTaskLabel = '';
+                        break;
+                    case 2:
+                        progress = 0;
+                        subTaskLabel = '';
+                    case 0:
+                        taskLabel = `Idle`;
+                        break;
+                    default:
+                        taskLabel = `Installing YandexMusicModClient ${version}...`;
+                        break;
+                }
+
+
                 sendPatchProgress(window, {
                     progress: progress,
-                    taskLabel: progress == -1 ? `Error installing YandexMusicModClient ` : `Installing YandexMusicModClient ${version}...`,
+                    taskLabel: taskLabel,
                     logLabel: logLabel,
+                    subTaskLabel: subTaskLabel ?? logLabel,
                 })
             }
 

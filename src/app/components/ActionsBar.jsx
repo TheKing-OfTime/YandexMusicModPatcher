@@ -28,6 +28,9 @@ function ActionsBar({ isSettingsOpen, setIsSettingsOpen }) {
             if (args.progress === 1) {
                 setIsPatching(false);
                 setIsPatched(true);
+            } else if (args.progress === 0) {
+                setIsDepatching(false);
+                setIsPatched(false);
             }
         })
         const OffIsInstallPossible = useOnIsInstallPossibleResponse((event, args) => {

@@ -84,7 +84,7 @@ export async function installMod(callback, customPathToYMAsar=undefined) {
     let wasYmClosed = false;
 
     if (await isYandexMusicRunning()) {
-        callback(0.9, 'Yandex Music is running. Closing it...');
+        callback(0.9, 'Yandex Music is running. Closing it...', 'Closing Yandex Music...');
         await closeYandexMusic();
         wasYmClosed = true;
         callback(0.9, 'Yandex Music closed.');
@@ -109,13 +109,13 @@ export async function installMod(callback, customPathToYMAsar=undefined) {
     console.log(State.get('lastPatchInfo'));
 
     if (await isYandexMusicRunning() && wasYmClosed) {
-        callback(0, 'Yandex Music was closed while mod install. Launching it...');
+        callback(1, 'Yandex Music was closed while mod install. Launching it...', 'Launching Yandex Music...');
         try {
-            await launchYandexMusic();
+            launchYandexMusic();
+            setTimeout(()=>callback(2, 'Yandex Music launched.'), 500);
+            setTimeout(()=>callback(0, 'Task finished.'), 2000);
         } catch (e) {
             callback(-1, 'Failed to launch Yandex Music: ' + e.message);
-        } finally {
-            callback(0, 'Yandex Music launched.');
         }
     }
 
