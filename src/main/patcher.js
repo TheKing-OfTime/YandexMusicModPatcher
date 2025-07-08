@@ -113,11 +113,11 @@ export async function installMod(callback, customPathToYMAsar=undefined) {
         try {
             launchYandexMusic();
             setTimeout(()=>callback(2, 'Yandex Music launched.'), 500);
-            setTimeout(()=>callback(0, 'Task finished.'), 2000);
         } catch (e) {
             callback(-1, 'Failed to launch Yandex Music: ' + e.message);
         }
     }
+    setTimeout(()=>callback(0, 'Task finished.'), 2000);
 
 }
 
