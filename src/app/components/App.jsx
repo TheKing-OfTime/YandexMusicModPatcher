@@ -5,7 +5,7 @@ import MainProgressBar from './MainProgressBar.jsx'
 import ActionsBar from "./ActionsBar.jsx";
 import LogCard from './LogCard.jsx';
 import SettingsPage from "./SettingsPage.jsx";
-import ModalsContainer from "./ModalsContainer.js";
+import ModalsContainer from "./ModalsContainer.jsx";
 import { StateProvider } from "./StateContext.jsx";
 
 function App() {
