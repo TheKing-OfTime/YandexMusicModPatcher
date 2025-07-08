@@ -4,10 +4,8 @@ import TitleBar from './TitleBar.jsx'
 import MainProgressBar from './MainProgressBar.jsx'
 import ActionsBar from "./ActionsBar.jsx";
 import LogCard from './LogCard.jsx';
-import CustomPathModal from "./CustomPathModal.jsx";
-import MacPermissionsModal from "./MacPermissionsModal.jsx";
-import WindowsLegacyAppModal from "./WindowsLegacyAppModal.jsx";
 import SettingsPage from "./SettingsPage.jsx";
+import ModalsContainer from "./ModalsContainer.js";
 import { StateProvider } from "./StateContext.jsx";
 
 function App() {
@@ -31,9 +29,7 @@ function App() {
                 }
                 <ActionsBar isSettingsOpen={isSettingsOpen} setIsSettingsOpen={setIsSettingsOpen} />
             </main>
-            <CustomPathModal/>
-            <MacPermissionsModal/>
-            <WindowsLegacyAppModal/>
+            <ModalsContainer/>
         </StateProvider>
     );
 }

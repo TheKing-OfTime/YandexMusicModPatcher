@@ -25,5 +25,8 @@ electron.contextBridge.exposeInMainWorld('desktopEvents', {
     },
     invoke(name, ...args) {
         return electron.ipcRenderer.invoke(name, ...args);
+    },
+    emit(name, ...args) {
+        return electron.ipcRenderer.emit(name, ...args);
     }
 });

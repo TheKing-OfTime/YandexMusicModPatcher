@@ -1,8 +1,6 @@
 import Modal from "./Modal.jsx";
 import React, { useEffect, useState, useCallback } from "react";
 import TextBox from "./TextBox.jsx";
-import TextInput from "./TextInput.jsx";
-import InlineButton from "./InlineButton.jsx";
 
 function MacPermissionsModal() {
 

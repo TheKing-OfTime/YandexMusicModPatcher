@@ -82,7 +82,12 @@
     display: flex;
     justify-content: flex-end;
     gap: 12px;
-    margin-top: 16px;
+}
+
+.Modal_footer_buttons_container {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
 }
 
 .Modal_cancelButton,
