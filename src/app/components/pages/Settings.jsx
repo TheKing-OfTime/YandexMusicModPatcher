@@ -1,18 +1,19 @@
-import React, {useCallback, useContext, useState} from "react";
+import React, { useCallback, useContext, useState } from "react";
 import '../../styles/SettingsPage.css';
 
 import Dropdown from "../ui/Dropdown.jsx";
 import Toggle from "../ui/Toggle.jsx";
-import {StateContext} from "../StateContext.jsx";
-import {useSendUpdateState} from "../Events.jsx";
+import { StateContext } from "../StateContext.jsx";
+import { useSendUpdateState } from "../Events.jsx";
+
 
 function SettingsPage() {
 
     const state = useContext(StateContext);
 
     const options = [
-        {label: 'Полный', id: 'default', description: 'Полноценная модификация со всеми функциями'},
-        {label: 'Только девтулзы', id: 'devtoolsOnly', description: "Автоматическая модификация. Только девтулзы."},
+        { label: 'Полный', id: 'default', description: 'Полноценная модификация со всеми функциями' },
+        { label: 'Только девтулзы', id: 'devtoolsOnly', description: "Автоматическая модификация. Только девтулзы." },
     ];
 
     const [selectedType, setSelectedType] = useState(options.find((option) => option.id === state.patchType) ?? options[0]);
@@ -22,25 +23,25 @@ function SettingsPage() {
 
     const handleSelect = useCallback((option) => {
         setSelectedType(option);
-        useSendUpdateState({key: 'patchType', value: option.id});
+        useSendUpdateState({ key: 'patchType', value: option.id });
         console.log('Selected:', option);
     }, []);
 
     const handleUpdatesControlToggle = useCallback((enabled) => {
         setUpdatesControl(enabled);
-        useSendUpdateState({key: 'controlYMUpdates', value: enabled});
+        useSendUpdateState({ key: 'controlYMUpdates', value: enabled });
         console.log('Toggled:', enabled);
     }, []);
 
     const handleUpdatePatcherToggle = useCallback((enabled) => {
         setUpdatePatcher(enabled);
-        useSendUpdateState({key: 'autoUpdate', value: enabled});
+        useSendUpdateState({ key: 'autoUpdate', value: enabled });
         console.log('Toggled:', enabled);
     }, []);
 
     const handleUpdateUseZipToggle = useCallback((enabled) => {
         setUseZip(enabled);
-        useSendUpdateState({key: 'useZIP', value: enabled});
+        useSendUpdateState({ key: 'useZIP', value: enabled });
         console.log('Toggled:', enabled);
     }, []);
 

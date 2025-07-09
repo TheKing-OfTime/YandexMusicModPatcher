@@ -1,5 +1,5 @@
 import Modal from "../../ui/Modal.jsx";
-import React, {useCallback, useEffect, useState} from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import TextBox from "../../ui/TextBox.jsx";
 import TextInput from "../../ui/TextInput.jsx";
 import InlineButton from "../../ui/InlineButton.jsx";
@@ -10,6 +10,7 @@ import {
     useSendSetCustomYmPath
 } from "../../Events.jsx";
 
+
 function CustomPathModal() {
 
     const [isModalOpen, setModalOpen] = useState(false);
@@ -19,7 +20,7 @@ function CustomPathModal() {
 
     const sendCustomPath = useCallback((path) => {
         if (!path) return;
-        useSendSetCustomYmPath({path});
+        useSendSetCustomYmPath({ path });
     }, [])
 
     const sendOpenExploreDialog = useCallback(() => {

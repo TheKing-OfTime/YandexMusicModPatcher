@@ -1,5 +1,6 @@
 import Events from "../../main/types/Events.js";
 
+
 window.EventList = Events;
 
 export function useSendPatch() {

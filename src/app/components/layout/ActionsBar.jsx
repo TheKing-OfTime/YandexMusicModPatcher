@@ -1,5 +1,5 @@
-import React, {useCallback, useContext, useEffect, useState} from 'react';
-import {StateContext} from "../StateContext.jsx";
+import React, { useCallback, useContext, useEffect, useState } from 'react';
+import { StateContext } from "../StateContext.jsx";
 import {
     useOnIsInstallPossibleResponse,
     useOnPatchProgress,
@@ -8,7 +8,8 @@ import {
     useSendPatch
 } from "../Events.jsx";
 
-function ActionsBar({isSettingsOpen, setIsSettingsOpen}) {
+
+function ActionsBar({ isSettingsOpen, setIsSettingsOpen }) {
 
     const State = useContext(StateContext);
 

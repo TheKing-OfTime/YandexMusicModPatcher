@@ -1,7 +1,8 @@
 import Modal from "../../ui/Modal.jsx";
-import React, {useCallback, useEffect, useState} from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import TextBox from "../../ui/TextBox.jsx";
-import {useOnRequestLegacyYmAppDeletion, useSendDeleteLegacyYmApp} from "../../Events.jsx";
+import { useOnRequestLegacyYmAppDeletion, useSendDeleteLegacyYmApp } from "../../Events.jsx";
+
 
 function WindowsLegacyAppModal() {
 

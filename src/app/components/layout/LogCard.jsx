@@ -1,8 +1,9 @@
-import React, {useEffect} from 'react';
-import {useOnLogEntryCreate, useOnPatchProgress} from "../Events.jsx";
-import {LogMessage} from "../ui/LogMessage.jsx";
+import React, { useEffect } from 'react';
+import { useOnLogEntryCreate, useOnPatchProgress } from "../Events.jsx";
+import { LogMessage } from "../ui/LogMessage.jsx";
 
-function LogCard({logEntries, setLogEntries}) {
+
+function LogCard({ logEntries, setLogEntries }) {
 
     const addLogEntry = (logEntry) => {
         setLogEntries(prevEntries => [...prevEntries, {

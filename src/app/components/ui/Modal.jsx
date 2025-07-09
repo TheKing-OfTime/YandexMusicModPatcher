@@ -34,7 +34,7 @@ function Modal({
 
 export default Modal;
 
-function ModalFooter({onClose, onSubmit = undefined, onSubmitLabel = 'ОК', onCancelLabel = 'Закрыть'}) {
+function ModalFooter({ onClose, onSubmit = undefined, onSubmitLabel = 'ОК', onCancelLabel = 'Закрыть' }) {
     return onSubmit ? (
         <div className="Modal_footer_buttons_container">
             <button className="Modal_cancelButton" onClick={onClose}>{onCancelLabel}</button>

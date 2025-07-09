@@ -1,13 +1,14 @@
-import React, {useEffect, useState} from 'react';
-import {createRoot} from 'react-dom/client';
+import React, { useEffect, useState } from 'react';
+import { createRoot } from 'react-dom/client';
 import TitleBar from './layout/TitleBar.jsx'
 import MainProgressBar from './layout/MainProgressBar.jsx'
 import ActionsBar from "./layout/ActionsBar.jsx";
 import LogCard from './layout/LogCard.jsx';
-import SettingsPage from "./pages/SettingsPage.jsx";
+import SettingsPage from "./pages/Settings.jsx";
 import ModalsContainer from "./layout/modals/ModalsContainer.jsx";
-import {StateProvider} from "./StateContext.jsx";
-import {useSendReady} from "./Events.jsx";
+import { StateProvider } from "./StateContext.jsx";
+import { useSendReady } from "./Events.jsx";
+
 
 function App() {
 

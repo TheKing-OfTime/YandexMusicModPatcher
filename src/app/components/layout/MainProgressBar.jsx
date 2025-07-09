@@ -1,5 +1,6 @@
-import React, {useEffect, useState} from 'react';
-import {useOnPatchProgress} from '../Events.jsx';
+import React, { useEffect, useState } from 'react';
+import { useOnPatchProgress } from '../Events.jsx';
+
 
 function MainProgressBar() {
 

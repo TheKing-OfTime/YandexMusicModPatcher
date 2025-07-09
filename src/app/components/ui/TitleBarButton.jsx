@@ -1,9 +1,9 @@
 import * as React from 'react';
 import '../../styles/TitleBar.css';
-import {useSendMaximize, useSendMinimize, useSendQuit} from "../Events.jsx";
+import { useSendMaximize, useSendMinimize, useSendQuit } from "../Events.jsx";
 
 
-function TitleBarButtonIcon({variant}) {
+function TitleBarButtonIcon({ variant }) {
     switch (variant) {
         case 'quit':
             return (
@@ -36,7 +36,7 @@ function TitleBarButtonIcon({variant}) {
 
 }
 
-function TitleBarButton({variant}) {
+function TitleBarButton({ variant }) {
     const btnVariant = {};
     switch (variant) {
         case 'quit':

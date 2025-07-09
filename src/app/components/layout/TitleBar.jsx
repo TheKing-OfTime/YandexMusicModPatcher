@@ -2,6 +2,7 @@ import * as React from 'react';
 import TitleBarButton from '../ui/TitleBarButton.jsx';
 import '../../styles/TitleBar.css';
 
+
 function TitleBar() {
     const platform = window?.CONSTANTS?.PLATFORM ?? 'win32';
     const macStyle = {
