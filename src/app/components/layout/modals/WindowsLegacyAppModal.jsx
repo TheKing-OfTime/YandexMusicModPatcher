@@ -34,22 +34,22 @@ function WindowsLegacyAppModal() {
     }, [isModalOpen]);
 
     return (
-        <Modal
-            isOpen={isModalOpen}
-            onClose={() => setModalOpen(false)}
-            onSubmit={() => {
-                sendDeleteLegacyYmApp();
-                setModalOpen(false);
-            }}
-            title="Устаревшая версия Яндекс Музыки"
-            onSubmitLabel="Удалить"
-            onCancelLabel="Отмена"
-        >
-            <TextBox>
-                У вас установлена устаревшая версия Яндекс Музыки из MS Store.<br/>Она может помешать установке и
-                использованию новой версии.<br/><br/><b>Удалить устаревшую версию?</b>
-            </TextBox>
-        </Modal>
+    <Modal
+    isOpen={isModalOpen}
+    onClose={() => setModalOpen(false)}
+    onSubmit={() => {
+        sendDeleteLegacyYmApp();
+        setModalOpen(false);
+    }}
+    title="Устаревшая версия Яндекс Музыки"
+    onSubmitLabel="Удалить"
+    onCancelLabel="Отмена"
+    >
+        <TextBox>
+            У вас установлена устаревшая версия Яндекс Музыки из MS Store.<br/>Она может помешать установке и
+            использованию новой версии.<br/><br/><b>Удалить устаревшую версию?</b>
+        </TextBox>
+    </Modal>
     )
 }
 

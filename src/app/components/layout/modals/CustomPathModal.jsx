@@ -57,28 +57,28 @@ function CustomPathModal() {
     }, [isModalOpen]);
 
     return (
-        <Modal
-            isOpen={isModalOpen}
-            onClose={() => setModalOpen(false)}
-            onSubmit={() => {
-                sendCustomPath(customPath);
-                setModalOpen(false);
-            }}
-            title="Укажите путь к папке с Яндекс Музыкой">
-            <TextBox>
-                Не удалось найти яндекс музыку автоматически. Укажите путь вручную.
-            </TextBox>
-            <div style={{
-                display: 'flex',
-                gap: '10px',
-                flexDirection: 'row',
-                alignItems: 'center',
-                justifyContent: 'space-between'
-            }}>
-                <TextInput value={customPath} disabled={true}/>
-                <InlineButton onClick={sendOpenExploreDialog}>Обзор</InlineButton>
-            </div>
-        </Modal>
+    <Modal
+    isOpen={isModalOpen}
+    onClose={() => setModalOpen(false)}
+    onSubmit={() => {
+        sendCustomPath(customPath);
+        setModalOpen(false);
+    }}
+    title="Укажите путь к папке с Яндекс Музыкой">
+        <TextBox>
+            Не удалось найти яндекс музыку автоматически. Укажите путь вручную.
+        </TextBox>
+        <div style={{
+            display: 'flex',
+            gap: '10px',
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'space-between'
+        }}>
+            <TextInput value={customPath} disabled={true}/>
+            <InlineButton onClick={sendOpenExploreDialog}>Обзор</InlineButton>
+        </div>
+    </Modal>
     )
 }
 

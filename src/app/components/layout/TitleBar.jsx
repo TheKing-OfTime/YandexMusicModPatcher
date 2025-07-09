@@ -14,21 +14,21 @@ function TitleBar() {
 
     if (platform === 'darwin') {
         return (
-            <header className="TitleBar" style={macStyle}>
-                <div>
-                </div>
-            </header>
+        <header className="TitleBar" style={macStyle}>
+            <div>
+            </div>
+        </header>
         )
     }
 
     return (
-        <header className="TitleBar">
-            <div>
-                <TitleBarButton variant="minimize"/>
-                <TitleBarButton variant="maximize"/>
-                <TitleBarButton variant="quit"/>
-            </div>
-        </header>
+    <header className="TitleBar">
+        <div>
+            <TitleBarButton variant="minimize"/>
+            <TitleBarButton variant="maximize"/>
+            <TitleBarButton variant="quit"/>
+        </div>
+    </header>
     )
 }
 

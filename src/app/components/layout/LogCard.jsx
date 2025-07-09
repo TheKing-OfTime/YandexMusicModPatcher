@@ -31,15 +31,15 @@ function LogCard({ logEntries, setLogEntries }) {
     }, [])
 
     return (
-        <div className="LogCard scroll_enabled">
-            <ul>{
-                logEntries.map((log, index) => (
-                    <li key={index}>
-                        <LogMessage message={log.message} timestamp={log.timestamp}/>
-                    </li>
-                ))
-            }</ul>
-        </div>
+    <div className="LogCard scroll_enabled">
+        <ul>{
+            logEntries.map((log, index) => (
+            <li key={index}>
+                <LogMessage message={log.message} timestamp={log.timestamp}/>
+            </li>
+            ))
+        }</ul>
+    </div>
     )
 }
 

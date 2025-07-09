@@ -4,14 +4,14 @@ import '../../styles/InlineButton.css';
 
 function InlineButton({ children, onClick, disabled = false, className = '', type = 'button' }) {
     return (
-        <button
-            type={type}
-            className={`InlineButton ${className}`}
-            onClick={onClick}
-            disabled={disabled}
-        >
-            {children}
-        </button>
+    <button
+    type={type}
+    className={`InlineButton ${className}`}
+    onClick={onClick}
+    disabled={disabled}
+    >
+        {children}
+    </button>
     );
 }
 

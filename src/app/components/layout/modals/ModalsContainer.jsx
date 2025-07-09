@@ -6,10 +6,10 @@ import WindowsLegacyAppModal from "./WindowsLegacyAppModal.jsx";
 
 export default function ModalsContainer() {
     return (
-        <>
-            <CustomPathModal/>
-            <MacPermissionsModal/>
-            <WindowsLegacyAppModal/>
-        </>
+    <>
+        <CustomPathModal/>
+        <MacPermissionsModal/>
+        <WindowsLegacyAppModal/>
+    </>
     );
 }

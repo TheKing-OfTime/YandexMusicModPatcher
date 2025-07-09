@@ -56,23 +56,23 @@ function ActionsBar({ isSettingsOpen, setIsSettingsOpen }) {
     }, [State]);
 
     return (
-        <div className="ActionsBar_root">
-            <button className="ActionsBar_SettingsButton"
-                    onClick={onSettingsClick}
-                    disabled={isDepatching || isPatching}>
-                <span>{isSettingsOpen ? 'Back' : 'Settings'}</span>
-            </button>
-            <button className="ActionsBar_DepatchButton"
-                    onClick={onDepatchClick}
-                    disabled={isDepatching || isPatching || !isPatched || !canInstall}>
-                <span>{isDepatching ? "Depatching" : (!isPatched ? "Depatched" : "Depatch")}</span>
-            </button>
-            <button className="ActionsBar_PatchButton"
-                    onClick={onPatchClick}
-                    disabled={isDepatching || isPatching || isPatched || !canInstall}>
-                <span>{isPatching ? "Patching" : (isPatched ? "Patched" : "Patch")}</span>
-            </button>
-        </div>
+    <div className="ActionsBar_root">
+        <button className="ActionsBar_SettingsButton"
+                onClick={onSettingsClick}
+                disabled={isDepatching || isPatching}>
+            <span>{isSettingsOpen ? 'Back' : 'Settings'}</span>
+        </button>
+        <button className="ActionsBar_DepatchButton"
+                onClick={onDepatchClick}
+                disabled={isDepatching || isPatching || !isPatched || !canInstall}>
+            <span>{isDepatching ? "Depatching" : (!isPatched ? "Depatched" : "Depatch")}</span>
+        </button>
+        <button className="ActionsBar_PatchButton"
+                onClick={onPatchClick}
+                disabled={isDepatching || isPatching || isPatched || !canInstall}>
+            <span>{isPatching ? "Patching" : (isPatched ? "Patched" : "Patch")}</span>
+        </button>
+    </div>
     )
 }
 

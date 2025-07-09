@@ -20,25 +20,25 @@ function App() {
     }, []);
 
     return (
-        <StateProvider>
-            <TitleBar platform={window.PLATFORM}/>
-            <main className="App">
-                <MainProgressBar/>
-                {
-                    isSettingsOpen
-                        ? <SettingsPage/>
-                        : <LogCard logEntries={logEntries} setLogEntries={setLogEntries}/>
-                }
-                <ActionsBar isSettingsOpen={isSettingsOpen} setIsSettingsOpen={setIsSettingsOpen}/>
-            </main>
-            <ModalsContainer/>
-        </StateProvider>
+    <StateProvider>
+        <TitleBar platform={window.PLATFORM}/>
+        <main className="App">
+            <MainProgressBar/>
+            {
+                isSettingsOpen
+                ? <SettingsPage/>
+                : <LogCard logEntries={logEntries} setLogEntries={setLogEntries}/>
+            }
+            <ActionsBar isSettingsOpen={isSettingsOpen} setIsSettingsOpen={setIsSettingsOpen}/>
+        </main>
+        <ModalsContainer/>
+    </StateProvider>
     );
 }
 
 const root = createRoot(document.getElementById('root'));
 root.render(
-    <>
-        <App/>
-    </>
+<>
+    <App/>
+</>
 );

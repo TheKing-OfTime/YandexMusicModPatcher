@@ -22,8 +22,8 @@ export const StateProvider = ({ children }) => {
     }, []);
 
     return (
-        <StateContext.Provider value={state}>
-            {children}
-        </StateContext.Provider>
+    <StateContext.Provider value={state}>
+        {children}
+    </StateContext.Provider>
     );
 };

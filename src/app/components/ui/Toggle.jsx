@@ -19,21 +19,21 @@ export default function Toggle({ label, description, onChange, checked = false, 
     }, [checked]);
 
     return (
-        <div className={`Toggle ${className}`}>
-            <label className={`Toggle_label${disabled ? ' Toggle_disabled' : ''}`}>
-                <div className="Toggle_label_container">
-                    {label && <span className="Toggle_label_text">{label}</span>}
-                    {finalDescription && <span className="Toggle_label_description">{finalDescription}</span>}
-                </div>
-                <input
-                    type="checkbox"
-                    className="Toggle_input"
-                    checked={isChecked}
-                    onChange={handleToggle}
-                    disabled={disabled}
-                />
-                <span className="Toggle_slider"/>
-            </label>
-        </div>
+    <div className={`Toggle ${className}`}>
+        <label className={`Toggle_label${disabled ? ' Toggle_disabled' : ''}`}>
+            <div className="Toggle_label_container">
+                {label && <span className="Toggle_label_text">{label}</span>}
+                {finalDescription && <span className="Toggle_label_description">{finalDescription}</span>}
+            </div>
+            <input
+            type="checkbox"
+            className="Toggle_input"
+            checked={isChecked}
+            onChange={handleToggle}
+            disabled={disabled}
+            />
+            <span className="Toggle_slider"/>
+        </label>
+    </div>
     );
 }

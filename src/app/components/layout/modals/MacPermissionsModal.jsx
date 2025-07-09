@@ -34,19 +34,19 @@ function MacPermissionsModal() {
     }, [isModalOpen]);
 
     return (
-        <Modal
-            isOpen={isModalOpen}
-            onClose={() => setModalOpen(false)}
-            onSubmit={() => {
-                sendOpenPermissionsSettings();
-                setModalOpen(false);
-            }}
-            title="Требуются дополнительные права">
-            <TextBox>
-                На macOS патчеру для правильной работы требуется предоставить права <b>App Management</b> или <b>Full
-                disk access</b><br/><br/>Нажав ОК откроется окно настроек
-            </TextBox>
-        </Modal>
+    <Modal
+    isOpen={isModalOpen}
+    onClose={() => setModalOpen(false)}
+    onSubmit={() => {
+        sendOpenPermissionsSettings();
+        setModalOpen(false);
+    }}
+    title="Требуются дополнительные права">
+        <TextBox>
+            На macOS патчеру для правильной работы требуется предоставить права <b>App Management</b> или <b>Full
+            disk access</b><br/><br/>Нажав ОК откроется окно настроек
+        </TextBox>
+    </Modal>
     )
 }
 
