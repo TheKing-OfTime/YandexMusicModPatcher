@@ -20,7 +20,7 @@ function Modal({
         setTimeout(() => {
             setIsOpen(false);
             setIsClosing(false);
-        }, 300);
+        }, 290);
     }, [onClose, setIsOpen, setIsClosing]);
 
     if (!isOpen) {
