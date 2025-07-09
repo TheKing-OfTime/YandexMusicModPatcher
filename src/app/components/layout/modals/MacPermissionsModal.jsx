@@ -36,7 +36,7 @@ function MacPermissionsModal() {
     return (
     <Modal
     isOpen={isModalOpen}
-    onClose={() => setModalOpen(false)}
+    setIsOpen={setModalOpen}
     onSubmit={() => {
         sendOpenPermissionsSettings();
         setModalOpen(false);

@@ -59,7 +59,7 @@ function CustomPathModal() {
     return (
     <Modal
     isOpen={isModalOpen}
-    onClose={() => setModalOpen(false)}
+    setIsOpen={setModalOpen}
     onSubmit={() => {
         sendCustomPath(customPath);
         setModalOpen(false);

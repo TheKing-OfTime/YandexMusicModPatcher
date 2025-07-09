@@ -18,6 +18,26 @@
     }
 }
 
+@keyframes fadeOut {
+    from {
+        opacity: 1;
+    }
+    to {
+        opacity: 0;
+    }
+}
+
+@keyframes slideOut {
+    from {
+        transform: translateY(0);
+        opacity: 1;
+    }
+    to {
+        transform: translateY(-20px);
+        opacity: 0;
+    }
+}
+
 .Modal_overlay {
     position: fixed;
     inset: 0;
@@ -43,6 +63,14 @@
     flex-direction: column;
     gap: 16px;
     animation: slideIn 0.3s ease-out;
+}
+
+.Modal_overlay__fadeOut {
+    animation: fadeOut 0.3s ease-out;
+}
+
+.Modal_content__slideOut {
+    animation: slideOut 0.3s ease-out;
 }
 
 .Modal_header {

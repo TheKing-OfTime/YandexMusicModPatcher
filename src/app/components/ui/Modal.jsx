@@ -1,23 +1,35 @@
-import React from 'react';
-import '../../styles/Modal.css'; // Подключите стили для модального окна
+import React, { useCallback, useState } from 'react';
+import '../../styles/Modal.css';
 
 function Modal({
     isOpen,
-    onClose,
+    setIsOpen,
     title,
     children,
     onSubmit = undefined,
     onSubmitLabel = undefined,
-    onCancelLabel = undefined
+    onCancelLabel = undefined,
+    onClose = undefined,
 }) {
+
+    const [isClosing, setIsClosing] = useState(false);
+
+    const closeModal = useCallback(() => {
+        onClose?.();
+        setIsClosing(true);
+        setTimeout(() => {
+            setIsOpen(false);
+            setIsClosing(false);
+        }, 300);
+    }, [onClose, setIsOpen, setIsClosing]);
 
     if (!isOpen) {
         return null;
     }
 
     return (
-    <div className="Modal_overlay" onClick={onClose}>
-        <div className="Modal_content" onClick={(e) => e.stopPropagation()}>
+    <div className={`Modal_overlay ${isClosing ? ' Modal_overlay__fadeOut' : ''}`} onClick={closeModal}>
+        <div className={`Modal_content${isClosing ? ' Modal_content__slideOut' : ''}`} onClick={(e) => e.stopPropagation()}>
             <div className="Modal_header">
                 <h2>{title}</h2>
             </div>
@@ -25,7 +37,7 @@ function Modal({
                 {children}
             </div>
             <div className="Modal_footer">
-                <ModalFooter onClose={onClose} onSubmit={onSubmit} onSubmitLabel={onSubmitLabel}
+                <ModalFooter onClose={closeModal} onSubmit={onSubmit} onSubmitLabel={onSubmitLabel}
                              onCancelLabel={onCancelLabel}></ModalFooter>
             </div>
         </div>

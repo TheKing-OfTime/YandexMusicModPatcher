@@ -36,7 +36,7 @@ function WindowsLegacyAppModal() {
     return (
     <Modal
     isOpen={isModalOpen}
-    onClose={() => setModalOpen(false)}
+    setIsOpen={setModalOpen}
     onSubmit={() => {
         sendDeleteLegacyYmApp();
         setModalOpen(false);
