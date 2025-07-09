@@ -1,7 +1,7 @@
 import * as React from 'react';
-import '../styles/InlineButton.css';
+import '../../styles/InlineButton.css';
 
-function InlineButton({ children, onClick, disabled = false, className = '', type = 'button' }) {
+function InlineButton({children, onClick, disabled = false, className = '', type = 'button'}) {
     return (
         <button
             type={type}

@@ -1,4 +1,4 @@
-import React, {} from 'react';
+import React from 'react';
 import CustomPathModal from "./CustomPathModal.jsx";
 import MacPermissionsModal from "./MacPermissionsModal.jsx";
 import WindowsLegacyAppModal from "./WindowsLegacyAppModal.jsx";

@@ -1,9 +1,9 @@
 import * as React from 'react';
-import '../styles/TitleBar.css';
-import { useSendQuit, useSendMinimize, useSendMaximize } from "./Events.jsx";
+import '../../styles/TitleBar.css';
+import {useSendMaximize, useSendMinimize, useSendQuit} from "../Events.jsx";
 
 
-function TitleBarButtonIcon({ variant }) {
+function TitleBarButtonIcon({variant}) {
     switch (variant) {
         case 'quit':
             return (
@@ -36,29 +36,29 @@ function TitleBarButtonIcon({ variant }) {
 
 }
 
-function TitleBarButton({ variant }) {
+function TitleBarButton({variant}) {
     const btnVariant = {};
     switch (variant) {
         case 'quit':
             btnVariant.id = 'quit';
             btnVariant.className = 'TitleBar_QuitButton';
-            btnVariant.callback = React.useCallback(()=>{
+            btnVariant.callback = React.useCallback(() => {
                 useSendQuit();
-            },[])
+            }, [])
             break;
         case 'minimize':
             btnVariant.id = 'minimize';
             btnVariant.className = 'TitleBar_Button';
-            btnVariant.callback = React.useCallback(()=>{
+            btnVariant.callback = React.useCallback(() => {
                 useSendMinimize();
-            },[])
+            }, [])
             break;
         case 'maximize':
             btnVariant.id = 'maximize';
             btnVariant.className = 'TitleBar_Button';
-            btnVariant.callback = React.useCallback(()=>{
+            btnVariant.callback = React.useCallback(() => {
                 useSendMaximize();
-            },[])
+            }, [])
             break;
     }
 

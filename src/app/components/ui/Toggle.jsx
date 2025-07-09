@@ -1,7 +1,7 @@
-import React, { useState, useEffect, useCallback } from "react";
-import '../styles/Toggle.css';
+import React, {useEffect, useState} from "react";
+import '../../styles/Toggle.css';
 
-export default function Toggle({ label, description, onChange, checked = false, disabled = false, className = '' }) {
+export default function Toggle({label, description, onChange, checked = false, disabled = false, className = ''}) {
     const [isChecked, setIsChecked] = useState(checked);
     const [finalDescription, setFinalDescription] = useState(Array.isArray(description) ? description[checked ? 1 : 0] : description);
 
@@ -31,7 +31,7 @@ export default function Toggle({ label, description, onChange, checked = false, 
                     onChange={handleToggle}
                     disabled={disabled}
                 />
-                <span className="Toggle_slider" />
+                <span className="Toggle_slider"/>
             </label>
         </div>
     );

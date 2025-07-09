@@ -1,24 +1,24 @@
-import React, { useEffect, useState, useCallback } from 'react';
-import { useOnPatchProgress } from './Events.jsx';
+import React, {useEffect, useState} from 'react';
+import {useOnPatchProgress} from '../Events.jsx';
 
 function MainProgressBar() {
 
-    const [ progress, setProgress ] = useState(0);
-    const [ taskLabel, setTaskLabel ] = useState('Idle...');
-    const [ logLabel, setLogLabel ] = useState('');
+    const [progress, setProgress] = useState(0);
+    const [taskLabel, setTaskLabel] = useState('Idle...');
+    const [logLabel, setLogLabel] = useState('');
 
-    const [ isDecreasing, setIsDecreasing ] = useState(false);
+    const [isDecreasing, setIsDecreasing] = useState(false);
 
 
     useEffect(() => {
         const OffPatchProgress = useOnPatchProgress((event, args) => {
-            setProgress((previousProgress)=>{
-                if (previousProgress<=args.progress) {
+            setProgress((previousProgress) => {
+                if (previousProgress <= args.progress) {
                     setIsDecreasing(false);
                     return args.progress;
                 } else {
                     setIsDecreasing(true);
-                    setTimeout(()=>setProgress(args.progress), 1000);
+                    setTimeout(() => setProgress(args.progress), 1000);
                     return previousProgress;
                 }
             });
@@ -36,9 +36,11 @@ function MainProgressBar() {
         <div className="ProgressBar_root">
             <div className="ProgressBar_container">
                 <div className="ProgressBar_ProgressBar" id="progressBar" style={isDecreasing ? {
-                    width: progress*100 + '%', opacity: 0, transition: "opacity 0.3s ease-in-out 0.7s, width 0.3s ease-in"
+                    width: progress * 100 + '%',
+                    opacity: 0,
+                    transition: "opacity 0.3s ease-in-out 0.7s, width 0.3s ease-in"
                 } : {
-                    width: progress*100 + '%', opacity: 1
+                    width: progress * 100 + '%', opacity: 1
                 }}/>
             </div>
             <div className="ProgressBar_labelsContainer">

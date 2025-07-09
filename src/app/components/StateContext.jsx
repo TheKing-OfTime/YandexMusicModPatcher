@@ -1,9 +1,9 @@
-import React, { createContext, useState, useEffect } from 'react';
-import { useOnStateUpdated, useOnStateInitiated } from "./Events.jsx";
+import React, {createContext, useEffect, useState} from 'react';
+import {useOnStateInitiated, useOnStateUpdated} from "./Events.jsx";
 
 export const StateContext = createContext(null);
 
-export const StateProvider = ({ children }) => {
+export const StateProvider = ({children}) => {
     const [state, setState] = useState(null);
 
     useEffect(() => {
@@ -21,7 +21,7 @@ export const StateProvider = ({ children }) => {
     }, []);
 
     return (
-        <StateContext.Provider value={state} >
+        <StateContext.Provider value={state}>
             {children}
         </StateContext.Provider>
     );

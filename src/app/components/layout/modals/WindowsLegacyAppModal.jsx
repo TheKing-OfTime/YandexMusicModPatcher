@@ -1,9 +1,7 @@
-import Modal from "./Modal.jsx";
-import React, { useEffect, useState, useCallback } from "react";
-import TextBox from "./TextBox.jsx";
-import TextInput from "./TextInput.jsx";
-import InlineButton from "./InlineButton.jsx";
-import { useSendDeleteLegacyYmApp, useOnRequestLegacyYmAppDeletion } from "./Events.jsx";
+import Modal from "../../ui/Modal.jsx";
+import React, {useCallback, useEffect, useState} from "react";
+import TextBox from "../../ui/TextBox.jsx";
+import {useOnRequestLegacyYmAppDeletion, useSendDeleteLegacyYmApp} from "../../Events.jsx";
 
 function WindowsLegacyAppModal() {
 
@@ -47,7 +45,8 @@ function WindowsLegacyAppModal() {
             onCancelLabel="Отмена"
         >
             <TextBox>
-                У вас установлена устаревшая версия Яндекс Музыки из MS Store.<br/>Она может помешать установке и использованию новой версии.<br/><br/><b>Удалить устаревшую версию?</b>
+                У вас установлена устаревшая версия Яндекс Музыки из MS Store.<br/>Она может помешать установке и
+                использованию новой версии.<br/><br/><b>Удалить устаревшую версию?</b>
             </TextBox>
         </Modal>
     )

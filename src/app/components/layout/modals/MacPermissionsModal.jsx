@@ -1,7 +1,7 @@
-import Modal from "./Modal.jsx";
-import React, { useEffect, useState, useCallback } from "react";
-import TextBox from "./TextBox.jsx";
-import { useSendOpenExternalPermissionsSettings, useOnRequestMacPermissions } from "./Events.jsx";
+import Modal from "../../ui/Modal.jsx";
+import React, {useCallback, useEffect, useState} from "react";
+import TextBox from "../../ui/TextBox.jsx";
+import {useOnRequestMacPermissions, useSendOpenExternalPermissionsSettings} from "../../Events.jsx";
 
 function MacPermissionsModal() {
 
@@ -42,7 +42,8 @@ function MacPermissionsModal() {
             }}
             title="Требуются дополнительные права">
             <TextBox>
-                На macOS патчеру для правильной работы требуется предоставить права <b>App Management</b> или <b>Full disk access</b><br/><br/>Нажав ОК откроется окно настроек
+                На macOS патчеру для правильной работы требуется предоставить права <b>App Management</b> или <b>Full
+                disk access</b><br/><br/>Нажав ОК откроется окно настроек
             </TextBox>
         </Modal>
     )

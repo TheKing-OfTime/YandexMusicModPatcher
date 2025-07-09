@@ -1,6 +1,6 @@
 import * as React from 'react';
-import TitleBarButton from './TitleBarButton.jsx';
-import '../styles/TitleBar.css';
+import TitleBarButton from '../ui/TitleBarButton.jsx';
+import '../../styles/TitleBar.css';
 
 function TitleBar() {
     const platform = window?.CONSTANTS?.PLATFORM ?? 'win32';
@@ -23,9 +23,9 @@ function TitleBar() {
     return (
         <header className="TitleBar">
             <div>
-                <TitleBarButton variant="minimize" />
-                <TitleBarButton variant="maximize" />
-                <TitleBarButton variant="quit" />
+                <TitleBarButton variant="minimize"/>
+                <TitleBarButton variant="maximize"/>
+                <TitleBarButton variant="quit"/>
             </div>
         </header>
     )

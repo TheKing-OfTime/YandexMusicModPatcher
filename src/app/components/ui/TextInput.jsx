@@ -1,7 +1,10 @@
 import * as React from 'react';
-import '../styles/TextInput.css';
+import '../../styles/TextInput.css';
 
-function TextInput({ value, onChange = () => {}, placeholder = '', disabled = false, className = '' }) {
+function TextInput({
+                       value, onChange = () => {
+    }, placeholder = '', disabled = false, className = ''
+                   }) {
     return (
         <input
             type="text"
