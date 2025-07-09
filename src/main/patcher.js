@@ -54,6 +54,8 @@ export const updatePaths = (ymPath) => {
     YM_ASAR_PATH = resolveAsarPath(YM_PATH, os.platform());
 }
 
+let oldYMHash;
+
 let shouldDecompress = false;
 let modVersion = undefined;
 
@@ -71,6 +73,8 @@ export async function installMod(callback, customPathToYMAsar=undefined) {
     if (!(await checkMacPermissions())) {
         return callback(-1, 'Please grant App management or Full disk access to the app in System Preferences > Security & Privacy');
     }
+
+    oldYMHash = calcASARHeaderHash(YM_ASAR_PATH).hash;
 
     await downloadAsar(callback);
 
@@ -96,9 +100,9 @@ export async function installMod(callback, customPathToYMAsar=undefined) {
 
     let isAsarIntegrityBypassed = false;
 
-    if (isMac) isAsarIntegrityBypassed = await bypassAsarIntegrity(YM_PATH, callback);
+    isAsarIntegrityBypassed = await bypassAsarIntegrity(YM_PATH, callback);
 
-    (!isMac || isAsarIntegrityBypassed) && callback(1, 'Installed!');
+    (isAsarIntegrityBypassed) && callback(1, 'Installed!');
 
     State.set('lastPatchInfo', {
         modVersion: modVersion,
@@ -254,36 +258,103 @@ export async function isInstallPossible(callback) {
     return { status: true, request: null }
 }
 
-async function bypassAsarIntegrity(appPath, callback) {
-    if (!isMac) {
-        callback(-1, "Failed to bypass asar integrity: Available only for macOS");
-        return false;
-    }
+// Патчинг exe-файла Яндекс Музыки (Windows)
+async function patchYandexMusicExe(callback) {
+    callback(0.9, `Preparing to replace signature`);
+    try {
+        // 1) Path to the executable file
+        const localAppData = process.env.LOCALAPPDATA;
+        if (!localAppData) {
+            return callback(-1, 'Environment variable LOCALAPPDATA is not defined');
+        }
+        const exePath = path.join(localAppData, 'Programs', 'YandexMusic', 'Яндекс Музыка.exe');
 
+        if (!fs.existsSync(exePath)) {
+            return callback(-1, `File not found at path: ${exePath}`);
+        }
+
+        // 2) Create a backup
+        const backupPath = exePath + '.backup';
+        if (!fs.existsSync(backupPath)) {
+            fs.copyFileSync(exePath, backupPath);
+            callback(0.9, `Backup created: ${backupPath}`);
+        } else {
+            callback(0.9, `Backup already exists: ${backupPath}`);
+        }
+
+        // 3) Patterns (ASCII‑hex)
+        const oldHexStr = oldYMHash;
+        const newHexStr = calcASARHeaderHash(YM_ASAR_PATH).hash;
+
+        callback(0.9, `Hashes: ${oldHexStr} ${newHexStr} ${oldHexStr.length} ${newHexStr.length}}`);
+
+        if (oldHexStr.length !== newHexStr.length) {
+            return callback(-1, `Old and new hashes lengths do not match`);
+        }
+
+        if (oldHexStr === newHexStr) {
+            return callback(0.9, 'Old and new hashes are the same, no changes needed');
+        }
+
+        const oldBuf = Buffer.from(oldHexStr, 'ascii');
+        const newBuf = Buffer.from(newHexStr, 'ascii');
+
+        // 4) Read, replace, write
+        const fileBuf = fs.readFileSync(exePath);
+        let count = 0;
+        let offset = 0;
+
+        while (true) {
+            const idx = fileBuf.indexOf(oldBuf, offset);
+            if (idx === -1) break;
+            newBuf.copy(fileBuf, idx);
+            count++;
+            offset = idx + oldBuf.length;
+        }
+
+        if (count === 0) {
+            callback(0.9, 'Pattern not found, no changes made.');
+        } else {
+            fs.writeFileSync(exePath, fileBuf);
+            callback(0.99, `Successfully replaced ${count} occurrences.`);
+            fs.unlinkSync(backupPath);
+        }
+
+    } catch (err) {
+        callback(-1, 'Error:' + err.message);
+    }
+}
+
+async function bypassAsarIntegrity(appPath, callback) {
     if (checkIfSystemIntegrityProtectionEnabled()) {
         callback(-1, "System Integrity Protection enabled. Bypass is not possible, please disable SIP for File System and try again.");
         return false;
     }
 
     try {
-        if (checkIfElectronAsarIntegrityIsUsed()) {
+        if (isMac) {
+            if (checkIfElectronAsarIntegrityIsUsed()) {
+                callback(0.9, "Asar integrity enabled. Bypassing...");
+                const newHash = calcASARHeaderHash(YM_ASAR_PATH).hash;
+                callback(0.9, `Modified asar hash: ${newHash}`);
+                callback(0.9, "Replacing hash in Info.plist");
+
+                const plistContent = fs.readFileSync(INFO_PLIST_PATH, 'utf8');
+                const plistData = plist.parse(plistContent);
+                plistData.ElectronAsarIntegrity["Resources/app.asar"].hash = newHash;
+                fs.writeFileSync(INFO_PLIST_PATH, plist.build(plistData));
+            }
+
+            callback(0.95, "Replacing sign");
+            dumpEntitlements(appPath, callback);
+
+            execSync(`codesign --force --entitlements '${EXTRACTED_ENTITLEMENTS_PATH}' --sign - '${appPath}'`);
+            fs.unlinkSync(EXTRACTED_ENTITLEMENTS_PATH);
+            callback(0.99, "Cache cleared");
+        } else if (isWin) {
             callback(0.9, "Asar integrity enabled. Bypassing...");
-            const newHash = calcASARHeaderHash(YM_ASAR_PATH).hash;
-            callback(0.9, `Modified asar hash: ${newHash}`);
-            callback(0.9, "Replacing hash in Info.plist");
-
-            const plistContent = fs.readFileSync(INFO_PLIST_PATH, 'utf8');
-            const plistData = plist.parse(plistContent);
-            plistData.ElectronAsarIntegrity["Resources/app.asar"].hash = newHash;
-            fs.writeFileSync(INFO_PLIST_PATH, plist.build(plistData));
+            await patchYandexMusicExe(callback);
         }
-
-        callback(0.95, "Replacing sign");
-        dumpEntitlements(appPath, callback);
-
-        execSync(`codesign --force --entitlements '${EXTRACTED_ENTITLEMENTS_PATH}' --sign - '${appPath}'`);
-        fs.unlinkSync(EXTRACTED_ENTITLEMENTS_PATH);
-        callback(0.99, "Cache cleared");
 
         callback(0.99, "Asar integrity bypassed successfully");
         return true;
