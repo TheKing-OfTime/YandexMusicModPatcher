@@ -7,7 +7,7 @@ import LogCard from './layout/LogCard.jsx';
 import SettingsPage from "./pages/Settings.jsx";
 import ModalsContainer from "./layout/modals/ModalsContainer.jsx";
 import { StateProvider } from "./StateContext.jsx";
-import { useSendReady } from "./Events.jsx";
+import { useOnIsInstallPossibleResponse, useSendReady, useSendReadyToPatch } from "./Events.jsx";
 
 
 function App() {
@@ -17,6 +17,13 @@ function App() {
 
     useEffect(() => {
         useSendReady({});
+        const OffIsInstallPossibleResponse = useOnIsInstallPossibleResponse(() =>{
+            useSendReadyToPatch();
+        })
+
+        return () => {
+            OffIsInstallPossibleResponse();
+        }
     }, []);
 
     return (

@@ -51,6 +51,10 @@ export function useSendDeleteLegacyYmApp() {
     return window.desktopEvents.send(Events.DELETE_LEGACY_YM_APP);
 }
 
+export function useSendReadyToPatch() {
+    return window.desktopEvents.send(Events.READY_TO_PATCH);
+}
+
 export function useOnPatchProgress(callback) {
     return window.desktopEvents.on(Events.PATCH_PROGRESS, (event, args) => {
         callback(event, args)

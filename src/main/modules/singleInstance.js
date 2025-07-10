@@ -1,5 +1,5 @@
 import electron from "electron";
-import { handleDeeplink } from "./handleDeeplinks.js";
+import { checkIsDeeplink, navigateToDeeplink } from "./handleDeeplinks.js";
 const isFirstInstance = electron.app.requestSingleInstanceLock();
 export const checkForSingleInstance = () => {
     if (isFirstInstance) {
@@ -11,9 +11,9 @@ export const checkForSingleInstance = () => {
                 }
                 window.focus();
                 const lastCommandLineArg = commandLine.pop();
-                if (lastCommandLineArg && handleDeeplink.checkIsDeeplink(lastCommandLineArg)
+                if (lastCommandLineArg && checkIsDeeplink(lastCommandLineArg)
                 ) {
-                    handleDeeplink.navigateToDeeplink(window, lastCommandLineArg);
+                    navigateToDeeplink(lastCommandLineArg, window);
                 }
             }
         });

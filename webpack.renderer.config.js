@@ -8,6 +8,7 @@ rules.push({
 
 module.exports = {
     // Put your normal webpack config below here
+    //target: "electron35.0-renderer",
     module: {
         rules,
     },

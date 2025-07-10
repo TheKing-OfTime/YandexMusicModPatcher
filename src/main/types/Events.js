@@ -21,6 +21,7 @@ const Events = {
     STATE_UPDATED: 'STATE_UPDATED',
     STATE_INITIATED: 'STATE_INITIATED',
     LOG_ENTRY_CREATE: 'LOG_ENTRY_CREATE',
+    READY_TO_PATCH: 'READY_TO_PATCH',
 };
 
 export default Events

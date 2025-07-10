@@ -3,8 +3,9 @@ import electron from 'electron';
 import config from '../config.js';
 
 
+
 const transformUrl = (url) => {
-    return url.replace(`${config.deeplinkProtocol}://`, "/").split('/');
+    return url.replace(`${config.deeplinkProtocol}://`, "").split('/');
 };
 
 const deeplinkCommandsHandler = await new deeplinkCommands();
@@ -13,7 +14,7 @@ export const checkIsDeeplink = (value) => {
     const deeplinkRegexp = new RegExp(`${config.deeplinkProtocol}:\/\/.*`);
     return deeplinkRegexp.test(value);
 };
-export const navigateToDeeplink = (url, window) => {
+export const navigateToDeeplink = (url, window=undefined) => {
     if (!url) {
         return;
     }
@@ -22,7 +23,7 @@ export const navigateToDeeplink = (url, window) => {
 
     if (args) {
         const commandName = args.shift();
-        deeplinkCommandsHandler.runCommand(commandName, args);
+        deeplinkCommandsHandler.runCommand(commandName, args, window);
     }
 
 };
