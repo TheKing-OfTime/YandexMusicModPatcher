@@ -7,6 +7,7 @@ class State {
         this.store = getStore();
         this.state = {
             ...this.store.getAll(),
+            onReadyEventsQueue: [],
         };
         console.log('State initialized with:', this.state);
     }

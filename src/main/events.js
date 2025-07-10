@@ -159,6 +159,9 @@ export const handleApplicationEvents = (window) => {
     electron.ipcMain.on(Events.READY, (event, args) => {
         console.log('Received READY', args);
         sendStateInitiated(undefined, State.state);
+        State.get('onReadyEventsQueue').forEach((event) => {
+            event();
+        })
     })
 }
 
