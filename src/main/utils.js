@@ -59,7 +59,7 @@ export async function getYandexMusicProcesses() {
 }
 
 export async function isYandexMusicRunning() {
-    return !!(await getYandexMusicProcesses());
+    return (await getYandexMusicProcesses())?.length > 0;
 }
 
 export async function closeYandexMusic() {
