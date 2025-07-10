@@ -29,7 +29,7 @@ export const handleApplicationEvents = (window) => {
         console.log('Received MAXIMIZE');
         window.isMaximized() ? window.unmaximize() : window.maximize();
     });
-    electron.ipcMain.on(Events.PATCH, async () => {
+    electron.ipcMain.on(Events.PATCH, async (event, args) => {
         console.log('Received PATCH');
         try {
             const metadata = await getReleaseMetadata();
@@ -68,7 +68,7 @@ export const handleApplicationEvents = (window) => {
                 })
             }
 
-            await installMod(callback);
+            await installMod(callback, args);
             sendPatchProgress(window, {
                 progress: 0,
                 taskLabel: `YandexMusicModClient ${version} installed`,

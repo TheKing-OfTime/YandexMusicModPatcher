@@ -15,6 +15,7 @@ import { downloadFile, isYandexMusicRunning, closeYandexMusic, launchYandexMusic
 import { getState } from "./state.js";
 
 import Events from "./types/Events.js";
+import PatchTypes from './types/PatchTypes.js';
 
 const State = getState();
 
@@ -61,7 +62,7 @@ let modVersion = undefined;
 
 await createDirIfNotExist(TMP_PATH);
 
-export async function installMod(callback, customPathToYMAsar=undefined) {
+export async function installMod(callback, { patchType = PatchTypes.DEFAULT, fromAsarSrc = undefined, customPathToYMAsar = undefined }) {
     const ymMetadata = await getYandexMusicMetadata();
     callback(0, 'Preparing to install...');
     const asarPath = customPathToYMAsar ?? getYMAsarDefaultPath();
@@ -71,19 +72,22 @@ export async function installMod(callback, customPathToYMAsar=undefined) {
     }
 
     if (!(await checkMacPermissions())) {
-        return callback(-1, 'Please grant App management or Full disk access to the app in System Preferences > Security & Privacy');
+        return callback(-1, 'Please grant App management or Full disk access to the app in System Preferences > Security & Privacy', 'Action required');
     }
 
     oldYMHash = calcASARHeaderHash(YM_ASAR_PATH).hash;
 
-    await downloadAsar(callback);
+    if (patchType !== PatchTypes.FROM_MOD) {
+        await downloadAsar(callback);
 
-    if (shouldDecompress) {
-        callback(0.8, 'Decompressing...');
-        await decompressFile(ASAR_GZ_TMP_PATH, ASAR_TMP_PATH)
-        callback(0.9, 'Decompressed');
+        if (shouldDecompress) {
+            callback(0.8, 'Decompressing...');
+            await decompressFile(ASAR_GZ_TMP_PATH, ASAR_TMP_PATH)
+            callback(0.9, 'Decompressed');
+        }
+    } else {
+        callback(0.9, 'Updating from mod... Downloading ASAR skipped...');
     }
-
 
     let wasYmClosed = false;
 
@@ -96,7 +100,7 @@ export async function installMod(callback, customPathToYMAsar=undefined) {
 
 
     callback(0.9, 'Replacing ASAR...');
-    await copyFile(ASAR_TMP_PATH, asarPath);
+    await copyFile((patchType === PatchTypes.FROM_MOD && fromAsarSrc) ? fromAsarSrc : ASAR_TMP_PATH, asarPath);
 
     let isAsarIntegrityBypassed = false;
 
@@ -260,40 +264,40 @@ export async function isInstallPossible(callback) {
 
 // Патчинг exe-файла Яндекс Музыки (Windows)
 async function patchYandexMusicExe(callback) {
-    callback(0.9, `Preparing to replace signature`);
+    callback(0.9, `Preparing to replace hash`);
     try {
         // 1) Path to the executable file
         const localAppData = process.env.LOCALAPPDATA;
         if (!localAppData) {
-            return callback(-1, 'Environment variable LOCALAPPDATA is not defined');
+            return callback(-1, 'Environment variable LOCALAPPDATA is not defined', 'Error occurred');
         }
         const exePath = path.join(localAppData, 'Programs', 'YandexMusic', 'Яндекс Музыка.exe');
 
         if (!fs.existsSync(exePath)) {
-            return callback(-1, `File not found at path: ${exePath}`);
+            return callback(-1, `File not found at path: ${exePath}`, 'Error occurred');
         }
 
         // 2) Create a backup
         const backupPath = exePath + '.backup';
         if (!fs.existsSync(backupPath)) {
             fs.copyFileSync(exePath, backupPath);
-            callback(0.9, `Backup created: ${backupPath}`);
+            callback(0.9, `Backup created: ${backupPath}`, 'Backup created');
         } else {
-            callback(0.9, `Backup already exists: ${backupPath}`);
+            callback(0.9, `Backup already exists: ${backupPath}`, 'Backup already exists');
         }
 
         // 3) Patterns (ASCII‑hex)
         const oldHexStr = oldYMHash;
         const newHexStr = calcASARHeaderHash(YM_ASAR_PATH).hash;
 
-        callback(0.9, `Hashes: ${oldHexStr} ${newHexStr} ${oldHexStr.length} ${newHexStr.length}}`);
+        callback(0.9, `Hashes: ${oldHexStr} ${newHexStr} ${oldHexStr.length} ${newHexStr.length}}`, 'Extracted hashes');
 
         if (oldHexStr.length !== newHexStr.length) {
-            return callback(-1, `Old and new hashes lengths do not match`);
+            return callback(-1, 'Old and new hashes lengths do not match', 'Hashes length mismatch');
         }
 
         if (oldHexStr === newHexStr) {
-            return callback(0.9, 'Old and new hashes are the same, no changes needed');
+            return callback(0.9, 'Old and new hashes are the same, no changes needed', 'Hashes match');
         }
 
         const oldBuf = Buffer.from(oldHexStr, 'ascii');
@@ -313,10 +317,10 @@ async function patchYandexMusicExe(callback) {
         }
 
         if (count === 0) {
-            callback(0.9, 'Pattern not found, no changes made.');
+            callback(0.9, 'Pattern not found, no changes made.', 'Hash not found');
         } else {
             fs.writeFileSync(exePath, fileBuf);
-            callback(0.99, `Successfully replaced ${count} occurrences.`);
+            callback(0.99, `Successfully replaced ${count} occurrences.`, 'Hash replaced');
             fs.unlinkSync(backupPath);
         }
 
@@ -327,7 +331,7 @@ async function patchYandexMusicExe(callback) {
 
 async function bypassAsarIntegrity(appPath, callback) {
     if (checkIfSystemIntegrityProtectionEnabled()) {
-        callback(-1, "System Integrity Protection enabled. Bypass is not possible, please disable SIP for File System and try again.");
+        callback(-1, "System Integrity Protection enabled. Bypass is not possible, please disable SIP for File System and try again.", 'Action required');
         return false;
     }
 
