@@ -1,9 +1,9 @@
 import installExtension, { REACT_DEVELOPER_TOOLS } from 'electron-devtools-installer';
 import { handleApplicationEvents } from './events.js'
-import { handleDeeplinkOnApplicationStartup, handleDeeplink } from './handleDeeplinks.js';
-import { getNativeImg } from './utils.js';
-import { getState } from "./state.js";
-import { checkForSingleInstance } from './singleInstance.js';
+import { handleDeeplinkOnApplicationStartup, handleDeeplink } from './modules/handleDeeplinks.js';
+import { getNativeImg } from './modules/utils.js';
+import { getState } from "./modules/state.js";
+import { checkForSingleInstance } from './modules/singleInstance.js';
 import electron, { app, BrowserWindow } from 'electron';
 import config from './config.js';
 

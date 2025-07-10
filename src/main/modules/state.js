@@ -1,5 +1,5 @@
 import { getStore } from "./store.js";
-import { sendStateUpdated } from "./events.js";
+import { sendStateUpdated } from "../events.js";
 
 
 class State {

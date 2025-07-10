@@ -1,6 +1,6 @@
 import deeplinkCommands from './deeplinkCommands/index.js';
 import electron from 'electron';
-import config from './config.js';
+import config from '../config.js';
 
 
 const transformUrl = (url) => {

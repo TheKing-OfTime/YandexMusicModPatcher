@@ -14,8 +14,8 @@ import plist from 'plist';
 import { downloadFile, isYandexMusicRunning, closeYandexMusic, launchYandexMusic, isMac, isWin, isLinux, checkIfLegacyYMInstalled } from "./utils.js";
 import { getState } from "./state.js";
 
-import Events from "./types/Events.js";
-import PatchTypes from './types/PatchTypes.js';
+import Events from "../types/Events.js";
+import PatchTypes from '../types/PatchTypes.js';
 
 const State = getState();
 

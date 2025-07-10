@@ -1,7 +1,7 @@
 import electron, { shell } from "electron";
-import { installMod, getReleaseMetadata, isInstallPossible, updatePaths, checkMacPermissions } from "./patcher.js";
-import { deleteLegacyYM } from "./utils.js";
-import { getState } from "./state.js";
+import { installMod, getReleaseMetadata, isInstallPossible, updatePaths, checkMacPermissions } from "./modules/patcher.js";
+import { deleteLegacyYM } from "./modules/utils.js";
+import { getState } from "./modules/state.js";
 import { mainWindow } from "./index.js";
 import Events from "./types/Events.js";
 

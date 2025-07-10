@@ -1,5 +1,5 @@
-import Events from '../../types/Events.js';
-import PatchTypes from '../../types/PatchTypes.js';
+import Events from '../../../types/Events.js';
+import PatchTypes from '../../../types/PatchTypes.js';
 import { ipcMain } from 'electron';
 import { getState } from '../../state.js';
 
