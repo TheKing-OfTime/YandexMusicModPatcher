@@ -68,7 +68,7 @@ export const handleApplicationEvents = (window) => {
                 })
             }
 
-            await installMod(callback, args);
+            await installMod(callback, args ?? {});
             sendPatchProgress(window, {
                 progress: 0,
                 taskLabel: `YandexMusicModClient ${version} installed`,
@@ -78,7 +78,7 @@ export const handleApplicationEvents = (window) => {
             sendPatchProgress(window, {
                 progress: -1,
                 taskLabel: `Error installing YandexMusicModClient`,
-                logLabel: e.message,
+                logLabel: `${e.message} ${e.stack}`,
             })
         }
     });
