@@ -81,7 +81,7 @@ class Store {
     }
 
     set(key, value) {
-        this.store.set(key, value);
+        if (this.store.has(key)) this.store.set(key, value);
     }
 
     getAll() {
