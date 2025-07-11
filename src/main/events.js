@@ -33,7 +33,7 @@ export const handleApplicationEvents = (window) => {
         console.log('Received PATCH');
         try {
             const metadata = await getReleaseMetadata();
-            const version = metadata.name;
+            const version = metadata?.name;
 
             const callback = (progress, logLabel, subTaskLabel = undefined) => {
                 let taskLabel = "";

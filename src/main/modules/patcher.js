@@ -136,13 +136,14 @@ async function downloadAsar(callback) {
         priorityFiles.unshift(`${filenamePrefix}.gz`)
     }
 
-    const metadata = (await getReleaseMetadata(LATEST_RELEASE_URL))?.assets;
-    modVersion = metadata.name;
+    const metadata = (await getReleaseMetadata(LATEST_RELEASE_URL));
+    const assets = metadata?.assets;
+    modVersion = metadata?.name;
 
     let url = undefined;
 
     for (const filename of priorityFiles) {
-        const asset = metadata.find((a) => a.name === filename);
+        const asset = assets.find((a) => a?.name === filename);
         if (asset) {
             if (filename === `${filenamePrefix}.gz`) shouldDecompress = true;
             url = asset.browser_download_url;

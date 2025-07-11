@@ -70,7 +70,7 @@ app.whenReady().then(() => {
     handleDeeplink(window);
 
     if(installExtension) installExtension(REACT_DEVELOPER_TOOLS)
-        .then((ext) => console.log(`Added Extension:  ${ext.name}`))
+        .then((ext) => console.log(`Added Extension:  ${ext?.name}`))
         .catch((err) => console.log('An error occurred: ', err));
 
     handleApplicationEvents(window);
