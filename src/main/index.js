@@ -6,6 +6,9 @@ import { getState } from "./modules/state.js";
 import { checkForSingleInstance } from './modules/singleInstance.js';
 import electron, { app, BrowserWindow } from 'electron';
 import config from './config.js';
+import { Logger } from "./modules/Logger.js";
+
+const logger = new Logger("main");
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require('electron-squirrel-startup')) {
@@ -24,9 +27,9 @@ export let mainWindow = null;
 
 if (!electron.app.isDefaultProtocolClient(config.deeplinkProtocol)) {
     electron.app.setAsDefaultProtocolClient(config.deeplinkProtocol);
-    console.log('Deeplink registered:', `${config.deeplinkProtocol}://`);
+    logger.log('Deeplink registered:', `${config.deeplinkProtocol}://`);
 } else {
-    console.log('Deeplink already registered:', `${config.deeplinkProtocol}://`);
+    logger.log('Deeplink already registered:', `${config.deeplinkProtocol}://`);
 }
 
 const createWindow = () => {
@@ -70,8 +73,8 @@ app.whenReady().then(() => {
     handleDeeplink(window);
 
     if(installExtension) installExtension(REACT_DEVELOPER_TOOLS)
-        .then((ext) => console.log(`Added Extension:  ${ext?.name}`))
-        .catch((err) => console.log('An error occurred: ', err));
+        .then((ext) => logger.log(`Added Extension:  ${ext?.name}`))
+        .catch((err) => logger.log('An error occurred: ', err));
 
     handleApplicationEvents(window);
 

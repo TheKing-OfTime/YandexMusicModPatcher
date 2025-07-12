@@ -14,6 +14,7 @@ import { getState } from "./state.js";
 import Events from "../types/Events.js";
 import PatchTypes from '../types/PatchTypes.js';
 import { ASAR_GZ_TMP_PATH, ASAR_TMP_PATH, EXTRACTED_ENTITLEMENTS_PATH, TMP_PATH } from '../constants/paths.js';
+import { Logger } from "./Logger.js";
 
 import {
     checkIfLegacyYMInstalled,
@@ -29,6 +30,7 @@ import { LATEST_RELEASE_URL, YM_RELEASE_METADATA_URL } from '../constants/urls.j
 
 
 const State = getState();
+const logger = new Logger("patcher");
 
 const unzipPromise = promisify(zlib.unzip);
 
@@ -117,7 +119,7 @@ export async function installMod(callback, { patchType = PatchTypes.DEFAULT, fro
         patchType: State.get('patchType'),
         date: new Date().toISOString(),
     });
-    console.log(State.get('lastPatchInfo'));
+    logger.log(State.get('lastPatchInfo'));
 
     if (await isYandexMusicRunning() && wasYmClosed) {
         callback(1, 'Yandex Music was closed while mod install. Launching it...', 'Launching Yandex Music...');

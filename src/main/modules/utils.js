@@ -4,9 +4,11 @@ import { exec, execSync, spawn } from 'child_process'
 import {app, nativeImage, shell} from "electron";
 import axios from "axios";
 import fs from "original-fs";
+import { Logger } from "./Logger.js";
 
 const execAsync = promisify(exec);
 const spawnAsync = promisify(spawn);
+const logger = new Logger("utils");
 
 export const isWin = process.platform === 'win32';
 export const isMac = process.platform === 'darwin';
@@ -18,7 +20,7 @@ export const getNativeImg = (relativePath) => {
         : path.join(__dirname, '..', '..', 'assets')
 
     const filePath = path.join(basePath, relativePath)
-        console.log(`File path is undefined for relative path: ${filePath}`);
+    logger.log(`File path is undefined for relative path: ${filePath}`);
     return nativeImage.createFromPath(filePath)
 }
 
@@ -31,7 +33,7 @@ export async function getYandexMusicProcesses() {
             const processes = stdout.split('\n').filter(line => line.trim() !== '')
             return processes.map(pid => ({ pid: parseInt(pid, 10) })).filter(proc => !isNaN(proc.pid))
         } catch (error) {
-            console.error('Error retrieving Yandex Music processes on Mac:', error)
+            logger.error('Error retrieving Yandex Music processes on Mac:', error)
             return []
         }
     } else {
@@ -52,7 +54,7 @@ export async function getYandexMusicProcesses() {
             })
             return yandexProcesses
         } catch (error) {
-            console.error('Error retrieving Yandex Music processes:', error)
+            logger.error('Error retrieving Yandex Music processes:', error)
             return []
         }
     }
@@ -65,16 +67,16 @@ export async function isYandexMusicRunning() {
 export async function closeYandexMusic() {
     const yandexProcesses = await getYandexMusicProcesses();
     if (yandexProcesses.length === 0) {
-        console.info('Yandex Music is not running.')
+        logger.info('Yandex Music is not running.')
         return
     }
 
     for (const proc of yandexProcesses) {
         try {
             process.kill(proc.pid)
-            console.info(`Yandex Music process with PID ${proc.pid} has been terminated.`)
+            logger.info(`Yandex Music process with PID ${proc.pid} has been terminated.`)
         } catch (error) {
-            console.error(`Error terminating process ${proc.pid}:`, error)
+            logger.error(`Error terminating process ${proc.pid}:`, error)
         }
     }
 }
@@ -111,7 +113,7 @@ export async function downloadFile(url, path, callback) {
 
     return new Promise((resolve, reject) => {
         response.data.on('end', () => {
-            resolve()
+            resolve(path)
         })
 
         response.data.on('error', (error) => {

@@ -1,5 +1,7 @@
 import { getStore } from "./store.js";
 import { sendStateUpdated } from "../events.js";
+import { Logger } from "./Logger.js";
+const logger = new Logger("state");
 
 
 class State {
@@ -9,7 +11,7 @@ class State {
             ...this.store.getAll(),
             onReadyEventsQueue: [],
         };
-        console.log('State initialized with:', this.state);
+        logger.log('State initialized with:', this.state);
     }
 
     get(key) {

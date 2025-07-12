@@ -4,7 +4,9 @@ import { deleteLegacyYM } from "./modules/utils.js";
 import { getState } from "./modules/state.js";
 import { mainWindow } from "./index.js";
 import Events from "./types/Events.js";
+import { Logger } from "./modules/Logger.js";
 
+const logger = new Logger("events");
 const State = getState();
 
 /**
@@ -13,24 +15,24 @@ const State = getState();
  */
 export const handleApplicationEvents = (window) => {
     electron.ipcMain.on(Events.QUIT, ()=>{
-        console.log('Received QUIT');
+        logger.log('Received QUIT');
         electron.app.quit();
     });
     electron.ipcMain.on(Events.RESTART, ()=>{
-        console.log('Received RESTART');
+        logger.log('Received RESTART');
         electron.app.relaunch();
         electron.app.quit();
     });
     electron.ipcMain.on(Events.MINIMIZE, ()=>{
-        console.log('Received MINIMIZE');
+        logger.log('Received MINIMIZE');
         window.minimize();
     });
     electron.ipcMain.on(Events.MAXIMIZE, ()=>{
-        console.log('Received MAXIMIZE');
+        logger.log('Received MAXIMIZE');
         window.isMaximized() ? window.unmaximize() : window.maximize();
     });
     electron.ipcMain.on(Events.PATCH, async (event, args) => {
-        console.log('Received PATCH');
+        logger.log('Received PATCH');
         try {
             const metadata = await getReleaseMetadata();
             const version = metadata?.name;
@@ -83,7 +85,7 @@ export const handleApplicationEvents = (window) => {
         }
     });
     electron.ipcMain.on(Events.IS_INSTALL_POSSIBLE, async () => {
-        console.log('Received IS_INSTALL_POSSIBLE');
+        logger.log('Received IS_INSTALL_POSSIBLE');
         const callback = (progress, logLabel) => {
             sendPatchProgress(window, {
                 progress: 0,
@@ -119,13 +121,13 @@ export const handleApplicationEvents = (window) => {
     });
 
     electron.ipcMain.on(Events.SET_CUSTOM_YM_PATH, async (event, args) => {
-        console.log('Received SET_CUSTOM_YM_PATH', args);
+        logger.log('Received SET_CUSTOM_YM_PATH', args);
         updatePaths(args.path)
         electron.ipcMain.emit(Events.IS_INSTALL_POSSIBLE, {})
     })
 
     electron.ipcMain.on(Events.OPEN_EXPLORER_DIALOG, (event, args) => {
-        console.log('Received OPEN_EXPLORER_DIALOG', args);
+        logger.log('Received OPEN_EXPLORER_DIALOG', args);
         electron.dialog.showOpenDialog(window, {
             properties: ['openDirectory'],
             title: 'Select Yandex Music Folder',
@@ -135,21 +137,21 @@ export const handleApplicationEvents = (window) => {
             }
             explorerDialogResponse(window,{path: result.filePaths[0]});
         }).catch((err) => {
-            console.error(err);
+            logger.error(err);
         });
     })
 
     electron.ipcMain.on(Events.OPEN_EXTERNAL_PERMISSIONS_SETTINGS, async (event, args) => {
-        console.log('Received OPEN_EXTERNAL_PERMISSIONS_SETTINGS', args);
+        logger.log('Received OPEN_EXTERNAL_PERMISSIONS_SETTINGS', args);
         if(!(await checkMacPermissions())) {
             shell.openExternal("x-apple.systempreferences:com.apple.preference.security?Privacy_AppBundles").then().catch((err) => {
-                console.error(err);
+                logger.error(err);
             });
             electron.ipcMain.emit(Events.IS_INSTALL_POSSIBLE, {})
         }
     })
     electron.ipcMain.on(Events.DELETE_LEGACY_YM_APP, async (event, args) => {
-        console.log('Received DELETE_LEGACY_YM_APP', args);
+        logger.log('Received DELETE_LEGACY_YM_APP', args);
         await deleteLegacyYM()
         electron.ipcMain.emit(Events.IS_INSTALL_POSSIBLE, {})
     })
@@ -157,11 +159,11 @@ export const handleApplicationEvents = (window) => {
         State.set(args.key, args.value);
     })
     electron.ipcMain.on(Events.READY, (event, args) => {
-        console.log('Received READY', args);
+        logger.log('Received READY', args);
         sendStateInitiated(undefined, State.state);
     })
     electron.ipcMain.on(Events.READY_TO_PATCH, (event, args) => {
-        console.log('Received READY_TO_PATCH', args);
+        logger.log('Received READY_TO_PATCH', args);
         State.get('onReadyEventsQueue').forEach((event) => {
             event();
         })
@@ -170,38 +172,38 @@ export const handleApplicationEvents = (window) => {
 
 export const sendPatchProgress = (window= mainWindow, args) => {
     window.webContents.send(Events.PATCH_PROGRESS, args);
-    console.log('Sent PATCH_PROGRESS', args);
+    logger.log('Sent PATCH_PROGRESS', args);
 }
 
 export const sendIsModInstallPossible = (window= mainWindow, args) => {
     window.webContents.send(Events.IS_INSTALL_POSSIBLE_RESPONSE, args);
-    console.log('Sent IS_INSTALL_POSSIBLE_RESPONSE', args);
+    logger.log('Sent IS_INSTALL_POSSIBLE_RESPONSE', args);
 }
 
 export const requestYmPath = (window= mainWindow, args) => {
     window.webContents.send(Events.REQUEST_YM_PATH, args);
-    console.log('Sent REQUEST_YM_PATH', args);
+    logger.log('Sent REQUEST_YM_PATH', args);
 }
 
 export const requestMacPermissions = (window= mainWindow, args) => {
     window.webContents.send(Events.REQUEST_MAC_PERMISSIONS, args);
-    console.log('Sent REQUEST_MAC_PERMISSIONS', args);
+    logger.log('Sent REQUEST_MAC_PERMISSIONS', args);
 }
 
 export const requestLegacyYmAppDeletion = (window= mainWindow, args) => {
     window.webContents.send(Events.REQUEST_LEGACY_YM_APP_DELETION, args);
-    console.log('Sent REQUEST_LEGACY_YM_APP_DELETION', args);
+    logger.log('Sent REQUEST_LEGACY_YM_APP_DELETION', args);
 }
 
 export const explorerDialogResponse = (window= mainWindow, args) => {
     window.webContents.send(Events.EXPLORER_DIALOG_RESPONSE, args);
-    console.log('Sent EXPLORER_DIALOG_RESPONSE', args);
+    logger.log('Sent EXPLORER_DIALOG_RESPONSE', args);
 }
 export const sendStateUpdated = (window= mainWindow, state) => {
     window.webContents.send(Events.STATE_UPDATED, state);
-    console.log('Sent STATE_UPDATED', state);
+    logger.log('Sent STATE_UPDATED', state);
 }
 export const sendStateInitiated = (window= mainWindow, state) => {
     window.webContents.send(Events.STATE_INITIATED, state);
-    console.log('Sent STATE_INITIATED', state);
+    logger.log('Sent STATE_INITIATED', state);
 }

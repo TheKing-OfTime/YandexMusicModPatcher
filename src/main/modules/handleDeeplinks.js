@@ -1,7 +1,8 @@
 import deeplinkCommands from './deeplinkCommands/index.js';
 import electron from 'electron';
 import config from '../config.js';
-
+import { Logger } from "./Logger.js";
+const logger = new Logger("deeplinks");
 
 
 const transformUrl = (url) => {
@@ -36,7 +37,7 @@ export const handleDeeplinkOnApplicationStartup = () => {
 export const handleDeeplink = (window) => {
     electron.app.on("open-url", (event, url) => {
         event.preventDefault();
-        console.log('Deeplink received:', url);
+        logger.log('Deeplink received:', url);
         navigateToDeeplink(url, window);
     });
 };
