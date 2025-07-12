@@ -1,4 +1,3 @@
-import electron from "electron";
 import path from "path";
 import { promisify } from "util";
 import os from "os";
@@ -11,22 +10,27 @@ import * as fsp from 'fs/promises'
 import { execSync } from "child_process";
 import asar from '@electron/asar';
 import plist from 'plist';
-import { downloadFile, isYandexMusicRunning, closeYandexMusic, launchYandexMusic, isMac, isWin, isLinux, checkIfLegacyYMInstalled } from "./utils.js";
 import { getState } from "./state.js";
-
 import Events from "../types/Events.js";
 import PatchTypes from '../types/PatchTypes.js';
+import { ASAR_GZ_TMP_PATH, ASAR_TMP_PATH, EXTRACTED_ENTITLEMENTS_PATH, TMP_PATH } from '../constants/paths.js';
+
+import {
+    checkIfLegacyYMInstalled,
+    closeYandexMusic,
+    downloadFile,
+    isLinux,
+    isMac,
+    isWin,
+    isYandexMusicRunning,
+    launchYandexMusic
+} from "./utils.js";
+import { LATEST_RELEASE_URL, YM_RELEASE_METADATA_URL } from '../constants/urls.js';
+
 
 const State = getState();
 
 const unzipPromise = promisify(zlib.unzip);
-
-const TMP_PATH = path.join(electron.app.getPath('userData'), '/temp');
-const ASAR_TMP_PATH = path.join(TMP_PATH, 'app.asar');
-const ASAR_GZ_TMP_PATH = path.join(TMP_PATH, 'app.asar.gz');
-const LATEST_RELEASE_URL = `https://api.github.com/repos/TheKing-OfTime/YandexMusicModClient/releases/latest`;
-const YM_RELEASE_METADATA_URL = 'https://music-desktop-application.s3.yandex.net/stable/latest.yml';
-const YM_RELEASE_DOWNLOAD_URL = 'https://music-desktop-application.s3.yandex.net/stable/download.json';
 
 const DEFAULT_YM_PATH = {
     darwin: path.join('/Applications', 'Яндекс Музыка.app'),
@@ -44,7 +48,6 @@ const resolveAsarPath = (appPath, platform) => {
     }
 }
 
-const EXTRACTED_ENTITLEMENTS_PATH = path.join(TMP_PATH, 'extracted_entitlements.xml');
 let YM_PATH = DEFAULT_YM_PATH[os.platform];
 let INFO_PLIST_PATH = path.join(YM_PATH, 'Contents', 'Info.plist');
 let YM_ASAR_PATH = resolveAsarPath(YM_PATH, os.platform());
