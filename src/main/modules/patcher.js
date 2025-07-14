@@ -141,7 +141,7 @@ async function downloadAsar(callback) {
         priorityFiles.unshift(`${filenamePrefix}.gz`)
     }
 
-    const metadata = (await getReleaseMetadata(LATEST_RELEASE_URL));
+    const metadata = await getReleaseMetadata(LATEST_RELEASE_URL);
     const assets = metadata?.assets;
     modVersion = metadata?.name;
 
@@ -184,8 +184,12 @@ async function decompressFile(target, dest) {
     await fso.promises.writeFile(dest, decompressedData);
 }
 
-export async function getReleaseMetadata(releaseUrl=undefined) {
-    return await (await fetch(releaseUrl ?? LATEST_RELEASE_URL)).json();
+export async function getReleaseMetadata(releaseUrl = undefined) {
+    const response = await fetch(releaseUrl ?? LATEST_RELEASE_URL);
+    if (!response.ok) {
+         throw new Error(`Failed to fetch release metadata: ${response.status} - ${response.statusText}:${await response.json()}`);
+    }
+    return await response.json();
 }
 
 async function getYandexMusicMetadata() {
