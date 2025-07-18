@@ -8,6 +8,8 @@ import electron, { app, BrowserWindow } from 'electron';
 import config from './config.js';
 import { Logger } from "./modules/Logger.js";
 
+Logger.setupLogger();
+
 const logger = new Logger("main");
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.

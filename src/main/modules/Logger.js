@@ -1,5 +1,6 @@
 "use strict";
 const electronLog = require("electron-log");
+electronLog.initialize();
 
 class Logger {
   scope;
@@ -45,10 +46,37 @@ class Logger {
     }, {});
   }
   static setupLogger() {
-    // Можно добавить кастомный форматтер, если потребуется
-    // electronLog.transports.console.format = ...
-    // electronLog.transports.file.format = ...
+    electronLog.default.transports.console.format = formatLog;
+    electronLog.default.transports.file.format = formatLog;
   }
 }
+
+const firstLine = (message) => {
+  if (typeof message === "string") {
+    const [line] = message.split("\n");
+    return line;
+  }
+  return message;
+};
+const dateFormatter = new Intl.DateTimeFormat("ru", {
+  year: "numeric",
+  month: "numeric",
+  day: "numeric",
+  hour: "numeric",
+  minute: "numeric",
+  second: "numeric",
+  fractionalSecondDigits: 3,
+  hour12: false,
+});
+const formatLog = ({ message }) => {
+  const date = dateFormatter.format(message.date);
+  const prefix = `[${date}] [${message.level}] (${message.scope})`;
+  const data = message.data.map((chunk) =>
+  chunk instanceof Error
+  ? `${chunk.name} ${firstLine(chunk.message)}`
+  : chunk,
+  );
+  return [prefix, ...data];
+};
 
 module.exports = { Logger };
