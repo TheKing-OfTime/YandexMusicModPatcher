@@ -125,10 +125,10 @@ export async function downloadFile(url, path, callback) {
 
 export async function checkIfLegacyYMInstalled() {
     if (!isWin) return false;
-    const command = `powershell -Command "Get-AppxPackage *yandex.music* | Select-Object -ExpandProperty Name"`;
+    const command = 'Get-AppxPackage *yandex.music* | Select-Object -ExpandProperty Name';
 
     try {
-        const { stdout } = await execAsync(command);
+        const { stdout } = await execAsync(command, {'shell':'powershell.exe'});
         return stdout.trim().length > 0;
     } catch (error) {
         return false;
@@ -136,10 +136,10 @@ export async function checkIfLegacyYMInstalled() {
 }
 
 export async function deleteLegacyYM() {
-    const command = `powershell -Command "Get-AppxPackage *yandex.music* | Remove-AppxPackage"`;
+    const command = 'Get-AppxPackage *yandex.music* | Remove-AppxPackage';
 
     try {
-        const { stdout } = await execAsync(command);
+        const { stdout } = await execAsync(command, {'shell':'powershell.exe'});
         return stdout.trim().length > 0;
     } catch (error) {
         return false;
