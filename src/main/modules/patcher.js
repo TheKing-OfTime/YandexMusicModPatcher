@@ -121,7 +121,7 @@ export async function installMod(callback, { patchType = PatchTypes.DEFAULT, fro
     });
     logger.log(State.get('lastPatchInfo'));
 
-    if (await isYandexMusicRunning() && wasYmClosed) {
+    if (!(await isYandexMusicRunning()) && wasYmClosed) {
         callback(1, 'Yandex Music was closed while mod install. Launching it...', 'Launching Yandex Music...');
         try {
             launchYandexMusic();
