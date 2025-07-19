@@ -368,7 +368,7 @@ async function bypassAsarIntegrityWin(callback) {
         const newBuf = Buffer.from(newHexStr, 'ascii');
 
         // 4) Read, replace, write
-        const fileBuf = fs.readFileSync(exePath);
+        const fileBuf = fs.readFileSync(YM_EXE_PATH);
         let count = 0;
         let offset = 0;
 
@@ -384,13 +384,13 @@ async function bypassAsarIntegrityWin(callback) {
             callback(-1, 'Pattern not found, no changes made.', 'Hash not found');
             return false;
         } else {
-            fs.writeFileSync(exePath, fileBuf);
+            fs.writeFileSync(YM_EXE_PATH, fileBuf);
             callback(0.99, `Successfully replaced ${count} occurrences.`, 'Hash replaced');
         }
         return true;
 
     } catch (err) {
-        callback(-1, 'Error:' + err.message);
+        callback(-1, 'Error: ' + err.message);
         return false;
     }
 }
