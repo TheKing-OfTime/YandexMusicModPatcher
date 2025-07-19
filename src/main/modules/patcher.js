@@ -67,67 +67,14 @@ let modVersion = undefined;
 
 await createDirIfNotExist(TMP_PATH);
 
-export async function installMod(callback, { patchType = PatchTypes.DEFAULT, fromAsarSrc = undefined, customPathToYMAsar = undefined }) {
-    const ymMetadata = await getYandexMusicMetadata();
-    callback(0, 'Preparing to install...');
-    const asarPath = customPathToYMAsar ?? getYMAsarDefaultPath();
-
-    if (!asarPath) {
-        return callback(-1, 'No install destination');
-    }
-
-    if (!(await checkMacPermissions())) {
-        return callback(-1, 'Please grant App management or Full disk access to the app in System Preferences > Security & Privacy', 'Action required');
-    }
-
-    oldYMHash = calcASARHeaderHash(YM_ASAR_PATH).hash;
-
-    if (patchType !== PatchTypes.FROM_MOD) {
-        await downloadAsar(callback);
-
-        if (shouldDecompress) {
-            callback(0.8, 'Decompressing...');
-            await decompressFile(ASAR_GZ_TMP_PATH, ASAR_TMP_PATH)
-            callback(0.9, 'Decompressed');
-        }
-    } else {
-        callback(0.9, 'Updating from mod... Downloading ASAR skipped...');
-    }
-
-    let wasYmClosed = false;
-
-    if (await isYandexMusicRunning()) {
-        callback(0.9, 'Yandex Music is running. Closing it...', 'Closing Yandex Music...');
-        await closeYandexMusic();
-        wasYmClosed = true;
-        callback(0.9, 'Yandex Music closed.');
-    }
-
-    callback(0.9, 'Creating ASAR backup...');
-    await copyFile(asarPath, ASAR_TMP_BACKUP_PATH);
-    callback(0.9, 'ASAR backup created.');
-    callback(0.9, 'Replacing ASAR...');
-    await copyFile((patchType === PatchTypes.FROM_MOD && fromAsarSrc) ? fromAsarSrc : ASAR_TMP_PATH, asarPath);
-    callback(0.9, 'ASAR replaced.');
-
-    let isAsarIntegrityBypassed = false;
-
-    isAsarIntegrityBypassed = await bypassAsarIntegrity(YM_PATH, callback);
-
-    if (!isAsarIntegrityBypassed) {
-        callback(-1, 'Reverting ASAR replace...');
-        await copyFile(ASAR_TMP_BACKUP_PATH, asarPath);
-        callback(-1, 'ASAR replace reverted.');
-        return false;
-    }
-    callback(1, 'Installed!');
-    logger.log('Installed mod version:', modVersion, 'YM version:', ymMetadata.version, 'Patch type:', patchType);
-
+async function clearCaches(callback) {
     callback(1, 'Clearing caches...');
-    await fsp.unlink(ASAR_TMP_BACKUP_PATH);
-    await fsp.unlink(YM_EXE_TMP_BACKUP_PATH);
+    if (fs.existsSync(ASAR_TMP_BACKUP_PATH)) await fsp.unlink(ASAR_TMP_BACKUP_PATH);
+    if (fs.existsSync(YM_EXE_TMP_BACKUP_PATH)) await fsp.unlink(YM_EXE_TMP_BACKUP_PATH);
     callback(1, 'Caches cleared.');
+}
 
+async function postInstallTasks(ymMetadata, wasYmClosed, callback) {
     State.set('lastPatchInfo', {
         modVersion: modVersion,
         ymVersion: ymMetadata.version,
@@ -145,6 +92,85 @@ export async function installMod(callback, { patchType = PatchTypes.DEFAULT, fro
             callback(-1, 'Failed to launch Yandex Music: ' + e.message);
         }
     }
+}
+
+async function applyBackups(callback, asarPath) {
+    callback(-1, 'Reverting ASAR replace...');
+    await copyFile(ASAR_TMP_BACKUP_PATH, asarPath);
+    callback(-1, 'ASAR replace reverted.');
+}
+
+async function createBackups(callback, asarPath) {
+    callback(0.9, 'Creating ASAR backup...');
+    await copyFile(asarPath, ASAR_TMP_BACKUP_PATH);
+    callback(0.9, 'ASAR backup created.');
+}
+
+async function replaceAsar(callback, patchType, fromAsarSrc, asarPath) {
+    callback(0.9, 'Replacing ASAR...');
+    await copyFile((patchType === PatchTypes.FROM_MOD && fromAsarSrc) ? fromAsarSrc : ASAR_TMP_PATH, asarPath);
+    callback(0.9, 'ASAR replaced.');
+}
+
+async function closeYmIfRunning(callback) {
+    if (await isYandexMusicRunning()) {
+        callback(0.9, 'Yandex Music is running. Closing it...', 'Closing Yandex Music...');
+        await closeYandexMusic();
+        callback(0.9, 'Yandex Music closed.');
+        return true;
+    }
+    return false;
+}
+
+async function prepareModAsarFile(patchType, callback) {
+    if (patchType !== PatchTypes.FROM_MOD) {
+        await downloadAsar(callback);
+
+        if (shouldDecompress) {
+            callback(0.8, 'Decompressing...');
+            await decompressFile(ASAR_GZ_TMP_PATH, ASAR_TMP_PATH)
+            callback(0.9, 'Decompressed.');
+        }
+    } else {
+        callback(0.9, 'Updating from mod... Downloading ASAR skipped...');
+    }
+}
+
+export async function installMod(callback, { patchType = PatchTypes.DEFAULT, fromAsarSrc = undefined, customPathToYMAsar = undefined }) {
+    const ymMetadata = await getYandexMusicMetadata();
+    callback(0, 'Preparing to install...');
+    const asarPath = customPathToYMAsar ?? getYMAsarDefaultPath();
+
+    if (!asarPath) {
+        return callback(-1, 'No install destination');
+    }
+
+    if (!(await checkMacPermissions())) {
+        return callback(-1, 'Please grant App management or Full disk access to the app in System Preferences > Security & Privacy', 'Action required');
+    }
+
+    oldYMHash = calcASARHeaderHash(YM_ASAR_PATH).hash;
+
+    await prepareModAsarFile(patchType, callback);
+
+    const wasYmClosed = await closeYmIfRunning(callback);
+
+    await createBackups(callback, asarPath);
+    await replaceAsar(callback, patchType, fromAsarSrc, asarPath);
+
+    const isAsarIntegrityBypassed = await bypassAsarIntegrity(YM_PATH, callback);
+
+    if (!isAsarIntegrityBypassed) {
+        await applyBackups(callback, asarPath);
+        return false;
+    }
+
+    callback(1, 'Installed!');
+    logger.log('Installed mod version:', modVersion, 'YM version:', ymMetadata.version, 'Patch type:', patchType);
+
+    await clearCaches(callback);
+    await postInstallTasks(ymMetadata, wasYmClosed, callback);
+
     setTimeout(()=>callback(0, 'Task finished.'), 2000);
 
 }
