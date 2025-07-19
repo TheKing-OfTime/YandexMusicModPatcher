@@ -2,6 +2,8 @@
 const electronLog = require("electron-log");
 electronLog.initialize();
 
+const logLevel = 'info';
+
 class Logger {
   scope;
   logger;
@@ -47,7 +49,9 @@ class Logger {
   }
   static setupLogger() {
     electronLog.default.transports.console.format = formatLog;
+    electronLog.default.transports.console.level = logLevel;
     electronLog.default.transports.file.format = formatLog;
+    electronLog.default.transports.file.level = logLevel;
   }
 }
 
