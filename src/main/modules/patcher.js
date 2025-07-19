@@ -71,6 +71,7 @@ async function clearCaches(callback) {
     callback(1, 'Clearing caches...');
     if (fs.existsSync(ASAR_TMP_BACKUP_PATH)) await fsp.unlink(ASAR_TMP_BACKUP_PATH);
     if (fs.existsSync(YM_EXE_TMP_BACKUP_PATH)) await fsp.unlink(YM_EXE_TMP_BACKUP_PATH);
+    if (fs.existsSync(EXTRACTED_ENTITLEMENTS_PATH)) await fsp.unlink(EXTRACTED_ENTITLEMENTS_PATH);
     callback(1, 'Caches cleared.');
 }
 
@@ -314,7 +315,8 @@ export async function isInstallPossible(callback) {
 }
 
 // Патчинг exe-файла Яндекс Музыки (Windows)
-async function patchYandexMusicExe(callback) {
+async function bypassAsarIntegrityWin(callback) {
+    callback(0.9, "Asar integrity enabled. Bypassing...");
     callback(0.9, `Preparing to replace hash`);
     try {
         // 1) Path to the executable file
@@ -384,6 +386,25 @@ async function patchYandexMusicExe(callback) {
     }
 }
 
+function bypassAsarIntegrityDarwin(callback) {
+    callback(0.9, "Asar integrity enabled. Bypassing...");
+    const newHash = calcASARHeaderHash(YM_ASAR_PATH).hash;
+    callback(0.9, `Modified asar hash: ${newHash}`);
+    callback(0.9, "Replacing hash in Info.plist");
+
+    const plistContent = fs.readFileSync(INFO_PLIST_PATH, 'utf8');
+    const plistData = plist.parse(plistContent);
+    plistData.ElectronAsarIntegrity["Resources/app.asar"].hash = newHash;
+    fs.writeFileSync(INFO_PLIST_PATH, plist.build(plistData));
+}
+
+function replaceSignDarwin(callback, appPath) {
+    callback(0.95, "Replacing sign");
+    dumpEntitlements(appPath, callback);
+
+    execSync(`codesign --force --entitlements '${EXTRACTED_ENTITLEMENTS_PATH}' --sign - '${appPath}'`);
+}
+
 async function bypassAsarIntegrity(appPath, callback) {
     if (checkIfSystemIntegrityProtectionEnabled()) {
         callback(-1, "System Integrity Protection enabled. Bypass is not possible, please disable SIP for File System and try again.", 'Action required');
@@ -393,26 +414,11 @@ async function bypassAsarIntegrity(appPath, callback) {
     try {
         if (isMac) {
             if (checkIfElectronAsarIntegrityIsUsed()) {
-                callback(0.9, "Asar integrity enabled. Bypassing...");
-                const newHash = calcASARHeaderHash(YM_ASAR_PATH).hash;
-                callback(0.9, `Modified asar hash: ${newHash}`);
-                callback(0.9, "Replacing hash in Info.plist");
-
-                const plistContent = fs.readFileSync(INFO_PLIST_PATH, 'utf8');
-                const plistData = plist.parse(plistContent);
-                plistData.ElectronAsarIntegrity["Resources/app.asar"].hash = newHash;
-                fs.writeFileSync(INFO_PLIST_PATH, plist.build(plistData));
+                bypassAsarIntegrityDarwin(callback);
             }
-
-            callback(0.95, "Replacing sign");
-            dumpEntitlements(appPath, callback);
-
-            execSync(`codesign --force --entitlements '${EXTRACTED_ENTITLEMENTS_PATH}' --sign - '${appPath}'`);
-            fs.unlinkSync(EXTRACTED_ENTITLEMENTS_PATH);
-            callback(0.99, "Cache cleared");
+            replaceSignDarwin(callback, appPath);
         } else if (isWin) {
-            callback(0.9, "Asar integrity enabled. Bypassing...");
-            const result = await patchYandexMusicExe(callback);
+            const result = await bypassAsarIntegrityWin(callback);
             if (!result) {
                 callback(-1, "Failed to patch Yandex Music executable. Reverting...", 'Error occurred');
                 return false;
@@ -424,8 +430,6 @@ async function bypassAsarIntegrity(appPath, callback) {
 
     } catch (error) {
         callback(-1, "Asar integrity bypass failed", error);
-        fs.unlinkSync(EXTRACTED_ENTITLEMENTS_PATH);
-        callback(-1, "Cache cleared");
     }
 
 }
