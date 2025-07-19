@@ -53,6 +53,7 @@ const resolveAsarPath = (appPath, platform) => {
 let YM_PATH = DEFAULT_YM_PATH[os.platform];
 let INFO_PLIST_PATH = path.join(YM_PATH, 'Contents', 'Info.plist');
 let YM_ASAR_PATH = resolveAsarPath(YM_PATH, os.platform());
+let YM_EXE_PATH = undefined;
 
 export const updatePaths = (ymPath) => {
     YM_PATH = ymPath;
@@ -96,9 +97,16 @@ async function postInstallTasks(ymMetadata, wasYmClosed, callback) {
 }
 
 async function applyBackups(callback, asarPath) {
+
     callback(-1, 'Reverting ASAR replace...');
     await copyFile(ASAR_TMP_BACKUP_PATH, asarPath);
     callback(-1, 'ASAR replace reverted.');
+
+    if (isWin && YM_EXE_PATH && fs.existsSync(YM_EXE_PATH) && fs.existsSync(YM_EXE_TMP_BACKUP_PATH)) {
+        callback(-1, 'Reverting EXE patch...');
+        await copyFile(YM_EXE_TMP_BACKUP_PATH, YM_EXE_PATH);
+        callback(-1, 'EXE patch reverted.');
+    }
 }
 
 async function createBackups(callback, asarPath) {
@@ -325,16 +333,16 @@ async function bypassAsarIntegrityWin(callback) {
             callback(-1, 'Environment variable LOCALAPPDATA is not defined', 'Error occurred');
             return false;
         }
-        const exePath = path.join(localAppData, 'Programs', 'YandexMusic', 'Яндекс Музыка.exe');
+        YM_EXE_PATH = path.join(localAppData, 'Programs', 'YandexMusic', 'Яндекс Музыка.exe');
 
-        if (!fs.existsSync(exePath)) {
-            callback(-1, `File not found at path: ${exePath}`, 'Error occurred');
+        if (!fs.existsSync(YM_EXE_PATH)) {
+            callback(-1, `File not found at path: ${YM_EXE_PATH}`, 'Error occurred');
             return false;
         }
 
         // 2) Create a backup
         if (!fs.existsSync(YM_EXE_TMP_BACKUP_PATH)) {
-            fs.copyFileSync(exePath, YM_EXE_TMP_BACKUP_PATH);
+            fs.copyFileSync(YM_EXE_PATH, YM_EXE_TMP_BACKUP_PATH);
             callback(0.9, `Backup created: ${YM_EXE_TMP_BACKUP_PATH}`, 'Backup created');
         } else {
             callback(0.9, `Backup already exists: ${YM_EXE_TMP_BACKUP_PATH}`, 'Backup already exists');
@@ -379,6 +387,7 @@ async function bypassAsarIntegrityWin(callback) {
             fs.writeFileSync(exePath, fileBuf);
             callback(0.99, `Successfully replaced ${count} occurrences.`, 'Hash replaced');
         }
+        return true;
 
     } catch (err) {
         callback(-1, 'Error:' + err.message);
@@ -430,6 +439,7 @@ async function bypassAsarIntegrity(appPath, callback) {
 
     } catch (error) {
         callback(-1, "Asar integrity bypass failed", error);
+        return false
     }
 
 }
