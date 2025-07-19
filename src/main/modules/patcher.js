@@ -13,7 +13,7 @@ import plist from 'plist';
 import { getState } from "./state.js";
 import Events from "../types/Events.js";
 import PatchTypes from '../types/PatchTypes.js';
-import { ASAR_GZ_TMP_PATH, ASAR_TMP_PATH, EXTRACTED_ENTITLEMENTS_PATH, TMP_PATH } from '../constants/paths.js';
+import { ASAR_GZ_TMP_PATH, ASAR_TMP_PATH, EXTRACTED_ENTITLEMENTS_PATH, TMP_PATH, ASAR_TMP_BACKUP_PATH, YM_EXE_TMP_BACKUP_PATH } from '../constants/paths.js';
 import { Logger } from "./Logger.js";
 
 import {
@@ -103,15 +103,30 @@ export async function installMod(callback, { patchType = PatchTypes.DEFAULT, fro
         callback(0.9, 'Yandex Music closed.');
     }
 
-
+    callback(0.9, 'Creating ASAR backup...');
+    await copyFile(asarPath, ASAR_TMP_BACKUP_PATH);
+    callback(0.9, 'ASAR backup created.');
     callback(0.9, 'Replacing ASAR...');
     await copyFile((patchType === PatchTypes.FROM_MOD && fromAsarSrc) ? fromAsarSrc : ASAR_TMP_PATH, asarPath);
+    callback(0.9, 'ASAR replaced.');
 
     let isAsarIntegrityBypassed = false;
 
     isAsarIntegrityBypassed = await bypassAsarIntegrity(YM_PATH, callback);
 
-    (isAsarIntegrityBypassed) && callback(1, 'Installed!');
+    if (!isAsarIntegrityBypassed) {
+        callback(-1, 'Reverting ASAR replace...');
+        await copyFile(ASAR_TMP_BACKUP_PATH, asarPath);
+        callback(-1, 'ASAR replace reverted.');
+        return false;
+    }
+    callback(1, 'Installed!');
+    logger.log('Installed mod version:', modVersion, 'YM version:', ymMetadata.version, 'Patch type:', patchType);
+
+    callback(1, 'Clearing caches...');
+    await fsp.unlink(ASAR_TMP_BACKUP_PATH);
+    await fsp.unlink(YM_EXE_TMP_BACKUP_PATH);
+    callback(1, 'Caches cleared.');
 
     State.set('lastPatchInfo', {
         modVersion: modVersion,
@@ -125,7 +140,7 @@ export async function installMod(callback, { patchType = PatchTypes.DEFAULT, fro
         callback(1, 'Yandex Music was closed while mod install. Launching it...', 'Launching Yandex Music...');
         try {
             launchYandexMusic();
-            setTimeout(()=>callback(2, 'Yandex Music launched.'), 500);
+            setTimeout(() => callback(2, 'Yandex Music launched.'), 500);
         } catch (e) {
             callback(-1, 'Failed to launch Yandex Music: ' + e.message);
         }
@@ -279,21 +294,22 @@ async function patchYandexMusicExe(callback) {
         // 1) Path to the executable file
         const localAppData = process.env.LOCALAPPDATA;
         if (!localAppData) {
-            return callback(-1, 'Environment variable LOCALAPPDATA is not defined', 'Error occurred');
+            callback(-1, 'Environment variable LOCALAPPDATA is not defined', 'Error occurred');
+            return false;
         }
         const exePath = path.join(localAppData, 'Programs', 'YandexMusic', 'Яндекс Музыка.exe');
 
         if (!fs.existsSync(exePath)) {
-            return callback(-1, `File not found at path: ${exePath}`, 'Error occurred');
+            callback(-1, `File not found at path: ${exePath}`, 'Error occurred');
+            return false;
         }
 
         // 2) Create a backup
-        const backupPath = exePath + '.backup';
-        if (!fs.existsSync(backupPath)) {
-            fs.copyFileSync(exePath, backupPath);
-            callback(0.9, `Backup created: ${backupPath}`, 'Backup created');
+        if (!fs.existsSync(YM_EXE_TMP_BACKUP_PATH)) {
+            fs.copyFileSync(exePath, YM_EXE_TMP_BACKUP_PATH);
+            callback(0.9, `Backup created: ${YM_EXE_TMP_BACKUP_PATH}`, 'Backup created');
         } else {
-            callback(0.9, `Backup already exists: ${backupPath}`, 'Backup already exists');
+            callback(0.9, `Backup already exists: ${YM_EXE_TMP_BACKUP_PATH}`, 'Backup already exists');
         }
 
         // 3) Patterns (ASCII‑hex)
@@ -303,11 +319,13 @@ async function patchYandexMusicExe(callback) {
         callback(0.9, `Hashes: ${oldHexStr} ${newHexStr} ${oldHexStr.length} ${newHexStr.length}`, 'Extracted hashes');
 
         if (oldHexStr.length !== newHexStr.length) {
-            return callback(-1, 'Old and new hashes lengths do not match', 'Hashes length mismatch');
+            callback(-1, 'Old and new hashes lengths do not match', 'Hashes length mismatch');
+            return false;
         }
 
         if (oldHexStr === newHexStr) {
-            return callback(0.9, 'Old and new hashes are the same, no changes needed', 'Hashes match');
+            callback(0.9, 'Old and new hashes are the same, no changes needed', 'Hashes match');
+            return true;
         }
 
         const oldBuf = Buffer.from(oldHexStr, 'ascii');
@@ -327,15 +345,16 @@ async function patchYandexMusicExe(callback) {
         }
 
         if (count === 0) {
-            callback(0.9, 'Pattern not found, no changes made.', 'Hash not found');
+            callback(-1, 'Pattern not found, no changes made.', 'Hash not found');
+            return false;
         } else {
             fs.writeFileSync(exePath, fileBuf);
             callback(0.99, `Successfully replaced ${count} occurrences.`, 'Hash replaced');
-            fs.unlinkSync(backupPath);
         }
 
     } catch (err) {
         callback(-1, 'Error:' + err.message);
+        return false;
     }
 }
 
@@ -367,7 +386,11 @@ async function bypassAsarIntegrity(appPath, callback) {
             callback(0.99, "Cache cleared");
         } else if (isWin) {
             callback(0.9, "Asar integrity enabled. Bypassing...");
-            await patchYandexMusicExe(callback);
+            const result = await patchYandexMusicExe(callback);
+            if (!result) {
+                callback(-1, "Failed to patch Yandex Music executable. Reverting...", 'Error occurred');
+                return false;
+            }
         }
 
         callback(0.99, "Asar integrity bypassed successfully");
