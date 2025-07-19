@@ -1,7 +1,7 @@
 {
   "name": "yandexmusicmodpatcher",
   "productName": "YandexMusicModPatcher",
-  "version": "0.4.3",
+  "version": "0.4.4",
   "description": "Patcher for YandexMusicModClient",
   "main": ".webpack/main",
   "scripts": {
