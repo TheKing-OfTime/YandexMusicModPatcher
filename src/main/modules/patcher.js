@@ -300,7 +300,7 @@ async function patchYandexMusicExe(callback) {
         const oldHexStr = oldYMHash;
         const newHexStr = calcASARHeaderHash(YM_ASAR_PATH).hash;
 
-        callback(0.9, `Hashes: ${oldHexStr} ${newHexStr} ${oldHexStr.length} ${newHexStr.length}}`, 'Extracted hashes');
+        callback(0.9, `Hashes: ${oldHexStr} ${newHexStr} ${oldHexStr.length} ${newHexStr.length}`, 'Extracted hashes');
 
         if (oldHexStr.length !== newHexStr.length) {
             return callback(-1, 'Old and new hashes lengths do not match', 'Hashes length mismatch');
