@@ -19,8 +19,10 @@ export const getNativeImg = (relativePath) => {
         ? path.join(process.resourcesPath, 'app.asar', '.webpack', 'renderer', 'static', 'assets')
         : path.join(__dirname, '..', '..', 'assets')
 
-    const filePath = path.join(basePath, relativePath)
-    logger.log(`File path is undefined for relative path: ${filePath}`);
+    const filePath = path.join(basePath, relativePath);
+    if (!filePath || !fs.existsSync(filePath)) {
+        logger.log(`File path is undefined for relative path: ${filePath}`);
+    }
     return nativeImage.createFromPath(filePath)
 }
 
