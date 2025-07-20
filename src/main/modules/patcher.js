@@ -309,7 +309,7 @@ export async function isInstallPossible(callback) {
     const isLegacyYMInstalled = await checkIfLegacyYMInstalled();
 
     if (isLegacyYMInstalled && !State.get('ignoreLegacyYM')) {
-        return { status: false, request: Events.REQUEST_LEGACY_YM_APP_DELETION };
+        return { status: true, request: Events.REQUEST_LEGACY_YM_APP_DELETION };
     }
 
     const ymAsarPath = getYMAsarDefaultPath();
