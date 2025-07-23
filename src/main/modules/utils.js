@@ -131,7 +131,7 @@ export async function checkIfLegacyYMInstalled() {
 
     try {
         const { stdout } = await execAsync(command, {'shell':'powershell.exe'});
-        return stdout.trim().length > 0;
+        return (stdout.match(/yandex\.music/gi)?.length ?? 0) > 0;
     } catch (error) {
         return false;
     }
