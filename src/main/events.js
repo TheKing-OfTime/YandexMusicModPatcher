@@ -168,6 +168,12 @@ export const handleApplicationEvents = (window) => {
             event();
         })
     })
+    electron.ipcMain.on(Events.READY_TO_PATCH, (event, args) => {
+        logger.log('Received READY_TO_PATCH', args);
+        State.get('onReadyEventsQueue').forEach((event) => {
+            event();
+        })
+    })
 }
 
 export const sendPatchProgress = (window= mainWindow, args) => {
@@ -206,4 +212,16 @@ export const sendStateUpdated = (window= mainWindow, state) => {
 export const sendStateInitiated = (window= mainWindow, state) => {
     window.webContents.send(Events.STATE_INITIATED, state);
     logger.log('Sent STATE_INITIATED', state);
+}
+export const sendModUpdateAvailable = (window= mainWindow, version) => {
+    window.webContents.send(Events.MOD_UPDATE_AVAILABLE, version);
+    logger.log('Sent MOD_UPDATE_AVAILABLE', version);
+}
+export const sendSelfUpdateAvailable = (window= mainWindow, version) => {
+    window.webContents.send(Events.SELF_UPDATE_AVAILABLE, version);
+    logger.log('Sent SELF_UPDATE_AVAILABLE', version);
+}
+export const sendYMUpdateAvailable = (window= mainWindow, version) => {
+    window.webContents.send(Events.YM_UPDATE_AVAILABLE, version);
+    logger.log('Sent YM_UPDATE_AVAILABLE', version);
 }

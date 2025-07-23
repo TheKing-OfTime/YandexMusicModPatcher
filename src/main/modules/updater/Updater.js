@@ -13,7 +13,7 @@ export default class Updater {
      * @param name {string} Name of the updater, used for logging
      * @param feedUrl {string} URL of the update feed
      * @param responseHandler {function(Response):Promise<{version: string, downloadUrl: string}>} Function to handle the response from the update feed.
-     * @param onUpdateAvailableHandler {function({version: string, downloadedPath: string}):Promise<void>} Function to call when an update is available.
+     * @param onUpdateAvailableHandler {function({version: string, downloadUrl: string}):Promise<void>} Function to call when an update is available.
      * @param onUpdateProgressHandler {function(progress:number, logText:string, subTaskText:string):void} Function to call while update progress. Optional.
      */
     constructor(name, feedUrl, responseHandler, onUpdateAvailableHandler, onUpdateProgressHandler=undefined) {
@@ -52,15 +52,9 @@ export default class Updater {
         this.latestVersion = version;
         this.updateAvailable = true;
 
-        const downloadedPath = await this.downloadUpdate(downloadUrl);
+        await this.onUpdateAvailableHandler({ version, downloadUrl });
 
-        if (!downloadedPath) {
-            return false;
-        }
-
-        await this.onUpdateAvailableHandler({ version, downloadedPath });
-
-        return { version, downloadUrl, downloadedPath };
+        return { version, downloadUrl };
     }
 
     /**
