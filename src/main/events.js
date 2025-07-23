@@ -168,11 +168,9 @@ export const handleApplicationEvents = (window) => {
             event();
         })
     })
-    electron.ipcMain.on(Events.READY_TO_PATCH, (event, args) => {
-        logger.log('Received READY_TO_PATCH', args);
-        State.get('onReadyEventsQueue').forEach((event) => {
-            event();
-        })
+    electron.ipcMain.on(Events.INSTALL_ALL_UPDATES, (event, args) => {
+        logger.log('Received INSTALL_ALL_UPDATES', args);
+        electron.ipcMain.emit(Events.PATCH, { patchType: State.get('patchType') || 'default' });
     })
 }
 
