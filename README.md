@@ -42,6 +42,9 @@
 ## Спонсоры
 Большое спасибо спонсорам, которые позволяют мне активно работать над этим проектом.
 <p align="left">
+   <a href="https://github.com/dmitrybabich">
+      <img width="50" alt="dmitrybabich" src="https://avatars.githubusercontent.com/u/6319078?v=4">
+   </a>
    <a href="https://www.last.fm/ru/user/am0rall">
       <img width="50" alt="am0rall" src="https://lastfm.freetls.fastly.net/i/u/avatar170s/a983db6495ea41c8c16777aa0679632d.png">
    </a>
@@ -73,7 +76,7 @@
       <img width="50" alt="SergheyUmca" src="https://avatars.githubusercontent.com/u/33039150?v=4">
    </a>
    <a href="https://github.com/schwarzalexey">
-      <img width="50" alt="SergheyUmca" src="https://avatars.githubusercontent.com/u/97682066?v=4?v=4">
+      <img width="50" alt="schwarzalexey" src="https://avatars.githubusercontent.com/u/97682066?v=4?v=4">
    </a>
    <a href="https://github.com/dudoska">
       <img width="50" alt="dudoska" src="https://avatars.githubusercontent.com/u/94677394?v=4">
