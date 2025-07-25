@@ -52,7 +52,7 @@ const resolveAsarPath = (appPath, platform) => {
 
 let YM_PATH = DEFAULT_YM_PATH[os.platform];
 let INFO_PLIST_PATH = path.join(YM_PATH, 'Contents', 'Info.plist');
-let YM_ASAR_PATH = resolveAsarPath(YM_PATH, os.platform());
+export let YM_ASAR_PATH = resolveAsarPath(YM_PATH, os.platform());
 let YM_EXE_PATH = undefined;
 
 export const updatePaths = (ymPath) => {

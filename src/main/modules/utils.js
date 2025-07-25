@@ -1,10 +1,13 @@
 import path from "path";
 import { promisify } from 'util'
-import { exec, execSync, spawn } from 'child_process'
-import {app, nativeImage, shell} from "electron";
+import { exec, spawn } from 'child_process'
+import { app, nativeImage } from "electron";
 import axios from "axios";
-import fs from "original-fs";
+import o_fs from "original-fs";
+import fs from "fs";
 import { Logger } from "./Logger.js";
+import { YM_ASAR_PATH } from './patcher.js';
+
 
 const execAsync = promisify(exec);
 const spawnAsync = promisify(spawn);
@@ -20,7 +23,7 @@ export const getNativeImg = (relativePath) => {
         : path.join(__dirname, '..', '..', 'assets')
 
     const filePath = path.join(basePath, relativePath);
-    if (!filePath || !fs.existsSync(filePath)) {
+    if (!filePath || !o_fs.existsSync(filePath)) {
         logger.log(`File path is undefined for relative path: ${filePath}`);
     }
     return nativeImage.createFromPath(filePath)
@@ -111,7 +114,7 @@ export async function downloadFile(url, path, callback) {
             callback(progress.progress, 'Downloading ASAR...');
         }
     })
-    response.data.pipe(fs.createWriteStream(path));
+    response.data.pipe(o_fs.createWriteStream(path));
 
     return new Promise((resolve, reject) => {
         response.data.on('end', () => {
@@ -145,5 +148,18 @@ export async function deleteLegacyYM() {
         return stdout.trim().length > 0;
     } catch (error) {
         return false;
+    }
+}
+
+export async function getInstalledYmMetadata() {
+    const ymMetadataPath = path.join(YM_ASAR_PATH, 'package.json');
+    if (!fs.existsSync(ymMetadataPath)) return null;
+
+    try {
+        const data = fs.readFileSync(ymMetadataPath, 'utf-8');
+        return JSON.parse(data);
+    } catch (error) {
+        logger.error('Error reading mod metadata:', error);
+        return null;
     }
 }
