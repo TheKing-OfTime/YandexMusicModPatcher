@@ -33,7 +33,7 @@ const State = getState();
 const logger = new Logger("patcher");
 
 const unzipPromise = promisify(zlib.unzip);
-const zstdDecompressPromise = promisify(zlib.zstdDecompress);
+const zstdDecompressPromise = zlib.zstdDecompress ? promisify(zlib.zstdDecompress) : undefined;
 
 const DEFAULT_YM_PATH = {
     darwin: path.join('/Applications', 'Яндекс Музыка.app'),
@@ -241,7 +241,7 @@ async function createDirIfNotExist(target) {
 async function decompressFile(target, dest, compressionType) {
     const compressedData = await fsp.readFile(target);
 
-    const decompressedData = await (compressionType === 'zst' ? zstdDecompressPromise(compressedData) : unzipPromise(compressedData));
+    const decompressedData = await ((zstdDecompressPromise && (compressionType === 'zst')) ? zstdDecompressPromise(compressedData) : unzipPromise(compressedData));
 
     await fso.promises.writeFile(dest, decompressedData);
 }
