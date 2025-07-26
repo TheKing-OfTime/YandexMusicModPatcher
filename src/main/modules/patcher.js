@@ -191,8 +191,8 @@ async function downloadAsar(callback) {
     const filenamePrefix = State.get('patchType') === 'default' ? 'app.asar' : 'appDevTools.asar';
     const priorityFiles = [filenamePrefix];
     if (State.get('useZIP')) {
-        priorityFiles.unshift(`${filenamePrefix}.gz`)
-        priorityFiles.unshift(`${filenamePrefix}.zst`)
+        priorityFiles.unshift(`${filenamePrefix}.gz`);
+        if (zstdDecompressPromise) priorityFiles.unshift(`${filenamePrefix}.zst`);
     }
 
     const metadata = await getReleaseMetadata(LATEST_MOD_RELEASE_URL);
@@ -241,7 +241,7 @@ async function createDirIfNotExist(target) {
 async function decompressFile(target, dest, compressionType) {
     const compressedData = await fsp.readFile(target);
 
-    const decompressedData = await ((zstdDecompressPromise && (compressionType === 'zst')) ? zstdDecompressPromise(compressedData) : unzipPromise(compressedData));
+    const decompressedData = await (compressionType === 'zst' ? zstdDecompressPromise(compressedData) : unzipPromise(compressedData));
 
     await fso.promises.writeFile(dest, decompressedData);
 }
