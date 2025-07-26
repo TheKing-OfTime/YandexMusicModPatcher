@@ -3,7 +3,7 @@ import { promisify } from "util";
 import os from "os";
 import crypto from "crypto";
 import * as fso from 'original-fs';
-import yaml from 'js-yaml';
+import * as yaml from 'yaml';
 import * as zlib from "node:zlib";
 import * as fs from 'fs';
 import * as fsp from 'fs/promises'
@@ -26,7 +26,7 @@ import {
     isYandexMusicRunning,
     launchYandexMusic
 } from "./utils.js";
-import { LATEST_RELEASE_URL, YM_RELEASE_METADATA_URL } from '../constants/urls.js';
+import { LATEST_MOD_RELEASE_URL, YM_RELEASE_METADATA_URL } from '../constants/urls.js';
 
 
 const State = getState();
@@ -195,7 +195,7 @@ async function downloadAsar(callback) {
         priorityFiles.unshift(`${filenamePrefix}.zst`)
     }
 
-    const metadata = await getReleaseMetadata(LATEST_RELEASE_URL);
+    const metadata = await getReleaseMetadata(LATEST_MOD_RELEASE_URL);
     const assets = metadata?.assets;
     modVersion = metadata?.name;
 
@@ -247,7 +247,7 @@ async function decompressFile(target, dest, compressionType) {
 }
 
 export async function getReleaseMetadata(releaseUrl = undefined) {
-    const response = await fetch(releaseUrl ?? LATEST_RELEASE_URL);
+    const response = await fetch(releaseUrl ?? LATEST_MOD_RELEASE_URL);
     if (!response.ok) {
          throw new Error(`Failed to fetch release metadata: ${response.status} - ${response.statusText}:${await response.json()}`);
     }
@@ -255,7 +255,7 @@ export async function getReleaseMetadata(releaseUrl = undefined) {
 }
 
 async function getYandexMusicMetadata() {
-    return yaml.load(await (await fetch(YM_RELEASE_METADATA_URL)).text());
+    return yaml.parse(await (await fetch(YM_RELEASE_METADATA_URL)).text());
 }
 
 function getYMAsarDefaultPath() {
