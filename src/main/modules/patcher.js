@@ -13,7 +13,7 @@ import plist from 'plist';
 import { getState } from "./state.js";
 import Events from "../types/Events.js";
 import PatchTypes from '../types/PatchTypes.js';
-import { ASAR_GZ_TMP_PATH, ASAR_TMP_PATH, EXTRACTED_ENTITLEMENTS_PATH, TMP_PATH, ASAR_TMP_BACKUP_PATH, YM_EXE_TMP_BACKUP_PATH } from '../constants/paths.js';
+import { ASAR_ZST_TMP_PATH, ASAR_GZ_TMP_PATH, ASAR_TMP_PATH, EXTRACTED_ENTITLEMENTS_PATH, TMP_PATH, ASAR_TMP_BACKUP_PATH, YM_EXE_TMP_BACKUP_PATH } from '../constants/paths.js';
 import { Logger } from "./Logger.js";
 
 import {
@@ -33,6 +33,7 @@ const State = getState();
 const logger = new Logger("patcher");
 
 const unzipPromise = promisify(zlib.unzip);
+const zstdDecompressPromise = promisify(zlib.zstdDecompress);
 
 const DEFAULT_YM_PATH = {
     darwin: path.join('/Applications', 'Яндекс Музыка.app'),
@@ -64,6 +65,7 @@ export const updatePaths = (ymPath) => {
 let oldYMHash;
 
 let shouldDecompress = false;
+let compressionType = null; // null, 'gz', 'zst'
 let modVersion = undefined;
 
 await createDirIfNotExist(TMP_PATH);
@@ -136,8 +138,9 @@ async function prepareModAsarFile(patchType, callback) {
         await downloadAsar(callback);
 
         if (shouldDecompress) {
+            const pathToCompressedFile = compressionType === 'zst' ? ASAR_ZST_TMP_PATH : ASAR_GZ_TMP_PATH;
             callback(0.8, 'Decompressing...');
-            await decompressFile(ASAR_GZ_TMP_PATH, ASAR_TMP_PATH)
+            await decompressFile(pathToCompressedFile, ASAR_TMP_PATH, compressionType)
             callback(0.9, 'Decompressed.');
         }
     } else {
@@ -189,6 +192,7 @@ async function downloadAsar(callback) {
     const priorityFiles = [filenamePrefix];
     if (State.get('useZIP')) {
         priorityFiles.unshift(`${filenamePrefix}.gz`)
+        priorityFiles.unshift(`${filenamePrefix}.zst`)
     }
 
     const metadata = await getReleaseMetadata(LATEST_RELEASE_URL);
@@ -200,13 +204,21 @@ async function downloadAsar(callback) {
     for (const filename of priorityFiles) {
         const asset = assets.find((a) => a?.name === filename);
         if (asset) {
-            if (filename === `${filenamePrefix}.gz`) shouldDecompress = true;
+            if (filename === `${filenamePrefix}.gz`) {
+                shouldDecompress = true
+                compressionType = 'gz';
+            } else if (filename === `${filenamePrefix}.zst`) {
+                shouldDecompress = true;
+                compressionType = 'zst';
+            }
             url = asset.browser_download_url;
             break;
         }
     }
 
-    await downloadFile(url, path.join(TMP_PATH, (shouldDecompress ? 'app.asar.gz' : 'app.asar')),
+    const downloadPath = shouldDecompress ? (compressionType === 'zst' ? ASAR_ZST_TMP_PATH : ASAR_GZ_TMP_PATH) : ASAR_TMP_PATH;
+
+    await downloadFile(url, path.join(TMP_PATH, downloadPath),
         (progress, label) => {
             callback(progress*0.8, label);
         }
@@ -226,10 +238,10 @@ async function createDirIfNotExist(target) {
     }
 }
 
-async function decompressFile(target, dest) {
+async function decompressFile(target, dest, compressionType) {
     const compressedData = await fsp.readFile(target);
 
-    const decompressedData = await unzipPromise(compressedData);
+    const decompressedData = await (compressionType === 'zst' ? zstdDecompressPromise(compressedData) : unzipPromise(compressedData));
 
     await fso.promises.writeFile(dest, decompressedData);
 }
