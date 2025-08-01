@@ -13,13 +13,13 @@ export default function run(...args) {
         State.state.onReadyEventsQueue.push(() => {
             ipcMain.emit(Events.PATCH, undefined, {
                 patchType: patchType,
-                fromAsarSrc: args?.[0]?.[1] ? decodeURI(args?.[0]?.[1]) : undefined
+                fromAsarSrc: args?.[0]?.[1] ? decodeURIComponent(args?.[0]?.[1]) : undefined
             })
         });
     } else {
         ipcMain.emit(Events.PATCH, undefined, {
             patchType: patchType,
-            fromAsarSrc: args?.[0]?.[1] ? decodeURI(args?.[0]?.[1]) : undefined
+            fromAsarSrc: args?.[0]?.[1] ? decodeURIComponent(args?.[0]?.[1]) : undefined
         })
     }
 }
