@@ -15,6 +15,7 @@ module.exports = {
             config: {
                 setupIcon: './assets/icons/icon.ico',
                 icon: './assets/icons/icon.ico',
+                productName: "Yandex Music Mod Patcher",
                 options: {
                     setupIcon: './assets/icons/icon.ico',
                     icon: './assets/icons/icon.ico'
