@@ -129,6 +129,9 @@
    <a href="https://github.com/Ryto0">
       <img width="50" alt="Ryto0" src="https://avatars.githubusercontent.com/u/113520566?v=4">
    </a>
+   <a href=" https://github.com/Rubikoid">
+      <img width="50" alt="Rubikoid" src=" https://avatars.githubusercontent.com/u/5082689?v=4">
+   </a>
 </p>
 
 > Список обновляется вручную
