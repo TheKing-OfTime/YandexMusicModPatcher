@@ -41,6 +41,22 @@ export async function getYandexMusicProcesses() {
             logger.error('Error retrieving Yandex Music processes on Mac:', error)
             return []
         }
+    } else if (process.platform === "linux") {
+        try {
+            const command = `pgrep -fa "yandexmusic"`
+            const { stdout } = await execAsync(command, { encoding: 'utf8' })
+            const processes = stdout.split('\n')
+                .filter(line => line.trim() !== '')
+                .filter(line => !['pgrep', 'yandexmusicmodpatcher', 'YandexMusicModPatcher'].some(keyword => line.includes(keyword)))
+            return processes.map(line => {
+                const parts = line.split(' ');
+                const pid = parseInt(parts[0], 10);
+                return { pid };
+            }).filter(proc => !isNaN(proc.pid));
+        } catch (error) {
+            logger.error('Error retrieving Yandex Music processes on Linux:', error)
+            return []
+        }
     } else {
         try {
             const command = `tasklist /FI "IMAGENAME eq Яндекс Музыка.exe" /FO CSV /NH`
