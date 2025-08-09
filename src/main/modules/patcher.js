@@ -37,7 +37,7 @@ const zstdDecompressPromise = zlib.zstdDecompress ? promisify(zlib.zstdDecompres
 
 const DEFAULT_YM_PATH = {
     darwin: path.join('/Applications', 'Яндекс Музыка.app'),
-    linux: '',
+    linux: path.join('/opt', 'Яндекс Музыка'),
     win32: path.join(process?.env?.LOCALAPPDATA ?? '' , 'Programs', 'YandexMusic'),
 }
 
