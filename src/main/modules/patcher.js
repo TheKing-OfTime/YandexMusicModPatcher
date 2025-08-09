@@ -15,6 +15,7 @@ import Events from "../types/Events.js";
 import PatchTypes from '../types/PatchTypes.js';
 import { ASAR_ZST_TMP_PATH, ASAR_GZ_TMP_PATH, ASAR_TMP_PATH, EXTRACTED_ENTITLEMENTS_PATH, TMP_PATH, ASAR_TMP_BACKUP_PATH, YM_EXE_TMP_BACKUP_PATH } from '../constants/paths.js';
 import { Logger } from "./Logger.js";
+import { execFile } from 'child_process';
 
 import {
     checkIfLegacyYMInstalled,
@@ -50,6 +51,8 @@ const resolveAsarPath = (appPath, platform) => {
         return path.join(appPath, 'resources', 'app.asar');
     }
 }
+
+const execFileAsync = promisify(execFile);
 
 let YM_PATH = DEFAULT_YM_PATH[os.platform];
 let INFO_PLIST_PATH = path.join(YM_PATH, 'Contents', 'Info.plist');
@@ -229,12 +232,28 @@ async function downloadAsar(callback) {
 
 
 async function copyFile(target, dest) {
-    await fso.promises.copyFile(target, dest);
+    try {
+        await fso.promises.copyFile(target, dest);
+    } catch (error) {
+        if (process.platform === 'linux' && error.code === 'EACCES') {
+            await execFileAsync('pkexec', ['cp', target, dest]);
+        } else {
+            logger.error('File copying failed:', error);
+        }
+    }
 }
 
 async function createDirIfNotExist(target) {
-    if(!fs.existsSync(target)){
-        await fsp.mkdir(target);
+    if (!fs.existsSync(target)) {
+        try {
+            await fsp.mkdir(target);
+        } catch (error) {
+            if (process.platform === 'linux' && error.code === 'EACCES') {
+                await execFileAsync('pkexec', ['mkdir', '-p', target]);
+            } else {
+                logger.error('Directory creation failed:', error)
+            }
+        }
     }
 }
 
