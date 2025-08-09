@@ -29,7 +29,6 @@ import {
 } from "./utils.js";
 import { LATEST_MOD_RELEASE_URL, YM_RELEASE_METADATA_URL } from '../constants/urls.js';
 
-
 const State = getState();
 const logger = new Logger("patcher");
 
@@ -228,8 +227,6 @@ async function downloadAsar(callback) {
     );
 
 }
-
-
 
 async function copyFile(target, dest) {
     try {
