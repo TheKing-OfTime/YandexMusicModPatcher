@@ -218,7 +218,7 @@ async function downloadAsar(callback) {
 
     const downloadPath = shouldDecompress ? (compressionType === 'zst' ? ASAR_ZST_TMP_PATH : ASAR_GZ_TMP_PATH) : ASAR_TMP_PATH;
 
-    await downloadFile(url, path.join(TMP_PATH, downloadPath),
+    await downloadFile(url, path.join(downloadPath),
         (progress, label) => {
             callback(progress*0.8, label);
         }
