@@ -314,8 +314,13 @@ export async function isInstallPossible(callback) {
     }
 
     if (isLinux) {
-        callback(0, "Linux is not supported yet.");
-        return { status: false, request: '' };
+        const ymAsarPath = getYMAsarDefaultPath();
+        if (!ymAsarPath) {
+            callback(0, "Can't find Yandex Music application in default path: " + YM_ASAR_PATH);
+            return { status: false, request: Events.REQUEST_YM_PATH };
+        }
+        callback(0, "Yandex Music application found: " + ymAsarPath);
+        return { status: true, request: null };
     }
 
     const isLegacyYMInstalled = await checkIfLegacyYMInstalled();
