@@ -45,7 +45,9 @@ export async function getYandexMusicProcesses() {
         try {
             const command = `pgrep -fa "yandexmusic"`
             const { stdout } = await execAsync(command, { encoding: 'utf8' })
-            const processes = stdout.split('\n').filter(line => line.trim() !== '').filter(line => !line.includes('pgrep'))
+            const processes = stdout.split('\n')
+                .filter(line => line.trim() !== '')
+                .filter(line => !['pgrep', 'yandexmusicmodpatcher', 'YandexMusicModPatcher'].some(keyword => line.includes(keyword)))
             return processes.map(line => {
                 const parts = line.split(' ');
                 const pid = parseInt(parts[0], 10);
