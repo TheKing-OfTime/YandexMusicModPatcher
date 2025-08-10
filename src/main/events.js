@@ -223,3 +223,15 @@ export const sendYMUpdateAvailable = (window= mainWindow, version) => {
     window.webContents.send(Events.YM_UPDATE_AVAILABLE, version);
     logger.log('Sent YM_UPDATE_AVAILABLE', version);
 }
+export const sendModUpdateProgress = (window= mainWindow, version) => {
+    window.webContents.send(Events.MOD_UPDATE_PROGRESS, version);
+    logger.log('Sent MOD_UPDATE_PROGRESS', version);
+}
+export const sendSelfUpdateProgress = (window= mainWindow, version) => {
+    window.webContents.send(Events.SELF_UPDATE_PROGRESS, version);
+    logger.log('Sent SELF_UPDATE_PROGRESS', version);
+}
+export const sendYMUpdateProgress = (window= mainWindow, version) => {
+    window.webContents.send(Events.YM_UPDATE_PROGRESS, version);
+    logger.log('Sent YM_UPDATE_PROGRESS', version);
+}

@@ -106,7 +106,7 @@ export async function launchYandexMusic() {
     await openExternalDetached('yandexmusic://');
 }
 
-async function openExternalDetached(url) {
+export async function openExternalDetached(url) {
     let command, args;
 
     if (process.platform === 'win32') {

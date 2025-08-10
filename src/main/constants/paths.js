@@ -9,3 +9,8 @@ export const ASAR_ZST_TMP_PATH = path.join(TMP_PATH, 'app.asar.zst');
 export const ASAR_TMP_BACKUP_PATH = path.join(TMP_PATH, 'app.asar.backup');
 export const YM_EXE_TMP_BACKUP_PATH = path.join(TMP_PATH, 'ym.exe.backup');
 export const EXTRACTED_ENTITLEMENTS_PATH = path.join(TMP_PATH, 'extracted_entitlements.xml');
+
+export const UPDATERS_TMP_PATH = path.join(TMP_PATH, 'updaters');
+export const MOD_UPDATER_TMP = path.join(UPDATERS_TMP_PATH, 'modUpdater');
+export const SELF_UPDATER_TMP = path.join(UPDATERS_TMP_PATH, 'selfUpdater');
+export const YM_UPDATER_TMP = path.join(UPDATERS_TMP_PATH, 'ymUpdater');
