@@ -266,11 +266,16 @@ async function decompressFile(target, dest, compressionType) {
 }
 
 export async function getReleaseMetadata(releaseUrl = undefined) {
-    const response = await fetch(releaseUrl ?? LATEST_MOD_RELEASE_URL);
-    if (!response.ok) {
-         throw new Error(`Failed to fetch release metadata: ${response.status} - ${response.statusText}:${await response.json()}`);
+    try {
+        const response = await fetch(releaseUrl ?? LATEST_MOD_RELEASE_URL);
+        if (!response.ok) {
+            logger.error(`Failed to fetch release metadata: ${response.status} - ${response.statusText}:${await response.json()}`);
+        }
+        return await response.json();
+    } catch (error) {
+        logger.error('Error fetching release metadata:', error.code, error.message, error.stack, error.cause);
+        throw error;
     }
-    return await response.json();
 }
 
 async function getYandexMusicMetadata() {
