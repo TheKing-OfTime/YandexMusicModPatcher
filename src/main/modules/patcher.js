@@ -20,7 +20,7 @@ import { execFile } from 'child_process';
 import {
     checkIfLegacyYMInstalled,
     closeYandexMusic,
-    downloadFile,
+    downloadFile, formatTimeStampDiff,
     isLinux,
     isMac,
     isWin,
@@ -151,6 +151,9 @@ async function prepareModAsarFile(patchType, callback) {
 }
 
 export async function installMod(callback, { patchType = PatchTypes.DEFAULT, fromAsarSrc = undefined, customPathToYMAsar = undefined }) {
+
+    const startTime = new Date();
+
     const ymMetadata = await getYandexMusicMetadata();
     callback(0, 'Preparing to install...');
     const asarPath = customPathToYMAsar ?? getYMAsarDefaultPath();
@@ -185,7 +188,7 @@ export async function installMod(callback, { patchType = PatchTypes.DEFAULT, fro
     await clearCaches(callback);
     await postInstallTasks(ymMetadata, wasYmClosed, callback);
 
-    setTimeout(()=>callback(0, 'Task finished.'), 2000);
+    setTimeout(()=>callback(0, `Task finished in: ${formatTimeStampDiff(startTime, new Date()) }`), 2000);
 
 }
 

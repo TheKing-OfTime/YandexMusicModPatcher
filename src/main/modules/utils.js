@@ -179,3 +179,18 @@ export async function getInstalledYmMetadata() {
         return null;
     }
 }
+
+export function formatTimeStampDiff(date1, date2) {
+    let diffMs = Math.abs(date1 - date2);
+
+    let seconds = Math.floor(diffMs / 1000) % 60;
+    let minutes = Math.floor(diffMs / (1000 * 60)) % 60;
+    let hours = Math.floor(diffMs / (1000 * 60 * 60));
+
+    let result = (hours ? (hours + 'h ') : '');
+    result += (minutes ? (minutes + 'm ') : '');
+    result += (seconds ? (seconds + 's ') : '');
+    result += (diffMs % 1000 + 'ms');
+
+    return result;
+}
