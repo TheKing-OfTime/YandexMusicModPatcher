@@ -9,7 +9,7 @@ import {
 } from "../Events.jsx";
 
 
-function ActionsBar({ isSettingsOpen, setIsSettingsOpen }) {
+function ActionsBar({ currentPage, setCurrentPage }) {
 
     const State = useContext(StateContext);
 
@@ -19,7 +19,7 @@ function ActionsBar({ isSettingsOpen, setIsSettingsOpen }) {
     const [canInstall, setCanInstall] = useState(false);
 
     const onSettingsClick = useCallback(() => {
-        setIsSettingsOpen(prev => !prev);
+        setCurrentPage(prev => { return prev === 'settings' ? 'main' : 'settings'});
     }, [])
     const onDepatchClick = useCallback(() => {
         useSendDepatch();
@@ -58,15 +58,18 @@ function ActionsBar({ isSettingsOpen, setIsSettingsOpen }) {
     return (
     <div className="ActionsBar_root">
         <button className="ActionsBar_SettingsButton"
-                onClick={onSettingsClick}
-                disabled={isDepatching || isPatching}>
-            <span>{isSettingsOpen ? 'Back' : 'Settings'}</span>
+                onClick={onSettingsClick}>
+                {/* TODO: Реализовать disabled для компонетов внутри страницы Settings
+                disabled = { isDepatching || isPatching}
+                */}
+            <span>{currentPage === 'settings' ? 'Back' : 'Settings'}</span>
         </button>
+        {/* TODO: Вернуть кнопку удаления модификации в каком то ином виде
         <button className="ActionsBar_DepatchButton"
                 onClick={onDepatchClick}
                 disabled={isDepatching || isPatching || !isPatched || !canInstall}>
             <span>{isDepatching ? "Depatching" : (!isPatched ? "Depatched" : "Depatch")}</span>
-        </button>
+        </button> */}
         <button className="ActionsBar_PatchButton"
                 onClick={onPatchClick}
                 disabled={isDepatching || isPatching || isPatched || !canInstall}>

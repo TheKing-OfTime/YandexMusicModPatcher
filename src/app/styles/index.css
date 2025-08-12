@@ -141,10 +141,9 @@ body {
     background-color: #E4CF0E;
 }
 
-.ActionsBar_DepatchButton {
+.ActionsBar_PatchButton {
     margin-left: auto;
 }
-
 
 .ActionsBar_SettingsButton:enabled:hover {
     background-color: #444;;

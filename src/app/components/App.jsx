@@ -3,7 +3,7 @@ import { createRoot } from 'react-dom/client';
 import TitleBar from './layout/TitleBar.jsx'
 import MainProgressBar from './layout/MainProgressBar.jsx'
 import ActionsBar from "./layout/ActionsBar.jsx";
-import LogCard from './layout/LogCard.jsx';
+import LogsPage from './pages/Logs.jsx';
 import SettingsPage from "./pages/Settings.jsx";
 import ModalsContainer from "./layout/modals/ModalsContainer.jsx";
 import { StateProvider } from "./StateContext.jsx";
@@ -12,7 +12,7 @@ import { useOnIsInstallPossibleResponse, useSendReady, useSendReadyToPatch } fro
 
 function App() {
 
-    const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+    const [currentPage, setCurrentPage] = useState('main');
     const [logEntries, setLogEntries] = useState([]);
 
     useEffect(() => {
@@ -26,20 +26,28 @@ function App() {
         }
     }, []);
 
+
+    const renderPage = () => {
+        switch (currentPage) {
+            case 'settings':
+                return <SettingsPage/>;
+            case 'logs':
+                return <LogsPage logEntries={logEntries} setLogEntries={setLogEntries}/>;
+            case 'main':                                                                    //TODO Поменять на main страницу когда она будет готова
+                return <LogsPage logEntries={logEntries} setLogEntries={setLogEntries}/>;
+        }
+    };
+
     return (
-    <StateProvider>
-        <TitleBar platform={window.PLATFORM}/>
-        <main className="App">
-            <MainProgressBar/>
-            {
-                isSettingsOpen
-                ? <SettingsPage/>
-                : <LogCard logEntries={logEntries} setLogEntries={setLogEntries}/>
-            }
-            <ActionsBar isSettingsOpen={isSettingsOpen} setIsSettingsOpen={setIsSettingsOpen}/>
-        </main>
-        <ModalsContainer/>
-    </StateProvider>
+        <StateProvider>
+            <TitleBar platform={window.PLATFORM}/>
+            <main className="App">
+                <MainProgressBar/>
+                { renderPage() }
+                <ActionsBar currentPage={currentPage} setCurrentPage={setCurrentPage}/>
+            </main>
+            <ModalsContainer/>
+        </StateProvider>
     );
 }
 
