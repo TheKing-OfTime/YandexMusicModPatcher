@@ -6,7 +6,7 @@ import ActionsBar from "./layout/ActionsBar.jsx";
 import ModalsContainer from "./layout/modals/ModalsContainer.jsx";
 import { StateProvider } from "./StateContext.jsx";
 import {
-    useOnIsInstallPossibleResponse,
+    useOnIsInstallPossibleResponse, useOnLogEntryCreate, useOnPatchProgress,
     useOnStateInitiated,
     useSendInit,
     useSendReady,
@@ -23,6 +23,21 @@ function App() {
     const [currentPage, setCurrentPage] = useState('main');
     const [logEntries, setLogEntries] = useState([]);
 
+    const addLogEntry = (logEntry) => {
+        setLogEntries(prevEntries => [...prevEntries, {
+            message: logEntry,
+            timestamp: new Date()
+        }])
+    };
+
+    const handlePatchProgressEvent = (event, args) => {
+        if (args.logLabel) addLogEntry(args.logLabel);
+    };
+
+    const handleLogEntryCreateEvent = (event, args) => {
+        addLogEntry(args.logLabel);
+    };
+
     useEffect(() => {
         useSendInit({});
         const OffStateInitiated = useOnStateInitiated(()=> {
@@ -34,10 +49,14 @@ function App() {
         const OffIsInstallPossibleResponse = useOnIsInstallPossibleResponse(() =>{
             useSendReadyToPatch();
         })
+        const offPatchProgressListener = useOnPatchProgress(handlePatchProgressEvent);
+        const offLogEntryCreateEListener = useOnLogEntryCreate(handleLogEntryCreateEvent);
 
         return () => {
             OffStateInitiated();
             OffIsInstallPossibleResponse();
+            offPatchProgressListener();
+            offLogEntryCreateEListener();
         }
     }, []);
 
