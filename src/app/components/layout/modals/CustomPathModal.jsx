@@ -10,6 +10,7 @@ import {
     useSendSetCustomYmPath
 } from "../../Events.jsx";
 import { StateContext } from '../../StateContext.jsx';
+import InlinePathChooser from '../InlinePathChooser.jsx';
 
 
 function CustomPathModal() {
@@ -69,16 +70,7 @@ function CustomPathModal() {
         <TextBox>
             Не удалось найти яндекс музыку автоматически. Укажите путь вручную.
         </TextBox>
-        <div style={{
-            display: 'flex',
-            gap: '10px',
-            flexDirection: 'row',
-            alignItems: 'center',
-            justifyContent: 'space-between'
-        }}>
-            <TextInput value={customPath} disabled={true}/>
-            <InlineButton onClick={sendOpenExploreDialog}>Обзор</InlineButton>
-        </div>
+        <InlinePathChooser path={customPath} onExploreClick={handleExplorerDialogResponse} />
     </Modal>
     )
 }
