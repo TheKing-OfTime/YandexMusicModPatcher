@@ -1,6 +1,7 @@
 import * as React from 'react';
 import TitleBarButton from '../ui/TitleBarButton.jsx';
 import '../../styles/TitleBar.css';
+import Icon from '../ui/Icon.jsx';
 
 
 function TitleBar() {
@@ -15,6 +16,7 @@ function TitleBar() {
     if (platform === 'darwin') {
         return (
         <header className="TitleBar" style={macStyle}>
+            <p className="TitleBar_app_name">YandexMusicModPatcher</p> {/* TODO: Добавить иконку приложения */}
             <div>
             </div>
         </header>
@@ -23,6 +25,8 @@ function TitleBar() {
 
     return (
     <header className="TitleBar">
+        <Icon name="logo" className="TitleBar_app_logo"/>
+        <p className="TitleBar_app_name">YandexMusicModPatcher</p>
         <div>
             <TitleBarButton variant="minimize"/>
             <TitleBarButton variant="maximize"/>

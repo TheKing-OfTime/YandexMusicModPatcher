@@ -10,6 +10,7 @@
     border-bottom-width: 1px;
     border-bottom-style: solid;
     border-bottom-color: rgba(255, 255, 255, 0.2);
+    align-items: center;
 }
 
 .TitleBar div {
@@ -47,4 +48,20 @@
 
 .TitleBar_QuitButton:hover {
     background-color: #f23f42
+}
+
+.TitleBar_app_logo {
+    margin-right: 93px;
+    margin-left: 20px;
+    width: 28px;
+    height: 28px;
+}
+
+.TitleBar_app_name {
+    color: #fff;
+    font-size: 1.2rem;
+    font-weight: 400;
+    display: flex;
+    align-items: center;
+    margin: auto;
 }
