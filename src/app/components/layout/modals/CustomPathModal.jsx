@@ -1,5 +1,5 @@
 import Modal from "../../ui/Modal.jsx";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useContext, useEffect, useState } from "react";
 import TextBox from "../../ui/TextBox.jsx";
 import TextInput from "../../ui/TextInput.jsx";
 import InlineButton from "../../ui/InlineButton.jsx";
@@ -9,12 +9,15 @@ import {
     useSendOpenExplorerDialog,
     useSendSetCustomYmPath
 } from "../../Events.jsx";
+import { StateContext } from '../../StateContext.jsx';
 
 
 function CustomPathModal() {
 
+    const State = useContext(StateContext);
+
     const [isModalOpen, setModalOpen] = useState(false);
-    const [customPath, setCustomPath] = useState('');
+    const [customPath, setCustomPath] = useState(State.customYMPath || '');
     const isModalOpenRef = React.useRef(isModalOpen);
 
 
@@ -28,7 +31,6 @@ function CustomPathModal() {
     }, [])
 
     const handleRequestYmPath = useCallback(() => {
-        console.log('Received REQUEST_YM_PATH');
         if (!isModalOpenRef.current) {
             setModalOpen(true);
         }
@@ -37,7 +39,6 @@ function CustomPathModal() {
 
 
     const handleExplorerDialogResponse = useCallback((event, args) => {
-        console.log('Received EXPLORER_DIALOG_RESPONSE', args);
         if (isModalOpenRef.current && args.path) {
             setCustomPath(args.path);
         }
