@@ -1,10 +1,16 @@
-import React, { useCallback, useContext, useState } from "react";
+import React, { useCallback, useContext, useEffect, useState } from "react";
 import '../../styles/SettingsPage.css';
 
 import Dropdown from "../ui/Dropdown.jsx";
 import Toggle from "../ui/Toggle.jsx";
+import InlinePathChooser from '../layout/InlinePathChooser.jsx';
 import { StateContext } from "../StateContext.jsx";
-import { useSendUpdateState } from "../Events.jsx";
+import {
+    useOnExplorerDialogResponse,
+    useSendOpenExplorerDialog,
+    useSendSetCustomYmPath,
+    useSendUpdateState
+} from "../Events.jsx";
 
 
 function SettingsPage() {
@@ -20,6 +26,7 @@ function SettingsPage() {
     const [useZip, setUseZip] = useState(state.useZIP ?? true);
     const [updatesControl, setUpdatesControl] = useState(state.controlYMUpdates ?? true);
     const [updatePatcher, setUpdatePatcher] = useState(state.autoUpdate ?? true);
+    const [customYMPath, setCustomYMPath] = useState(state.customYMPath ?? '');
 
     const handleSelect = useCallback((option) => {
         setSelectedType(option);
@@ -45,9 +52,36 @@ function SettingsPage() {
         console.log('Toggled:', enabled);
     }, []);
 
+    const sendOpenExploreDialog = useCallback(() => {
+        useSendOpenExplorerDialog();
+    }, [])
+
+    const handleExplorerDialogResponse = useCallback((event, args) => {
+        setCustomYMPath(args.path);
+        useSendSetCustomYmPath({ path: args.path });
+        useSendUpdateState({ key: 'customYMPath', value: args.path });
+    }, []);
+
+    useEffect(() => {
+        const offExplorerDialogResponse = useOnExplorerDialogResponse(handleExplorerDialogResponse);
+        return () => {
+            offExplorerDialogResponse();
+        }
+    }, []);
+
     return (
     <div className="SettingsPage scroll_enabled">
         <ul className="SettingItemList">
+            <li>
+                <div className="width100percent" style={{ padding: '8px', gap: '8px', display: 'flex', flexDirection: 'column' }}>
+                    <InlinePathChooser
+                        label="Пользовательский путь до Яндекс Музыки"
+                        description="Используйте если патчер не нашёл путь до Яндекс Музыки сам"
+                        path={customYMPath}
+                        onExploreClick={sendOpenExploreDialog}
+                    />
+                </div>
+            </li>
             <li>
                 <Dropdown className="width100percent" label="Канал релизов" options={options}
                           onSelect={handleSelect} defaultOption={selectedType}/>

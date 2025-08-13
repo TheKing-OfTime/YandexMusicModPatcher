@@ -1,13 +1,11 @@
 import Modal from "../../ui/Modal.jsx";
 import React, { useCallback, useContext, useEffect, useState } from "react";
 import TextBox from "../../ui/TextBox.jsx";
-import TextInput from "../../ui/TextInput.jsx";
-import InlineButton from "../../ui/InlineButton.jsx";
 import {
     useOnExplorerDialogResponse,
     useOnRequestYmPath,
     useSendOpenExplorerDialog,
-    useSendSetCustomYmPath
+    useSendSetCustomYmPath, useSendUpdateState
 } from "../../Events.jsx";
 import { StateContext } from '../../StateContext.jsx';
 import InlinePathChooser from '../InlinePathChooser.jsx';
@@ -18,13 +16,13 @@ function CustomPathModal() {
     const State = useContext(StateContext);
 
     const [isModalOpen, setModalOpen] = useState(false);
-    const [customPath, setCustomPath] = useState(State.customYMPath || '');
+    const [customPath, setCustomPath] = useState( '');
     const isModalOpenRef = React.useRef(isModalOpen);
 
 
     const sendCustomPath = useCallback((path) => {
-        if (!path) return;
         useSendSetCustomYmPath({ path });
+        useSendUpdateState({ key: 'customYMPath', value: path });
     }, [])
 
     const sendOpenExploreDialog = useCallback(() => {
@@ -70,7 +68,7 @@ function CustomPathModal() {
         <TextBox>
             Не удалось найти яндекс музыку автоматически. Укажите путь вручную.
         </TextBox>
-        <InlinePathChooser path={customPath} onExploreClick={handleExplorerDialogResponse} />
+        <InlinePathChooser path={customPath} onExploreClick={sendOpenExploreDialog} />
     </Modal>
     )
 }

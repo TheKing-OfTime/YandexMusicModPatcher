@@ -9,7 +9,7 @@ export const StateProvider = ({ children }) => {
 
     useEffect(() => {
         const handleStateUpdated = (event, args) => {
-            setState(args);
+            setState({ ...args }); // TODO Исправить отсутствие обновления состояния при обновлении args.foo args.bar
         };
 
         const OffStateUpdated = useOnStateUpdated(handleStateUpdated);
