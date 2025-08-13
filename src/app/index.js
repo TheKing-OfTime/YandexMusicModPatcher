@@ -1,4 +1,5 @@
 import './styles/index.css';
+import './load-icons';
 import './components/App.jsx';
 
 import log from 'electron-log/renderer';
