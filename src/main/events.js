@@ -158,7 +158,7 @@ export const handleApplicationEvents = (window) => {
     electron.ipcMain.on(Events.UPDATE_STATE, (event, args) => {
         State.set(args.key, args.value);
     })
-    electron.ipcMain.on(Events.READY, (event, args) => {
+    electron.ipcMain.on(Events.INIT, (event, args) => {
         logger.log('Received READY', args);
         sendStateInitiated(undefined, State.state);
     })

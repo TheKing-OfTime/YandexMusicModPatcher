@@ -19,6 +19,10 @@ export function useSendReady(payload = {}) {
     return window.desktopEvents.send(Events.READY, payload);
 }
 
+export function useSendInit(payload = {}) {
+    return window.desktopEvents.send(Events.INIT, payload);
+}
+
 export function useSendSetCustomYmPath(payload) {
     return window.desktopEvents.send(Events.SET_CUSTOM_YM_PATH, payload);
 }

@@ -1,0 +1,49 @@
+.LoadingPage {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 32px;
+    bottom: 0;
+    overflow: hidden;
+    gap: 10vmin;
+    background-color: #343434;
+}
+
+.LoadingPageIcon {
+    width: 40vmin;
+    height: 40vmin;
+    margin: 0;
+    display: block;
+    opacity: inherit;
+}
+
+.LoadingPageTitle {
+    margin: 0;
+    color: white;
+    font-size: 3rem;
+    text-align: center;
+    opacity: inherit;
+}
+
+.pulsating:not(.disappear) {
+    animation: pulsate 1.5s infinite;
+}
+
+.disappear {
+    animation: disappear 0.3s forwards;
+}
+
+@keyframes pulsate {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+    100% { transform: scale(1); }
+}
+
+@keyframes disappear {
+    0% { opacity: 1; }
+    100% { opacity: 0; }
+}
