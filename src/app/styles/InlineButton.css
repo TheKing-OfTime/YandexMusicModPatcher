@@ -3,13 +3,15 @@
     background: none;
     border: none;
     border-radius: 8px;
-    color: #000;
+    color: #232323;
     background-color: #E4CF0E;
     font: inherit;
     cursor: pointer;
     transition: background-color 0.2s;
     padding: 10px;
     width: fit-content;
+    font-weight: 500;
+
 }
 
 .InlineButton:hover:not(:disabled) {

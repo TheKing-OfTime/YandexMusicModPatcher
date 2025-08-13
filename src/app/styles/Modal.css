@@ -61,7 +61,7 @@
     position: relative;
     display: flex;
     flex-direction: column;
-    gap: 16px;
+    gap: 25px;
     animation: slideIn 0.3s ease-out;
 }
 

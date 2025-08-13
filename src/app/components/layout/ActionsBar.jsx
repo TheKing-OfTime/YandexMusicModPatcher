@@ -62,18 +62,18 @@ function ActionsBar({ currentPage, setCurrentPage }) {
                 {/* TODO: Реализовать disabled для компонетов внутри страницы Settings
                 disabled = { isDepatching || isPatching}
                 */}
-            <span>{currentPage === 'settings' ? 'Back' : 'Settings'}</span>
+            {currentPage === 'settings' ? 'Back' : 'Settings'}
         </button>
         {/* TODO: Вернуть кнопку удаления модификации в каком то ином виде
         <button className="ActionsBar_DepatchButton"
                 onClick={onDepatchClick}
                 disabled={isDepatching || isPatching || !isPatched || !canInstall}>
-            <span>{isDepatching ? "Depatching" : (!isPatched ? "Depatched" : "Depatch")}</span>
+            {isDepatching ? "Depatching" : (!isPatched ? "Depatched" : "Depatch")}
         </button> */}
         <button className="ActionsBar_PatchButton"
                 onClick={onPatchClick}
                 disabled={isDepatching || isPatching || isPatched || !canInstall}>
-            <span>{isPatching ? "Patching" : (isPatched ? "Patched" : "Patch")}</span>
+            {isPatching ? "Patching" : (isPatched ? "Patched" : "Patch")}
         </button>
     </div>
     )
