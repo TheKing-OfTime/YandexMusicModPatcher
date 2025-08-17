@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useOnPatchProgress } from '../Events.jsx';
+import ProgressBar from '../ui/ProgressBar.jsx';
 
 
 function MainProgressBar() {
@@ -35,15 +36,7 @@ function MainProgressBar() {
 
     return (
     <div className="MainProgressBar_root">
-        <div className="MainProgressBar_container">
-            <div className="MainProgressBar_ProgressBar" id="progressBar" style={isDecreasing ? {
-                width: progress * 100 + '%',
-                opacity: 0,
-                transition: "opacity 0.3s ease-in-out 0.7s, width 0.3s ease-in-out"
-            } : {
-                width: progress * 100 + '%', opacity: 1
-            }}/>
-        </div>
+        <ProgressBar progress={progress} color={"#E4CF0E"} height={'20px'} />
         <div className="MainProgressBar_labelsContainer">
             <div className="MainProgressBar_TaskLabel" id="taskLabel">
                 <span>{taskLabel}</span>

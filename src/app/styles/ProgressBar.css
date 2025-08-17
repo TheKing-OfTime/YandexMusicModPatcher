@@ -1,0 +1,27 @@
+.ProgressBar_container {
+    width: 100%;
+    height: 20px;
+    background-color: #343434;
+    border-radius: 20px;
+}
+
+.ProgressBar_progress {
+    width: 50%;
+    height: 100%;
+    background-color: #5865f2;
+    border-radius: 20px;
+    transition: width 0.3s ease-in-out;
+}
+
+@keyframes ProgressBar_indeterminate {
+    0% {
+        opacity: 0;
+    }
+    50% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+    }
+
+}
