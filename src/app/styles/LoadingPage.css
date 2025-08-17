@@ -9,7 +9,7 @@
     top: 32px;
     bottom: 0;
     overflow: hidden;
-    gap: 10vmin;
+    gap: 7vmin;
     background-color: #343434;
 }
 
@@ -24,7 +24,7 @@
 .LoadingPageTitle {
     margin: 0;
     color: white;
-    font-size: 3rem;
+    font-size: 7vmin;
     text-align: center;
     opacity: inherit;
 }
