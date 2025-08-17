@@ -34,9 +34,9 @@ function MainProgressBar() {
     }, [])
 
     return (
-    <div className="ProgressBar_root">
-        <div className="ProgressBar_container">
-            <div className="ProgressBar_ProgressBar" id="progressBar" style={isDecreasing ? {
+    <div className="MainProgressBar_root">
+        <div className="MainProgressBar_container">
+            <div className="MainProgressBar_ProgressBar" id="progressBar" style={isDecreasing ? {
                 width: progress * 100 + '%',
                 opacity: 0,
                 transition: "opacity 0.3s ease-in-out 0.7s, width 0.3s ease-in-out"
@@ -44,11 +44,11 @@ function MainProgressBar() {
                 width: progress * 100 + '%', opacity: 1
             }}/>
         </div>
-        <div className="ProgressBar_labelsContainer">
-            <div className="ProgressBar_TaskLabel" id="taskLabel">
+        <div className="MainProgressBar_labelsContainer">
+            <div className="MainProgressBar_TaskLabel" id="taskLabel">
                 <span>{taskLabel}</span>
             </div>
-            <div className="ProgressBar_LogLabel" id="logLabel">
+            <div className="MainProgressBar_LogLabel" id="logLabel">
                 <span>{logLabel}</span>
             </div>
         </div>

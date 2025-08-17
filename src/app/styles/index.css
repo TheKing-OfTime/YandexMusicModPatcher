@@ -60,7 +60,7 @@ body {
     gap: 20px;
 }
 
-.ProgressBar_root, .LogCard, .ActionsBar_root {
+.MainProgressBar_root, .LogCard, .ActionsBar_root {
     display: flex;
     justify-content: center;
     align-items: normal;
@@ -69,7 +69,7 @@ body {
     width: 100%;
 }
 
-.ProgressBar_root {
+.MainProgressBar_root {
     height: 100px;
     background-color: #1E1E1E;
     padding: 20px;
@@ -163,14 +163,14 @@ body {
     box-shadow: none;
 }
 
-.ProgressBar_container {
+.MainProgressBar_container {
     width: 100%;
     height: 20px;
     background-color: #343434;
     border-radius: 20px;
 }
 
-.ProgressBar_ProgressBar {
+.MainProgressBar_ProgressBar {
     width: 50%;
     height: 20px;
     background-color: #E4CF0E;
@@ -178,12 +178,12 @@ body {
     transition: width 0.3s ease-in;
 }
 
-.ProgressBar_labelsContainer {
+.MainProgressBar_labelsContainer {
     display: flex;
     justify-content: space-between;
 }
 
-.ProgressBar_TaskLabel, .ProgressBar_LogLabel {
+.MainProgressBar_TaskLabel, .MainProgressBar_LogLabel {
     font-size: 15px;
     color: #FFF;
     font-weight: 400;
