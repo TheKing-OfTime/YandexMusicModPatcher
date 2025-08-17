@@ -39,7 +39,7 @@ function MainProgressBar() {
             <div className="ProgressBar_ProgressBar" id="progressBar" style={isDecreasing ? {
                 width: progress * 100 + '%',
                 opacity: 0,
-                transition: "opacity 0.3s ease-in-out 0.7s, width 0.3s ease-in"
+                transition: "opacity 0.3s ease-in-out 0.7s, width 0.3s ease-in-out"
             } : {
                 width: progress * 100 + '%', opacity: 1
             }}/>
