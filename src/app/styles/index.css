@@ -2,11 +2,19 @@
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
     box-sizing: border-box;
-    font-family: 'Segoe UI', 'Roboto', 'Arial', Tahoma, Geneva, Verdana, sans-serif;
+    font-family: 'Montserrat','Segoe UI', 'Roboto', 'Arial', Tahoma, Geneva, Verdana, sans-serif;
     text-rendering: geometricPrecision;
 }
 .scroll_enabled {
     overflow: auto;
+}
+
+.default_font {
+    font-family: 'Montserrat', 'Segoe UI', 'Roboto', 'Arial', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.settings_font {
+    font-family: 'Segoe UI', 'Roboto', 'Arial', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 .scroll_enabled::-webkit-scrollbar {

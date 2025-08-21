@@ -73,7 +73,7 @@ function SettingsPage() {
     <div className="SettingsPage scroll_enabled">
         <ul className="SettingItemList">
             <li>
-                <div className="width100percent" style={{ padding: '8px', gap: '8px', display: 'flex', flexDirection: 'column' }}>
+                <div className="width100percent settings_font" style={{ padding: '8px', gap: '8px', display: 'flex', flexDirection: 'column' }}>
                     <InlinePathChooser
                         label="Пользовательский путь до Яндекс Музыки"
                         description="Используйте если патчер не нашёл путь до Яндекс Музыки сам"
@@ -83,20 +83,20 @@ function SettingsPage() {
                 </div>
             </li>
             <li>
-                <Dropdown className="width100percent" label="Канал релизов" options={options}
+                <Dropdown className="width100percent settings_font" label="Канал релизов" options={options}
                           onSelect={handleSelect} defaultOption={selectedType}/>
             </li>
             <li>
-                <Toggle className="width100percent" checked={useZip} label="Использовать сжатые asar"
+                <Toggle className="width100percent settings_font" checked={useZip} label="Использовать сжатые asar"
                         description="Ускоряет скачивание файлов модификации" onChange={handleUpdateUseZipToggle}/>
             </li>
             <li>
-                <Toggle className="width100percent" checked={updatesControl} label="Контроль обновлений ЯМ"
+                <Toggle className="width100percent settings_font" checked={updatesControl} label="Контроль обновлений ЯМ"
                         description={["Обновления Яндекс Музыки контролирует сама Яндекс Музыка", "Обновления Яндекс Музыки контролирует патчер"]}
                         onChange={handleUpdatesControlToggle}/>
             </li>
             <li>
-                <Toggle className="width100percent" checked={updatePatcher} label="Обновлять патчер автоматически"
+                <Toggle className="width100percent settings_font" checked={updatePatcher} label="Обновлять патчер автоматически"
                         description="Обновлять ли патчер автоматически. Рекомендуется не выключать"
                         onChange={handleUpdatePatcherToggle}/>
             </li>

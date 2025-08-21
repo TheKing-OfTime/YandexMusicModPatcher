@@ -6,6 +6,7 @@
     border-radius: 8px;
     background: #232323;
     color: #fff;
+    font-family: inherit;
     outline: none;
     transition: border-color 0.2s, box-shadow 0.2s;
     box-sizing: border-box;

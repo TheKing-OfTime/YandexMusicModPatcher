@@ -1,13 +1,13 @@
 .Dropdown {
     position: relative;
     display: inline-block;
-    font-family: inherit;
 }
 
 .Dropdown_toggle {
     width: 200px;
     padding: 10px 12px;
     font-size: 1rem;
+    font-family: inherit;
     background: #232323;
     color: #fff;
     border: 1px solid #444;
@@ -33,6 +33,7 @@
 
 .Dropdown_menu {
     position: absolute;
+    font-family: inherit;
     top: 110%;
     right: 8px;
     width: 200px;
@@ -55,6 +56,7 @@
 .Dropdown_item {
     padding: 10px 12px;
     color: #fff;
+    font-family: inherit;
     cursor: pointer;
     transition: background 0.15s, color 0.15s;
     border-radius: 4px;
@@ -71,6 +73,7 @@
 
 .Dropdown_label {
     font-size: 1rem;
+    font-family: inherit;
     color: #fff;
     user-select: none;
     font-weight: 500;
@@ -81,6 +84,7 @@
 .Dropdown_container {
     display: flex;
     flex-direction: row;
+    font-family: inherit;
     align-items: center;
     padding: 8px;
     justify-content: space-between;
@@ -89,12 +93,14 @@
 
 .Dropdown_label_container {
     display: flex;
+    font-family: inherit;
     flex-direction: column;
     gap: 2px
 }
 
 .Dropdown_description {
     font-size: 0.8rem;
+    font-family: inherit;
     color: #999;
     user-select: none;
     font-weight: 400;

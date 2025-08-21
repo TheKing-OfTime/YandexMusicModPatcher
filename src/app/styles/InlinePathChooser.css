@@ -3,11 +3,13 @@
     gap: 10px;
     flex-direction: row;
     align-items: center;
-    justify-content: space-between
+    justify-content: space-between;
+    font-family: inherit;
 }
 
 .InlinePathChooser_label_container {
     display: flex;
+    font-family: inherit;
     flex-direction: column;
     gap: 2px
 }
@@ -15,6 +17,7 @@
 .InlinePathChooser_label {
     font-size: 1rem;
     color: #fff;
+    font-family: inherit;
     user-select: none;
     font-weight: 500;
     letter-spacing: 0.01em;
@@ -22,6 +25,7 @@
 
 .InlinePathChooser_description {
     font-size: 0.8rem;
+    font-family: inherit;
     color: #999;
     user-select: none;
     font-weight: 400;
