@@ -9,7 +9,7 @@ function Icon({ name, size = 24, color = 'currentColor', ...props }) {
             aria-hidden="true"
             {...props}
         >
-            <use xlinkHref={`/static/icons/sprite.svg#${name}`} />
+            <use xlinkHref={`../static/icons/sprite.svg#${name}`} />
         </svg>
     );
 }
