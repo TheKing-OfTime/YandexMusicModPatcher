@@ -3,6 +3,7 @@ import { handleApplicationEvents } from './events.js'
 import { handleDeeplinkOnApplicationStartup, handleDeeplink } from './modules/handleDeeplinks.js';
 import { getNativeImg } from './modules/utils.js';
 import { getState } from "./modules/state.js";
+import { registerSchemes, isDevelopment } from './modules/development.js';
 import { checkForSingleInstance } from './modules/singleInstance.js';
 import electron, { app, BrowserWindow } from 'electron';
 import config from './config.js';
@@ -15,6 +16,10 @@ const logger = new Logger("main");
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require('electron-squirrel-startup')) {
     app.quit();
+}
+
+if( isDevelopment ) {
+    registerSchemes();
 }
 
 checkForSingleInstance();
@@ -56,6 +61,7 @@ const createWindow = () => {
             nodeIntegrationInWorker: true,
             nodeIntegration: false,
             contextIsolation: true,
+
             preload: MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY,
         },
     });

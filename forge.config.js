@@ -58,6 +58,7 @@ module.exports = {
             name: '@electron-forge/plugin-webpack',
             config: {
                 mainConfig: './webpack.main.config.js',
+                //devContentSecurityPolicy: "default-src 'self' 'unsafe-inline' data:; script-src 'self' 'unsafe-eval' 'unsafe-inline' data:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com;",
                 renderer: {
                     config: './webpack.renderer.config.js',
                     entryPoints: [
