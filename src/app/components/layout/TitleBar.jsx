@@ -8,7 +8,6 @@ function TitleBar() {
     const platform = window?.CONSTANTS?.PLATFORM ?? 'win32';
     const macStyle = {
         justifyContent: 'flex-start',
-        padding: '8px',
         display: 'flex',
         height: '33px',
     }
@@ -16,7 +15,7 @@ function TitleBar() {
     if (platform === 'darwin') {
         return (
         <header className="TitleBar" style={macStyle}>
-            <p className="TitleBar_app_name">YandexMusicModPatcher</p> {/* TODO: Добавить иконку приложения */}
+            <p className="TitleBar_app_name"><Icon name="logo" className="TitleBar_app_logo_darwin"/>YandexMusicModPatcher</p> {/* TODO: Добавить иконку приложения */}
             <div>
             </div>
         </header>

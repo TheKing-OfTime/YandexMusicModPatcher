@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Roboto+Slab:wght@700&family=Oswald:wght@700&family=Poppins:wght@700&family=Playfair+Display:wght@700&display=swap');
+
 .TitleBar {
     inset-block-start: 0;
     inset-inline-end: 0;
@@ -57,8 +59,16 @@
     height: 28px;
 }
 
+.TitleBar_app_logo_darwin {
+    margin-right: 10px;
+    width: 28px;
+    height: 28px;
+}
+
+
 .TitleBar_app_name {
     color: #fff;
+    font-family: 'Montserrat', 'Roboto Slab', 'Oswald', 'Poppins', 'Playfair Display', sans-serif;
     font-size: 1.2rem;
     font-weight: 400;
     display: flex;
