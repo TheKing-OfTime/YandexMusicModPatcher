@@ -15,7 +15,7 @@ function TitleBar() {
     if (platform === 'darwin') {
         return (
         <header className="TitleBar" style={macStyle}>
-            <p className="TitleBar_app_name"><Icon name="logo" className="TitleBar_app_logo_darwin"/>YandexMusicModPatcher</p> {/* TODO: Добавить иконку приложения */}
+            <p className="TitleBar_app_name"><Icon name="logo" className="TitleBar_app_logo_darwin"/>YandexMusicModPatcher</p>
             <div>
             </div>
         </header>
