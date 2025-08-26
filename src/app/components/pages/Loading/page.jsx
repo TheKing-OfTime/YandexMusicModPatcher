@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import Icon from '../ui/Icon.jsx';
-import '../../styles/LoadingPage.css';
+import Icon from '../../ui/Icon.jsx';
+import '../../../styles/LoadingPage.css';
 
 function LoadingPage ({disappear=false}) {
 

@@ -1,16 +1,16 @@
 import React, { useCallback, useContext, useEffect, useState } from "react";
-import '../../styles/SettingsPage.css';
+import '../../../styles/SettingsPage.css';
 
-import Dropdown from "../ui/Dropdown.jsx";
-import Toggle from "../ui/Toggle.jsx";
-import InlinePathChooser from '../layout/InlinePathChooser.jsx';
-import { StateContext } from "../StateContext.jsx";
+import Dropdown from "../../ui/Dropdown.jsx";
+import Toggle from "../../ui/Toggle.jsx";
+import InlinePathChooser from '../../layout/InlinePathChooser.jsx';
+import { StateContext } from "../../StateContext.jsx";
 import {
     useOnExplorerDialogResponse,
     useSendOpenExplorerDialog,
     useSendSetCustomYmPath,
     useSendUpdateState
-} from "../Events.jsx";
+} from "../../Events.jsx";
 
 
 function SettingsPage() {

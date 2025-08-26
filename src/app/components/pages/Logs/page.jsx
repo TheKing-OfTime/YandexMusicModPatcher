@@ -1,5 +1,5 @@
 import React from 'react';
-import LogCard from '../layout/LogCard.jsx';
+import LogCard from '../../layout/LogCard.jsx';
 
 function LogsPage ({ logEntries, setLogEntries }) {
     return (

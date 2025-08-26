@@ -92,3 +92,5 @@ typings/
 out/
 /hash.py
 /package-lock.json
+
+!/src/**

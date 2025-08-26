@@ -13,9 +13,9 @@ import {
     useSendReadyToPatch
 } from "./Events.jsx";
 
-import LogsPage from './pages/Logs.jsx';
-import SettingsPage from "./pages/Settings.jsx";
-import LoadingPage from './pages/Loading.jsx';
+import LogsPage from './pages/Logs';
+import SettingsPage from "./pages/Settings";
+import LoadingPage from './pages/Loading';
 
 function App() {
 
