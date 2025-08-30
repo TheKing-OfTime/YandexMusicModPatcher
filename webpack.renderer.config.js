@@ -28,6 +28,11 @@ module.exports = {
     module: {
         rules,
     },
+
+    resolve: {
+        extensions: ['.js', '.jsx', '.json', '.css', '.html'],
+    },
+
     plugins: [
         new SpriteLoaderPlugin(),
         new CopyWebpackPlugin({
