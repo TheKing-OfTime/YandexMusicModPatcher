@@ -1,6 +1,6 @@
 import installExtension, { REACT_DEVELOPER_TOOLS } from 'electron-devtools-installer';
 import { handleApplicationEvents } from './events.js'
-import { handleDeeplinkOnApplicationStartup, handleDeeplink } from './modules/handleDeeplinks.js';
+import { handleDeeplink } from './modules/handleDeeplinks.js';
 import { getNativeImg } from './modules/utils.js';
 import { getState } from "./modules/state.js";
 import { registerSchemes, isDevelopment } from './modules/development.js';
@@ -23,7 +23,6 @@ if( isDevelopment ) {
 }
 
 checkForSingleInstance();
-handleDeeplinkOnApplicationStartup();
 
 const icon = getNativeImg('icons/icon.ico').resize({
     width: 128,

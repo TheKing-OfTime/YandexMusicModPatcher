@@ -1,5 +1,6 @@
 import electron, { shell } from "electron";
 import { installMod, getReleaseMetadata, isInstallPossible, updatePaths, checkMacPermissions } from "./modules/patcher.js";
+import { handleDeeplinkOnApplicationStartup } from "./modules/handleDeeplinks.js";
 import { deleteLegacyYM } from "./modules/utils.js";
 import { getState } from "./modules/state.js";
 import { mainWindow } from "./index.js";
@@ -159,11 +160,12 @@ export const handleApplicationEvents = (window) => {
         State.set(args.key, args.value);
     })
     electron.ipcMain.on(Events.INIT, (event, args) => {
-        logger.log('Received READY', args);
+        logger.log('Received INIT', args);
         sendStateInitiated(undefined, State.state);
     })
     electron.ipcMain.on(Events.READY_TO_PATCH, (event, args) => {
         logger.log('Received READY_TO_PATCH', args);
+        handleDeeplinkOnApplicationStartup();
         State.get('onReadyEventsQueue').forEach((event) => {
             event();
         })
