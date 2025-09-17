@@ -236,7 +236,7 @@ async function copyFile(target, dest) {
         await fso.promises.copyFile(target, dest);
     } catch (error) {
         if (process.platform === 'linux' && error.code === 'EACCES') {
-            await execFileAsync('pkexec', ['cp', target, dest]);
+            await execFileAsync('pkexec', ['cp', `"${target}"`, `"${dest}"`]);
         } else {
             logger.error('File copying failed:', error);
         }
