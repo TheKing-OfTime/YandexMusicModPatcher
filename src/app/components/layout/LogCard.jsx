@@ -16,13 +16,13 @@ function LogCard({ logEntries, setLogEntries }) {
     }, [logEntries, isAtBottom]);
 
     return (
-    <div className="LogCard scroll_enabled" ref={listRef}
-         onScroll={() => {
-             const el = listRef.current;
-             setIsAtBottom(el.scrollHeight - el.scrollTop === el.clientHeight);
-         }}
-    >
-        <ul>
+    <div className="LogCard">
+        <ul className="scroll_enabled"  ref={listRef} onScroll={
+            () => {
+                const el = listRef.current;
+                setIsAtBottom(el.scrollHeight - el.scrollTop === el.clientHeight);
+            }
+        }>
             {logEntries.map((log, index) => (
             <li key={index}>
                 <LogMessage message={log.message} timestamp={log.timestamp}/>
