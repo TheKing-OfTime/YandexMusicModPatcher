@@ -1,0 +1,59 @@
+.TabSelector {
+    display: flex;
+    gap: 1px;
+    padding: 1px;
+    border-radius: 11px;
+    overflow: hidden;
+    background-color: rgba(255, 255, 255, 0.2);
+    :first-child {
+        border-radius: 10px 0 0 10px;
+    }
+
+    :last-child {
+        border-radius: 0 10px 10px 0;
+    }
+}
+
+.TabSelectorItem {
+    background: #343434;
+    border: none;
+    gap: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px;
+    cursor: pointer;
+    color: #fff;
+    font-size: 20px;
+    font-weight: 600;
+    transition: background 0.2s, color;
+}
+
+.TabSelectorItem:disabled {
+    color: #666;
+    cursor: default;
+    background: #222;
+}
+
+.TabSelectorItem:not(:disabled):hover {
+    background: #555;
+}
+
+.TabSelectorItem_active,
+.TabSelectorItem.TabSelectorItem_active:not(:disabled):hover {
+    background: #666;
+}
+
+.TabSelectorItem_icon {
+    display: inline-flex;
+    vertical-align: middle;
+    fill: currentColor;
+}
+
+.TabSelectorItem_label {
+    vertical-align: middle;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    user-select: none;
+}

@@ -7,6 +7,7 @@ import {
     useSendIsInstallPossible,
     useSendPatch
 } from "../Events.jsx";
+import TabSelector from '../ui/TabSelector.jsx';
 
 
 function ActionsBar({ currentPage, setCurrentPage }) {
@@ -18,9 +19,6 @@ function ActionsBar({ currentPage, setCurrentPage }) {
     const [isDepatching, setIsDepatching] = useState(false);
     const [canInstall, setCanInstall] = useState(false);
 
-    const onSettingsClick = useCallback(() => {
-        setCurrentPage(prev => { return prev === 'settings' ? 'main' : 'settings'});
-    }, [])
     const onDepatchClick = useCallback(() => {
         useSendDepatch();
         setIsDepatching(true);
@@ -29,6 +27,10 @@ function ActionsBar({ currentPage, setCurrentPage }) {
         useSendPatch();
         setIsPatching(true);
     }, [])
+
+    const onTabSelectorToggled = useCallback((tab) => {
+        setCurrentPage(tab.name);
+    }, [setCurrentPage])
 
     useEffect(() => {
         const OffPatchProgress = useOnPatchProgress((event, args) => {
@@ -57,13 +59,7 @@ function ActionsBar({ currentPage, setCurrentPage }) {
 
     return (
     <div className="ActionsBar_root">
-        <button className="ActionsBar_SettingsButton"
-                onClick={onSettingsClick}>
-                {/* TODO: Реализовать disabled для компонетов внутри страницы Settings
-                disabled = { isDepatching || isPatching}
-                */}
-            {currentPage === 'settings' ? 'Back' : 'Settings'}
-        </button>
+        <TabSelector tabs={ [{ name: 'main', icon: 'home', disabled: true, label: 'Home' }, { name: 'settings', icon: 'settings' }, { name: 'logs', icon: 'logs' }] } defaultActiveTabName={ 'logs' } onTabSelect={ onTabSelectorToggled }/>
         {/* TODO: Вернуть кнопку удаления модификации в каком то ином виде
         <button className="ActionsBar_DepatchButton"
                 onClick={onDepatchClick}
