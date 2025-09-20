@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import Tooltip from "./Tooltip.jsx";
 import '../../styles/Toggle.css';
 
 
@@ -25,14 +26,16 @@ export default function Toggle({ label, description, onChange, checked = false, 
                 {label && <span className="Toggle_label_text">{label}</span>}
                 {finalDescription && <span className="Toggle_label_description">{finalDescription}</span>}
             </div>
-            <input
-            type="checkbox"
-            className="Toggle_input"
-            checked={isChecked}
-            onChange={handleToggle}
-            disabled={disabled}
-            />
-            <span className="Toggle_slider"/>
+            <Tooltip label="В разработке" enabled={disabled} direction="left">
+                <input
+                type="checkbox"
+                className="Toggle_input"
+                checked={disabled ? false : isChecked}
+                onChange={handleToggle}
+                disabled={disabled}
+                />
+                <span className="Toggle_slider"/>
+            </Tooltip>
         </label>
     </div>
     );

@@ -3,15 +3,14 @@
     gap: 1px;
     padding: 1px;
     border-radius: 11px;
-    overflow: hidden;
-    background-color: rgba(255, 255, 255, 0.2);
-    :first-child {
-        border-radius: 10px 0 0 10px;
-    }
+    background-color: rgba(255, 255, 255, 0.1);
+}
+.TabSelectorItem_first {
+    border-radius: 10px 0 0 10px;
+}
 
-    :last-child {
-        border-radius: 0 10px 10px 0;
-    }
+.TabSelectorItem_last {
+    border-radius: 0 10px 10px 0;
 }
 
 .TabSelectorItem {
