@@ -59,7 +59,7 @@ function ActionsBar({ currentPage, setCurrentPage }) {
 
     return (
     <div className="ActionsBar_root">
-        <TabSelector tabs={ [{ name: 'main', icon: 'home', disabled: true, label: 'Home' }, { name: 'settings', icon: 'settings' }, { name: 'logs', icon: 'logs' }] } defaultActiveTabName={ 'logs' } onTabSelect={ onTabSelectorToggled }/>
+        <TabSelector tabs={ [{ name: 'main', icon: 'home', disabled: true, label: 'Home', tooltipLabel: 'Home' }, { name: 'settings', icon: 'settings', tooltipLabel: 'Settings' }, { name: 'logs', icon: 'logs', tooltipLabel: 'Logs' }] } defaultActiveTabName={ 'logs' } onTabSelect={ onTabSelectorToggled }/>
         {/* TODO: Вернуть кнопку удаления модификации в каком то ином виде
         <button className="ActionsBar_DepatchButton"
                 onClick={onDepatchClick}

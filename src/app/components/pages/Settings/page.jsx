@@ -6,6 +6,7 @@ import Toggle from "../../ui/Toggle.jsx";
 import InlinePathChooser from '../../layout/InlinePathChooser.jsx';
 import { StateContext } from "../../StateContext.jsx";
 import { useOnExplorerDialogResponse, useSendOpenExplorerDialog, useSendSetCustomYmPath, useSendUpdateState } from "../../Events.jsx";
+import Tooltip from '../../ui/Tooltip.jsx';
 
 
 function SettingsPage() {
@@ -86,13 +87,15 @@ function SettingsPage() {
                         description="Ускоряет скачивание файлов модификации" onChange={handleUpdateUseZipToggle}/>
             </li>
             <li>
-                <Toggle className="width100percent settings_font" checked={updatesControl} label="Контроль обновлений ЯМ"
-                        description={["Обновления Яндекс Музыки контролирует сама Яндекс Музыка", "Обновления Яндекс Музыки контролирует патчер"]}
-                        onChange={handleUpdatesControlToggle}/>
+                    <Toggle className="width100percent settings_font" checked={updatesControl} label="Контроль обновлений ЯМ"
+                            description={["Обновления Яндекс Музыки контролирует сама Яндекс Музыка", "Обновления Яндекс Музыки контролирует патчер"]}
+                            disabled={true}
+                            onChange={handleUpdatesControlToggle}/>
             </li>
             <li>
                 <Toggle className="width100percent settings_font" checked={updatePatcher} label="Обновлять патчер автоматически"
                         description="Обновлять ли патчер автоматически. Рекомендуется не выключать"
+                        disabled={true}
                         onChange={handleUpdatePatcherToggle}/>
             </li>
         </ul>
