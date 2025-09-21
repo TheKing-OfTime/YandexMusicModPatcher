@@ -236,7 +236,9 @@ async function copyFile(target, dest) {
         await fso.promises.copyFile(target, dest);
     } catch (error) {
         if (process.platform === 'linux' && error.code === 'EACCES') {
-            await execFileAsync('pkexec', ['cp', `"${target}"`, `"${dest}"`]);
+            const encodedTarget = `'${target.replace(/'/g, "'\\''")}'`;
+            const encodedDest = `'${dest.replace(/'/g, "'\\''")}'`;
+            await execFileAsync('pkexec', ['bash', '-c', `cp ${encodedTarget} ${encodedDest}`]);
         } else {
             logger.error('File copying failed:', error);
         }
