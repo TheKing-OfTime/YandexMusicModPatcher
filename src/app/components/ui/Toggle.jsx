@@ -4,7 +4,7 @@ import '../../styles/Toggle.css';
 
 
 export default function Toggle({ label, description, onChange, checked = false, disabled = false, className = '' }) {
-    const [isChecked, setIsChecked] = useState(checked);
+    const [isChecked, setIsChecked] = useState(disabled ? false : checked);
     const [finalDescription, setFinalDescription] = useState(Array.isArray(description) ? description[checked ? 1 : 0] : description);
 
     const handleToggle = () => {
@@ -21,20 +21,24 @@ export default function Toggle({ label, description, onChange, checked = false, 
 
     return (
     <div className={`Toggle ${className}`}>
-        <div className={`Toggle_container${disabled ? ' Toggle_disabled' : ''}`}>
+        <div
+            className={`Toggle_container${disabled ? ' Toggle_disabled' : ''}`}
+        >
             <div className="Toggle_label_container">
                 {label && <span className="Toggle_label_text">{label}</span>}
                 {finalDescription && <span className="Toggle_label_description">{finalDescription}</span>}
             </div>
             <Tooltip label="В разработке" enabled={disabled} direction="left">
                 <input
-                type="checkbox"
-                className="Toggle_input"
-                checked={disabled ? false : isChecked}
-                onChange={handleToggle}
-                disabled={disabled}
+                    type="checkbox"
+                    className="Toggle_input"
+                    checked={isChecked}
+                    disabled={disabled}
                 />
-                <span className="Toggle_slider"/>
+                <span
+                    className="Toggle_slider"
+                    onClick={handleToggle}
+                />
             </Tooltip>
         </div>
     </div>

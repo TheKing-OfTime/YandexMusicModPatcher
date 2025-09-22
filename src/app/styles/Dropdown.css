@@ -38,8 +38,8 @@
 .Dropdown_menu {
     position: absolute;
     font-family: inherit;
-    top: 110%;
-    right: 8px;
+    top: 120%;
+    right: 0;
     width: 200px;
     background: var(--color-bg-dark);
     border: 1px solid var(--color-border);

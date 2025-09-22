@@ -9,7 +9,6 @@
 .Toggle_container {
     display: flex;
     align-items: center;
-    cursor: pointer;
     font-family: inherit;
     user-select: none;
     justify-content: space-between;
@@ -33,6 +32,7 @@
     transition: background 0.2s;
     box-sizing: border-box;
     display: inline-block;
+    cursor: pointer;
 }
 
 .Toggle_input:checked + .Toggle_slider {
@@ -58,6 +58,7 @@
 
 .Toggle_input:disabled + .Toggle_slider {
     background: var(--color-border-muted);
+    cursor: default;
 }
 
 .Toggle_input:disabled + .Toggle_slider::before {
