@@ -1,0 +1,22 @@
+@import './theme.css';
+
+.ActionsBar_root {
+    height: 40px;
+    align-self: end;
+    gap: 20px;
+    flex-direction: row;
+    display: flex;
+    justify-content: start;
+    background-color: var(--color-bg);
+
+}
+
+.ActionsBar_PatchButton {
+    height: 100%;
+    width: 150px;
+    font-size: 26px;
+    border-radius: 10px;
+    font-weight: 400;
+    letter-spacing: 0.01em;
+    margin-left: auto;
+}

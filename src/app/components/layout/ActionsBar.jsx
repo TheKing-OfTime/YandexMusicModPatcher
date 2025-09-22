@@ -1,13 +1,10 @@
 import React, { useCallback, useContext, useEffect, useState } from 'react';
 import { StateContext } from "../StateContext.jsx";
-import {
-    useOnIsInstallPossibleResponse,
-    useOnPatchProgress,
-    useSendDepatch,
-    useSendIsInstallPossible,
-    useSendPatch
-} from "../Events.jsx";
+import { useOnIsInstallPossibleResponse, useOnPatchProgress, useSendDepatch, useSendIsInstallPossible, useSendPatch } from "../Events.jsx";
 import TabSelector from '../ui/TabSelector.jsx';
+import InlineButton from '../ui/InlineButton.jsx';
+
+import '../../styles/ActionsBar.css';
 
 
 function ActionsBar({ currentPage, setCurrentPage }) {
@@ -58,20 +55,30 @@ function ActionsBar({ currentPage, setCurrentPage }) {
     }, [State]);
 
     return (
-    <div className="ActionsBar_root">
-        <TabSelector tabs={ [{ name: 'main', icon: 'home', disabled: true, label: 'Home', tooltipLabel: 'Home' }, { name: 'settings', icon: 'settings', tooltipLabel: 'Settings' }, { name: 'logs', icon: 'logs', tooltipLabel: 'Logs' }] } defaultActiveTabName={ 'logs' } onTabSelect={ onTabSelectorToggled }/>
-        {/* TODO: Вернуть кнопку удаления модификации в каком то ином виде
-        <button className="ActionsBar_DepatchButton"
-                onClick={onDepatchClick}
-                disabled={isDepatching || isPatching || !isPatched || !canInstall}>
-            {isDepatching ? "Depatching" : (!isPatched ? "Depatched" : "Depatch")}
-        </button> */}
-        <button className="ActionsBar_PatchButton"
-                onClick={onPatchClick}
-                disabled={isDepatching || isPatching || isPatched || !canInstall}>
-            {isPatching ? "Patching" : (isPatched ? "Patched" : "Patch")}
-        </button>
-    </div>
+        <div className="ActionsBar_root">
+            <TabSelector
+                tabs={
+                [
+                    { name: 'main', icon: 'home', disabled: true, label: 'Home', tooltipLabel: 'Home' },
+                    { name: 'settings', icon: 'settings', tooltipLabel: 'Settings' },
+                    { name: 'logs', icon: 'logs', tooltipLabel: 'Logs' }
+                ]}
+                defaultActiveTabName={ 'logs' }
+                onTabSelect={ onTabSelectorToggled }
+            />
+            {/* TODO: Вернуть кнопку удаления модификации в каком то ином виде
+             <button className="ActionsBar_DepatchButton"
+             onClick={onDepatchClick}
+             disabled={isDepatching || isPatching || !isPatched || !canInstall}>
+             {isDepatching ? "Depatching" : (!isPatched ? "Depatched" : "Depatch")}
+             </button> */ }
+            <InlineButton
+                className="ActionsBar_PatchButton"
+                onClick={ onPatchClick }
+                disabled={ isDepatching || isPatching || isPatched || !canInstall }
+                label={ (isPatching ? "Patching" : (isPatched ? "Patched" : "Patch")) }
+            />
+        </div>
     )
 }
 
