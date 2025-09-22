@@ -187,3 +187,77 @@ body {
 .width100percent {
     width: 100%;
 }
+
+.SecondaryButton {
+    transition: background-color 0.2s;
+    background: #343434;
+    color: #fff;
+    border: 1px solid #555;
+    cursor: pointer;
+    opacity: 1;
+}
+
+.SecondaryButton:disabled {
+    opacity: 0.6;
+    cursor: default;
+}
+
+.SecondaryButton:hover:not(:disabled) {
+    background: #444;
+}
+
+.SecondaryButton:active:not(:disabled) {
+    background: #303030;
+}
+
+.PrimaryButton {
+    transition: background-color 0.2s;
+    background: #E4CF0E;
+    color: #232323;
+    border: 1px solid #E4CF0E;
+    cursor: pointer;
+    opacity: 1;
+}
+
+.PrimaryButton:disabled {
+    opacity: 0.6;
+    cursor: default;
+}
+
+.PrimaryButton:hover:not(:disabled) {
+    background: #FFE814;
+    color: #232323;
+    border-color: #FFE814;
+}
+
+.PrimaryButton:active:not(:disabled) {
+    background: #D9C607;
+    color: #232323;
+    border-color: #D9C607;
+}
+
+.DangerButton {
+    transition: background-color 0.2s;
+    background: #f23f42;
+    color: #fff;
+    border: 1px solid #f23f42;
+    cursor: pointer;
+    opacity: 1;
+}
+
+.DangerButton:disabled {
+    opacity: 0.6;
+    cursor: default;
+}
+
+.DangerButton:hover:not(:disabled) {
+    background: #ff6367;
+    color: #fff;
+    border-color: #ff6367;
+}
+
+.DangerButton:active:not(:disabled) {
+    background: #e23a3d;
+    color: #fff;
+    border-color: #e23a3d;
+}
