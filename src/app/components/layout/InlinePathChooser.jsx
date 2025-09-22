@@ -1,7 +1,9 @@
 import React from 'react';
+import '../../styles/InlinePathChooser.css';
+
 import TextInput from '../ui/TextInput.jsx';
 import InlineButton from '../ui/InlineButton.jsx';
-import '../../styles/InlinePathChooser.css';
+import Tooltip from '../ui/Tooltip.jsx';
 
 
 function InlinePathChooser({ label, description, path, onExploreClick, pathTextboxDisabled=true, ...props }) {
@@ -15,7 +17,9 @@ function InlinePathChooser({ label, description, path, onExploreClick, pathTextb
             {withLabelContainer}
             <div className="InlinePathChooser" {...props}>
                 <TextInput value={path} disabled={pathTextboxDisabled}/>
-                <InlineButton onClick={onExploreClick}>Обзор</InlineButton>
+                <Tooltip label="Обзор" direction="top">
+                    <InlineButton onClick={onExploreClick} icon="folder" variant="secondary"></InlineButton>
+                </Tooltip>
             </div>
         </>
     )
