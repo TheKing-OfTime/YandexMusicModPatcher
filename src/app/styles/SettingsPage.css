@@ -2,7 +2,7 @@
     min-height: 75px;
     flex-grow: 1;
     padding-block: 20px;
-    padding-inline: 12px;
+    padding-inline: 20px;
     background-color: #1E1E1E;
     margin-bottom: 20px;
     margin-top: 20px;
@@ -16,11 +16,17 @@
 
 }
 
-.SettingItemList {
-    align-content: start;
+.SettingsList {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
     list-style: none;
     width: 100%;
     height: 100%;
     padding: 0;
     margin: 0;
+}
+
+.SettingsListItem {
+
 }

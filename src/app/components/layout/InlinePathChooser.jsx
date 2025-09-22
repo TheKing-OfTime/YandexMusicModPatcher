@@ -13,7 +13,7 @@ function InlinePathChooser({ label, description, path, onExploreClick, pathTextb
     const withLabelContainer = withLabel || withDescription ? <div className="InlinePathChooser_label_container">{withLabel}{withDescription}</div> : undefined;
 
     return (
-        <>
+        <div className="InlinePathChooser_container">
             {withLabelContainer}
             <div className="InlinePathChooser" {...props}>
                 <TextInput value={path} disabled={pathTextboxDisabled}/>
@@ -21,7 +21,7 @@ function InlinePathChooser({ label, description, path, onExploreClick, pathTextb
                     <InlineButton onClick={onExploreClick} icon="folder" variant="secondary"></InlineButton>
                 </Tooltip>
             </div>
-        </>
+        </div>
     )
 }
 

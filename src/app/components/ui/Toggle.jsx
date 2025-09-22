@@ -21,7 +21,7 @@ export default function Toggle({ label, description, onChange, checked = false, 
 
     return (
     <div className={`Toggle ${className}`}>
-        <label className={`Toggle_label${disabled ? ' Toggle_disabled' : ''}`}>
+        <div className={`Toggle_container${disabled ? ' Toggle_disabled' : ''}`}>
             <div className="Toggle_label_container">
                 {label && <span className="Toggle_label_text">{label}</span>}
                 {finalDescription && <span className="Toggle_label_description">{finalDescription}</span>}
@@ -36,7 +36,7 @@ export default function Toggle({ label, description, onChange, checked = false, 
                 />
                 <span className="Toggle_slider"/>
             </Tooltip>
-        </label>
+        </div>
     </div>
     );
 }

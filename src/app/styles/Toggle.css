@@ -1,14 +1,15 @@
 .Toggle {
     display: inline-block;
+    font-family: inherit;
+    width: 100%;
 }
 
-.Toggle_label {
+.Toggle_container {
     display: flex;
     align-items: center;
     cursor: pointer;
     font-family: inherit;
     user-select: none;
-    padding: 8px;
     justify-content: space-between;
     gap: 8px
 }

@@ -7,6 +7,14 @@
     font-family: inherit;
 }
 
+.InlinePathChooser_container {
+    display: flex;
+    font-family: inherit;
+    flex-direction: column;
+    gap: 8px;
+    width: 100%;
+}
+
 .InlinePathChooser_label_container {
     display: flex;
     font-family: inherit;

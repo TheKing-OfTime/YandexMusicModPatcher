@@ -1,6 +1,8 @@
 .Dropdown {
     position: relative;
     display: inline-block;
+    font-family: inherit;
+    width: 100%;
 }
 
 .Dropdown_toggle {
@@ -86,7 +88,6 @@
     flex-direction: row;
     font-family: inherit;
     align-items: center;
-    padding: 8px;
     justify-content: space-between;
     gap: 8px
 }

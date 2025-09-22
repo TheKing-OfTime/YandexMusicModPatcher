@@ -6,7 +6,23 @@ import Toggle from "../../ui/Toggle.jsx";
 import InlinePathChooser from '../../layout/InlinePathChooser.jsx';
 import { StateContext } from "../../StateContext.jsx";
 import { useOnExplorerDialogResponse, useSendOpenExplorerDialog, useSendSetCustomYmPath, useSendUpdateState } from "../../Events.jsx";
-import Tooltip from '../../ui/Tooltip.jsx';
+
+
+function SettingsList({children}) {
+    return (
+        <ul className="SettingsList">
+            {children}
+        </ul>
+    )
+}
+
+function SettingsListItem({children}) {
+    return (
+        <li className="SettingsListItem settings_font">
+            {children}
+        </li>
+    )
+}
 
 
 function SettingsPage() {
@@ -67,38 +83,44 @@ function SettingsPage() {
 
     return (
     <div className="SettingsPage scroll_enabled">
-        <ul className="SettingItemList">
-            <li>
-                <div className="width100percent settings_font" style={{ padding: '8px', gap: '8px', display: 'flex', flexDirection: 'column' }}>
-                    <InlinePathChooser
-                        label="Пользовательский путь до Яндекс Музыки"
-                        description="Используйте если патчер не нашёл путь до Яндекс Музыки сам"
-                        path={customYMPath}
-                        onExploreClick={sendOpenExploreDialog}
-                    />
-                </div>
-            </li>
-            <li>
-                <Dropdown className="width100percent settings_font" label="Канал релизов" options={options}
-                          onSelect={handleSelect} defaultOption={selectedType}/>
-            </li>
-            <li>
-                <Toggle className="width100percent settings_font" checked={useZip} label="Использовать сжатые asar"
-                        description="Ускоряет скачивание файлов модификации" onChange={handleUpdateUseZipToggle}/>
-            </li>
-            <li>
-                    <Toggle className="width100percent settings_font" checked={updatesControl} label="Контроль обновлений ЯМ"
-                            description={["Обновления Яндекс Музыки контролирует сама Яндекс Музыка", "Обновления Яндекс Музыки контролирует патчер"]}
-                            disabled={true}
-                            onChange={handleUpdatesControlToggle}/>
-            </li>
-            <li>
-                <Toggle className="width100percent settings_font" checked={updatePatcher} label="Обновлять патчер автоматически"
-                        description="Обновлять ли патчер автоматически. Рекомендуется не выключать"
-                        disabled={true}
-                        onChange={handleUpdatePatcherToggle}/>
-            </li>
-        </ul>
+        <SettingsList>
+            <SettingsListItem>
+                <InlinePathChooser
+                    label="Пользовательский путь до Яндекс Музыки"
+                    description="Используйте если патчер не нашёл путь до Яндекс Музыки сам"
+                    path={customYMPath}
+                    onExploreClick={sendOpenExploreDialog}
+                />
+            </SettingsListItem>
+            <SettingsListItem>
+                <Dropdown
+                    label="Канал релизов" options={options}
+                    onSelect={handleSelect} defaultOption={selectedType}
+                />
+            </SettingsListItem>
+            <SettingsListItem>
+                <Toggle
+                    checked={useZip} label="Использовать сжатые asar"
+                    description="Ускоряет скачивание файлов модификации" onChange={handleUpdateUseZipToggle}
+                />
+            </SettingsListItem>
+            <SettingsListItem>
+                <Toggle
+                    checked={updatesControl} label="Контроль обновлений ЯМ"
+                    description={["Обновления Яндекс Музыки контролирует сама Яндекс Музыка", "Обновления Яндекс Музыки контролирует патчер"]}
+                    disabled={true}
+                    onChange={handleUpdatesControlToggle}
+                />
+            </SettingsListItem>
+            <SettingsListItem>
+                <Toggle
+                    checked={updatePatcher} label="Обновлять патчер автоматически"
+                    description="Обновлять ли патчер автоматически. Рекомендуется не выключать"
+                    disabled={true}
+                    onChange={handleUpdatePatcherToggle}
+                />
+            </SettingsListItem>
+        </SettingsList>
     </div>
     )
 }
