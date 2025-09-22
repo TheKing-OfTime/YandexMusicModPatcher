@@ -236,9 +236,9 @@ async function copyFile(target, dest) {
         await fso.promises.copyFile(target, dest);
     } catch (error) {
         if (process.platform === 'linux' && error.code === 'EACCES') {
-            const encodedTarget = `'${target.replace(/'/g, "'\\''")}'`;
-            const encodedDest = `'${dest.replace(/'/g, "'\\''")}'`;
-            await execFileAsync('pkexec', ['bash', '-c', `cp ${encodedTarget} ${encodedDest}`]);
+            const encodedTarget = target.replaceAll("'", "\\'");
+            const encodedDest = dest.replaceAll("'", "\\'");
+            await execFileAsync('pkexec', ['bash', '-c', `cp '${encodedTarget}' '${encodedDest}'`]);
         } else {
             logger.error('File copying failed:', error);
         }
@@ -251,8 +251,8 @@ async function createDirIfNotExist(target) {
             await fsp.mkdir(target);
         } catch (error) {
             if (process.platform === 'linux' && error.code === 'EACCES') {
-                const encodedTarget = `'${target.replace(/'/g, "'\\''")}'`;
-                await execFileAsync('pkexec', ['bash', '-c', `mkdir -p ${encodedTarget}`]);
+                const encodedTarget = target.replaceAll("'", "\\'");
+                await execFileAsync('pkexec', ['bash', '-c', `mkdir -p '${encodedTarget}'`]);
             } else {
                 logger.error('Directory creation failed:', error)
             }
