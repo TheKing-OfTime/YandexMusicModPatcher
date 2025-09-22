@@ -1,3 +1,5 @@
+@import './theme.css';
+
 .Tooltip_wrapper {
     position: relative;
     display: flex;
@@ -6,11 +8,11 @@
 .Tooltip_box {
     position: absolute;
     z-index: 100;
-    background: #222;
-    color: #fff;
+    background: var(--color-bg-variant);
+    color: var(--color-text);
     padding: 6px 12px;
     border-radius: 8px;
-    border: 1px solid #444;
+    border: 1px solid var(--color-border);
     font-size: 14px;
     white-space: nowrap;
     opacity: 0;

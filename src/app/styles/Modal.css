@@ -1,3 +1,5 @@
+@import './theme.css';
+
 @keyframes fadeIn {
     from {
         opacity: 0;
@@ -41,7 +43,7 @@
 .Modal_overlay {
     position: fixed;
     inset: 0;
-    background: rgba(0, 0, 0, 0.5);
+    background: var(--overlay-bg);
     z-index: 1000;
     display: flex;
     align-items: center;
@@ -50,13 +52,13 @@
 }
 
 .Modal_content {
-    background: #232323;
-    color: #fff;
+    background: var(--color-bg-dark);
+    color: var(--color-text);
     border-radius: 12px;
     min-width: 320px;
     max-width: 70vw;
     min-height: 120px;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
+    box-shadow: 0 8px 32px var(--shadow);
     padding: 24px 28px 20px 28px;
     position: relative;
     display: flex;
@@ -86,7 +88,7 @@
 .Modal_closeButton {
     background: transparent;
     border: none;
-    color: #fff;
+    color: var(--color-text);
     font-size: 2rem;
     cursor: pointer;
     line-height: 1;
@@ -95,14 +97,14 @@
 }
 
 .Modal_closeButton:hover {
-    color: #f23f42;
+    color: var(--color-danger);
 }
 
 .Modal_body {
     display: flex;
     flex-direction: column;
     font-size: 1rem;
-    color: #fff;
+    color: var(--color-text);
     word-break: break-word;
     gap: 10px;
 }
@@ -131,23 +133,23 @@
 }
 
 .Modal_cancelButton {
-    background: #343434;
-    color: #fff;
-    border: 1px solid #555;
+    background: var(--color-bg);
+    color: var(--color-text);
+    border: 1px solid var(--color-border-strong);
 }
 
 .Modal_cancelButton:hover {
-    background: #444;
+    background: var(--color-bg-hover);
 }
 
 .Modal_submitButton {
-    background: #E4CF0E;
-    color: #232323;
-    border: 1px solid #E4CF0E;
+    background: var(--color-accent);
+    color: var(--color-text-on-accent);
+    border: 1px solid var(--color-accent);
 }
 
 .Modal_submitButton:hover {
-    background: #FFE814;
-    color: #232323;
-    border-color: #FFE814;
+    background: var(--color-accent-strong);
+    color: var(--color-text-on-accent);
+    border-color: var(--color-accent-strong);
 }

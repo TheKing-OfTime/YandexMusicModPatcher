@@ -1,9 +1,11 @@
+@import './theme.css';
+
 .SettingsPage {
     min-height: 75px;
     flex-grow: 1;
     padding-block: 20px;
     padding-inline: 20px;
-    background-color: #1E1E1E;
+    background-color: var(--color-surface);
     margin-bottom: 20px;
     margin-top: 20px;
     display: flex;

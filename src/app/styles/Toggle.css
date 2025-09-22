@@ -1,3 +1,5 @@
+@import './theme.css';
+
 .Toggle {
     display: inline-block;
     font-family: inherit;
@@ -26,7 +28,7 @@
     position: relative;
     width: 50px;
     height: 30px;
-    background: #444;
+    background: var(--color-border);
     border-radius: 30px;
     transition: background 0.2s;
     box-sizing: border-box;
@@ -34,7 +36,7 @@
 }
 
 .Toggle_input:checked + .Toggle_slider {
-    background: #E4CF0E;
+    background: var(--color-accent);
 }
 
 .Toggle_slider::before {
@@ -44,10 +46,10 @@
     top: 4px;
     width: 22px;
     height: 22px;
-    background: #fff;
+    background: var(--color-text);
     border-radius: 50%;
     transition: transform 0.2s;
-    box-shadow: 0 1px 4px rgba(0,0,0,0.15);
+    box-shadow: 0 1px 4px var(--shadow-sm);
 }
 
 .Toggle_input:checked + .Toggle_slider::before {
@@ -55,11 +57,11 @@
 }
 
 .Toggle_input:disabled + .Toggle_slider {
-    background: #333333;
+    background: var(--color-border-muted);
 }
 
 .Toggle_input:disabled + .Toggle_slider::before {
-    background: #777777;
+    background: var(--color-muted-3);
 }
 
 .Toggle_label_container {
@@ -72,7 +74,7 @@
 .Toggle_label_text {
     font-size: 1rem;
     font-family: inherit;
-    color: #fff;
+    color: var(--color-text);
     user-select: none;
     font-weight: 500;
     letter-spacing: 0.01em;
@@ -81,7 +83,7 @@
 .Toggle_label_description {
     font-size: 0.8rem;
     font-family: inherit;
-    color: #999;
+    color: var(--color-muted-2);
     user-select: none;
     font-weight: 400;
     letter-spacing: 0.01em;

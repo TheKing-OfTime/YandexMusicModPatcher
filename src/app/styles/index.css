@@ -1,3 +1,5 @@
+@import './theme.css';
+
 * {
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
@@ -25,7 +27,7 @@
     background: rgba(0,0,0,0);
 }
 .scroll_enabled::-webkit-scrollbar-thumb {
-    background-color: #343434;
+    background-color: var(--scrollbar-thumb);
     border-radius: 10px;
     border: 5px solid rgba(0,0,0,0);
     background-clip: padding-box;
@@ -41,7 +43,7 @@ main {
 }
 
 body {
-    background-color: #343434;
+    background-color: var(--color-bg);
     position: absolute;
     display: block;
     width: 100%;
@@ -79,7 +81,7 @@ body {
 
 .MainProgressBar_root {
     height: 100px;
-    background-color: #1E1E1E;
+    background-color: var(--color-surface);
     gap: 20px;
     padding: 20px;
     flex-direction: column;
@@ -91,7 +93,7 @@ body {
     min-height: 75px;
     flex-grow: 1;
     padding: 20px;
-    background-color: #1E1E1E;
+    background-color: var(--color-surface);
     margin-bottom: 20px;
     margin-top: 20px;
 
@@ -108,69 +110,10 @@ body {
 .LogEntry {
     white-space: nowrap;
     text-align: left;
-    color: white;
+    color: var(--color-text);
     font-size: 0.8rem;
     font-family: 'JetBrains Mono', 'Consolas', 'DejaVu Sans Mono', 'Courier New', monospace;
 }
-
-.ActionsBar_root {
-    height: 40px;
-    align-self: end;
-    gap: 20px;
-    flex-direction: row;
-    display: flex;
-    justify-content: start;
-    background-color: #343434;
-
-}
-
-.ActionsBar_SettingsButton, .ActionsBar_DepatchButton, .ActionsBar_PatchButton {
-    height: 100%;
-    width: 150px;
-    font-size: 26px;
-    border: 1px solid rgba(255, 255, 255, 0.2);;
-    border-radius: 10px;
-    box-shadow: 0px 2px 2px black;
-    font-weight: 400;
-    letter-spacing: 0.01em;
-}
-
-.ActionsBar_SettingsButton:enabled, .ActionsBar_DepatchButton:enabled, .ActionsBar_PatchButton:enabled {
-    cursor: pointer;
-}
-
-.ActionsBar_SettingsButton {
-    background: #343434;
-    color: #fff;
-    border: 1px solid #555;
-}
-
-.ActionsBar_DepatchButton, .ActionsBar_PatchButton {
-    background-color: #E4CF0E;
-}
-
-.ActionsBar_PatchButton {
-    margin-left: auto;
-}
-
-.ActionsBar_SettingsButton:enabled:hover {
-    background-color: #444;;
-}
-
-.ActionsBar_DepatchButton:enabled:hover, .ActionsBar_PatchButton:enabled:hover {
-    background-color: #FFE814;
-}
-
-.ActionsBar_SettingsButton:enabled:active:hover {
-    background-color: #303030;
-    box-shadow: none;
-}
-
-.ActionsBar_DepatchButton:enabled:active:hover, .ActionsBar_PatchButton:enabled:active:hover {
-    background-color: #E4CF0E;
-    box-shadow: none;
-}
-
 
 .MainProgressBar_labelsContainer {
     display: flex;
@@ -179,7 +122,7 @@ body {
 
 .MainProgressBar_TaskLabel, .MainProgressBar_LogLabel {
     font-size: 15px;
-    color: #FFF;
+    color: var(--color-text);
     font-weight: 400;
     letter-spacing: 0.03em;
 }
@@ -190,9 +133,9 @@ body {
 
 .SecondaryButton {
     transition: background-color 0.2s;
-    background: #343434;
-    color: #fff;
-    border: 1px solid #555;
+    background: var(--color-bg);
+    color: var(--color-text);
+    border: 1px solid var(--color-border-strong);
     cursor: pointer;
     opacity: 1;
 }
@@ -203,18 +146,18 @@ body {
 }
 
 .SecondaryButton:hover:not(:disabled) {
-    background: #444;
+    background: var(--color-bg-hover);
 }
 
 .SecondaryButton:active:not(:disabled) {
-    background: #303030;
+    background: var(--color-bg-active);
 }
 
 .PrimaryButton {
     transition: background-color 0.2s;
-    background: #E4CF0E;
-    color: #232323;
-    border: 1px solid #E4CF0E;
+    background: var(--color-accent);
+    color: var(--color-text-on-accent);
+    border: 1px solid var(--color-accent);
     cursor: pointer;
     opacity: 1;
 }
@@ -225,22 +168,22 @@ body {
 }
 
 .PrimaryButton:hover:not(:disabled) {
-    background: #FFE814;
-    color: #232323;
-    border-color: #FFE814;
+    background: var(--color-accent-strong);
+    color: var(--color-text-on-accent);
+    border-color: var(--color-accent-strong);
 }
 
 .PrimaryButton:active:not(:disabled) {
-    background: #D9C607;
-    color: #232323;
-    border-color: #D9C607;
+    background: var(--color-accent-active);
+    color: var(--color-text-on-accent);
+    border-color: var(--color-accent-active);
 }
 
 .DangerButton {
     transition: background-color 0.2s;
-    background: #f23f42;
-    color: #fff;
-    border: 1px solid #f23f42;
+    background: var(--color-danger);
+    color: var(--color-text);
+    border: 1px solid var(--color-danger);
     cursor: pointer;
     opacity: 1;
 }
@@ -251,13 +194,13 @@ body {
 }
 
 .DangerButton:hover:not(:disabled) {
-    background: #ff6367;
-    color: #fff;
-    border-color: #ff6367;
+    background: var(--color-danger-hover);
+    color: var(--color-text);
+    border-color: var(--color-danger-hover);
 }
 
 .DangerButton:active:not(:disabled) {
-    background: #e23a3d;
-    color: #fff;
-    border-color: #e23a3d;
+    background: var(--color-danger-active);
+    color: var(--color-text);
+    border-color: var(--color-danger-active);
 }

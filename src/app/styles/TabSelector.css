@@ -1,9 +1,11 @@
+@import './theme.css';
+
 .TabSelector {
     display: flex;
     gap: 1px;
     padding: 1px;
     border-radius: 11px;
-    background-color: rgba(255, 255, 255, 0.1);
+    background-color: var(--tab-bg);
 }
 .TabSelectorItem_first {
     border-radius: 10px 0 0 10px;
@@ -14,7 +16,7 @@
 }
 
 .TabSelectorItem {
-    background: #343434;
+    background: var(--color-bg);
     border: none;
     gap: 8px;
     display: flex;
@@ -22,25 +24,25 @@
     justify-content: center;
     padding: 8px;
     cursor: pointer;
-    color: #fff;
+    color: var(--color-text);
     font-size: 20px;
     font-weight: 600;
     transition: background 0.2s, color;
 }
 
 .TabSelectorItem:disabled {
-    color: #666;
+    color: var(--color-muted-4);
     cursor: default;
-    background: #222;
+    background: var(--color-bg-variant);
 }
 
 .TabSelectorItem:not(:disabled):hover {
-    background: #555;
+    background: var(--color-bg-hover);
 }
 
 .TabSelectorItem_active,
 .TabSelectorItem.TabSelectorItem_active:not(:disabled):hover {
-    background: #666;
+    background: var(--color-active);
 }
 
 .TabSelectorItem_icon {

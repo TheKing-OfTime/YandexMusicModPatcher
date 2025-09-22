@@ -1,3 +1,4 @@
+@import './theme.css';
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Roboto+Slab:wght@700&family=Oswald:wght@700&family=Poppins:wght@700&family=Playfair+Display:wght@700&display=swap');
 
 .TitleBar {
@@ -11,7 +12,7 @@
     overflow: hidden;
     border-bottom-width: 1px;
     border-bottom-style: solid;
-    border-bottom-color: rgba(255, 255, 255, 0.2);
+    border-bottom-color: var(--white-transparent-20);
     align-items: center;
 }
 
@@ -20,7 +21,7 @@
 }
 
 .TitleBar_icon {
-    color: #fff
+    color: var(--color-text)
 }
 
 .TitleBar_Button, .TitleBar_QuitButton {
@@ -45,11 +46,11 @@
 }
 
 .TitleBar_Button:hover {
-    background-color: hsla(0, 0%, 100%, .2);
+    background-color: var(--white-transparent-20);
 }
 
 .TitleBar_QuitButton:hover {
-    background-color: #f23f42
+    background-color: var(--color-danger)
 }
 
 .TitleBar_app_logo {
@@ -67,7 +68,7 @@
 
 
 .TitleBar_app_name {
-    color: #fff;
+    color: var(--color-text);
     font-family: 'Montserrat', 'Roboto Slab', 'Oswald', 'Poppins', 'Playfair Display', sans-serif;
     font-size: 1.2rem;
     font-weight: 400;

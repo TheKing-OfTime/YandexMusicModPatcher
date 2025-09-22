@@ -1,11 +1,13 @@
+@import './theme.css';
+
 .TextInput {
     width: 100%;
     padding: 8px 12px;
     font-size: 1rem;
-    border: 1px solid #444;
+    border: 1px solid var(--color-border);
     border-radius: 8px;
-    background: #232323;
-    color: #fff;
+    background: var(--color-bg-dark);
+    color: var(--color-text);
     font-family: inherit;
     outline: none;
     transition: border-color 0.2s, box-shadow 0.2s;
@@ -13,14 +15,14 @@
 }
 
 .TextInput:focus {
-    border-color: #E4CF0E;
-    box-shadow: 0 0 0 2px rgba(228, 207, 14, 0.2);
+    border-color: var(--color-accent);
+    box-shadow: 0 0 0 2px rgba(var(--color-accent-rgb), 0.2);
 }
 
 .TextInput:disabled {
-    background: #2d2d2d;
-    color: #888;
-    border-color: #333;
+    background: var(--color-bg-disabled);
+    color: var(--color-muted);
+    border-color: var(--color-border-muted);
     cursor: default;
     opacity: 0.7;
 }

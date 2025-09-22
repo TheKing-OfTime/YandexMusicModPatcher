@@ -1,3 +1,5 @@
+@import './theme.css';
+
 .InlineButton {
     display: flex;
     align-items: center;

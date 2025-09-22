@@ -1,3 +1,5 @@
+@import './theme.css';
+
 .LoadingPage {
     display: flex;
     flex-direction: column;
@@ -10,7 +12,7 @@
     bottom: 0;
     overflow: hidden;
     gap: 7vmin;
-    background-color: #343434;
+    background-color: var(--color-bg);
 }
 
 .LoadingPageIcon {
@@ -23,7 +25,7 @@
 
 .LoadingPageTitle {
     margin: 0;
-    color: white;
+    color: var(--color-text);
     font-size: 7vmin;
     text-align: center;
     opacity: inherit;

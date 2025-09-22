@@ -1,0 +1,45 @@
+/* Theme variables extracted from existing styles */
+:root {
+    --color-bg: #343434; /* main background */
+    --color-bg-dark: #232323; /* darker surfaces */
+    --color-surface: #1E1E1E; /* panel surface */
+    --color-bg-disabled: #2d2d2d;
+
+    --color-border: #444444;
+    --color-border-strong: #555555;
+    --color-border-muted: #333333;
+
+    --color-text: #ffffff;
+    --color-text-on-accent: #232323;
+
+    --color-muted: #888888;
+    --color-muted-2: #999999;
+    --color-muted-3: #777777;
+    --color-muted-4: #666666;
+
+    --color-accent: #E4CF0E;
+    --color-accent-rgb: 228,207,14;
+    --color-accent-strong: #FFE814;
+    --color-accent-active: #D9C607;
+
+    --color-danger: #f23f42;
+    --color-danger-hover: #ff6367;
+    --color-danger-active: #e23a3d;
+
+    --color-progress: #5865f2;
+
+    --tab-bg: rgba(255,255,255,0.1);
+
+    --overlay-bg: rgba(0,0,0,0.5);
+    --white-transparent-20: rgba(255,255,255,0.2);
+    --shadow: rgba(0,0,0,0.25);
+    --shadow-soft: rgba(0,0,0,0.2);
+    --shadow-sm: rgba(0,0,0,0.15);
+
+    --scrollbar-thumb: #343434;
+
+    --color-bg-variant: #222222;
+    --color-active: #666666;
+    --color-bg-active: #303030;
+    --color-bg-hover: #444444;
+}
