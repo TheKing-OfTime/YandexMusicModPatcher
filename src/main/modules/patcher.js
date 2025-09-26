@@ -8,12 +8,12 @@ import * as zlib from "node:zlib";
 import * as fs from 'fs';
 import * as fsp from 'fs/promises'
 import { execSync } from "child_process";
-import asar from '@electron/asar';
+import { getRawHeader } from '@electron/asar';
 import plist from 'plist';
 import { getState } from "./state.js";
 import Events from "../types/Events.js";
 import PatchTypes from '../types/PatchTypes.js';
-import { ASAR_ZST_TMP_PATH, ASAR_GZ_TMP_PATH, ASAR_TMP_PATH, EXTRACTED_ENTITLEMENTS_PATH, TMP_PATH, ASAR_TMP_BACKUP_PATH, YM_EXE_TMP_BACKUP_PATH } from '../constants/paths.js';
+import { ASAR_ZST_TMP_PATH, ASAR_GZ_TMP_PATH, ASAR_TMP_PATH, EXTRACTED_ENTITLEMENTS_PATH, TMP_PATH, ASAR_TMP_BACKUP_PATH, YM_EXE_TMP_BACKUP_PATH, ASAR_UNPACKED_ZIP_TMP_PATH } from '../constants/paths.js';
 import { Logger } from "./Logger.js";
 import { execFile } from 'child_process';
 
@@ -25,7 +25,8 @@ import {
     isMac,
     isWin,
     isYandexMusicRunning,
-    launchYandexMusic
+    launchYandexMusic,
+    unzipFolder
 } from "./utils.js";
 import { LATEST_MOD_RELEASE_URL, YM_RELEASE_METADATA_URL } from '../constants/urls.js';
 
@@ -74,6 +75,10 @@ await createDirIfNotExist(TMP_PATH);
 
 async function clearCaches(callback) {
     callback(1, 'Clearing caches...');
+    if (fs.existsSync(ASAR_ZST_TMP_PATH)) await fsp.unlink(ASAR_ZST_TMP_PATH);
+    if (fs.existsSync(ASAR_GZ_TMP_PATH)) await fsp.unlink(ASAR_GZ_TMP_PATH);
+    //if (fs.existsSync(ASAR_TMP_PATH)) await fsp.unlink(ASAR_TMP_PATH); // Отключаю пока не станет понятно почему файл остаётся залочен.
+    if (fs.existsSync(ASAR_UNPACKED_ZIP_TMP_PATH)) await fsp.unlink(ASAR_UNPACKED_ZIP_TMP_PATH);
     if (fs.existsSync(ASAR_TMP_BACKUP_PATH)) await fsp.unlink(ASAR_TMP_BACKUP_PATH);
     if (fs.existsSync(YM_EXE_TMP_BACKUP_PATH)) await fsp.unlink(YM_EXE_TMP_BACKUP_PATH);
     if (fs.existsSync(EXTRACTED_ENTITLEMENTS_PATH)) await fsp.unlink(EXTRACTED_ENTITLEMENTS_PATH);
@@ -135,19 +140,40 @@ async function closeYmIfRunning(callback) {
     return false;
 }
 
-async function prepareModAsarFile(patchType, callback) {
+async function prepareModAsarFile(patchType, asarPath, callback) {
+
+    const metadata = await getReleaseMetadata(LATEST_MOD_RELEASE_URL);
+
     if (patchType !== PatchTypes.FROM_MOD) {
-        await downloadAsar(callback);
+        await downloadAsar(callback, metadata);
 
         if (shouldDecompress) {
             const pathToCompressedFile = compressionType === 'zst' ? ASAR_ZST_TMP_PATH : ASAR_GZ_TMP_PATH;
-            callback(0.8, 'Decompressing...');
+            callback(0.6, 'Decompressing...');
             await decompressFile(pathToCompressedFile, ASAR_TMP_PATH, compressionType)
-            callback(0.9, 'Decompressed.');
+            callback(0.6, 'Decompressed.');
         }
     } else {
-        callback(0.9, 'Updating from mod... Downloading ASAR skipped...');
+        callback(0.6, 'Updating from mod... Downloading ASAR skipped...');
     }
+
+    const unpackedAsset = metadata.assets.find((a) => a?.name === 'app.asar.unpacked.zip');
+    if (!unpackedAsset) {
+        logger.warn('No app.asar.unpacked.zip asset found in the release. Skipping unpacked files download.');
+        return;
+    }
+
+    await downloadFile(unpackedAsset.browser_download_url, ASAR_UNPACKED_ZIP_TMP_PATH,
+        (progress, label) => {
+            callback(0.6 + (progress * 0.2), label);
+        }
+    );
+
+    callback(0.8, 'Unzipping asar.unpacked file...');
+
+    await unzipFolder(ASAR_UNPACKED_ZIP_TMP_PATH, path.join(path.dirname(asarPath), 'app.asar.unpacked'));
+
+    callback(0.9, 'Asar.unpacked unzipped...');
 }
 
 export async function installMod(callback, { patchType = PatchTypes.DEFAULT, fromAsarSrc = undefined, customPathToYMAsar = undefined }) {
@@ -168,7 +194,7 @@ export async function installMod(callback, { patchType = PatchTypes.DEFAULT, fro
 
     oldYMHash = calcASARHeaderHash(YM_ASAR_PATH).hash;
 
-    await prepareModAsarFile(patchType, callback);
+    await prepareModAsarFile(patchType, asarPath, callback);
 
     const wasYmClosed = await closeYmIfRunning(callback);
 
@@ -192,7 +218,7 @@ export async function installMod(callback, { patchType = PatchTypes.DEFAULT, fro
 
 }
 
-async function downloadAsar(callback) {
+async function downloadAsar(callback, metadata) {
     const filenamePrefix = State.get('patchType') === 'default' ? 'app.asar' : 'appDevTools.asar';
     const priorityFiles = [filenamePrefix];
     if (State.get('useZIP')) {
@@ -200,7 +226,6 @@ async function downloadAsar(callback) {
         if (zstdDecompressPromise) priorityFiles.unshift(`${filenamePrefix}.zst`);
     }
 
-    const metadata = await getReleaseMetadata(LATEST_MOD_RELEASE_URL);
     const assets = metadata?.assets;
     modVersion = metadata?.name;
 
@@ -225,7 +250,7 @@ async function downloadAsar(callback) {
 
     await downloadFile(url, path.join(downloadPath),
         (progress, label) => {
-            callback(progress*0.8, label);
+            callback(progress*0.6, label);
         }
     );
 
@@ -290,7 +315,7 @@ function getYMAsarDefaultPath() {
 }
 
 function calcASARHeaderHash(archivePath) {
-    const headerString = asar.getRawHeader(archivePath).headerString;
+    const headerString = getRawHeader(archivePath).headerString;
     const hash = crypto.createHash('sha256').update(headerString).digest('hex');
     return { algorithm: 'SHA256', hash };
 }

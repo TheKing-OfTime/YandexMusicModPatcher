@@ -4,6 +4,7 @@ import { exec, spawn } from 'child_process'
 import { app, nativeImage } from "electron";
 import axios from "axios";
 import o_fs from "original-fs";
+import unzipper from "unzipper";
 import fs from "fs";
 import { Logger } from "./Logger.js";
 import { YM_ASAR_PATH } from './patcher.js';
@@ -123,25 +124,42 @@ export async function openExternalDetached(url) {
     (await spawnAsync(command, args, { detached: true, stdio: 'ignore', })).unref();
 }
 
-export async function downloadFile(url, path, callback) {
+export async function downloadFile(url, dest, callback) {
     const response = await axios.get(url, {
         responseType: 'stream',
         onDownloadProgress: progress => {
-            callback(progress.progress, 'Downloading ASAR...');
+            callback(progress.progress, `Downloading ${path.basename(dest)}...`);
         }
     })
-    response.data.pipe(o_fs.createWriteStream(path));
-
     return new Promise((resolve, reject) => {
-        response.data.on('end', () => {
-            resolve(path)
-        })
+        const writer = o_fs.createWriteStream(dest);
+
+        response.data.pipe(writer);
+
+        writer.on('finish', () => {
+            writer.close((err)=>{
+                if (err) {
+                    callback(-1, 'Error closing file: ' + err);
+                    reject(err);
+                    return;
+                }
+                callback(1, 'Download completed: ' + path.basename(dest));
+            });
+            resolve(dest);
+        });
+
+        writer.on('error', (error) => {
+            writer.close?.();
+            callback(-1, 'Download error: ' + error);
+            reject(error);
+        });
 
         response.data.on('error', (error) => {
+            writer.close?.();
             callback(-1, 'Download error: ' + error);
-            reject()
-        })
-    })
+            reject(error);
+        });
+    });
 }
 
 export async function checkIfLegacyYMInstalled() {
@@ -193,4 +211,10 @@ export function formatTimeStampDiff(date1, date2) {
     result += (diffMs % 1000 + 'ms');
 
     return result;
+}
+
+export async function unzipFolder(zipPath, outputFolder) {
+    await fs.createReadStream(zipPath)
+    .pipe(unzipper.Extract({ path: outputFolder }))
+    .promise();
 }
