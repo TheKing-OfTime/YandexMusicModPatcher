@@ -37,6 +37,10 @@ function ActionsBar({ currentPage, setCurrentPage }) {
             } else if (args.progress === 0) {
                 setIsDepatching(false);
                 setIsPatched(false);
+            } else if (args.progress === -1) {
+                setTimeout(()=> {
+                    useSendIsInstallPossible();
+                }, 3000)
             }
         })
         const OffIsInstallPossible = useOnIsInstallPossibleResponse((event, args) => {
