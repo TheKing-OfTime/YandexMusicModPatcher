@@ -42,6 +42,7 @@
     "svg-sprite-loader": "^6.0.11"
   },
   "dependencies": {
+    "@electron/asar": "^4.0.1",
     "axios": "^1.8.3",
     "copy-webpack-plugin": "^13.0.0",
     "electron-is-dev": "^3.0.1",
@@ -49,9 +50,11 @@
     "electron-squirrel-startup": "^1.0.1",
     "electron-store": "^10.0.1",
     "original-fs": "^1.2.0",
+    "plist": "^3.1.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "semver": "^7.7.2",
+    "unzipper": "^0.12.3",
     "yaml": "^2.8.0"
   }
 }
