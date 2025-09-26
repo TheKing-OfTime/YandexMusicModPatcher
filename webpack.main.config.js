@@ -11,5 +11,8 @@ module.exports = {
     },
     resolve: {
         extensions: ['.js', '.ts', '.json'],
+        fallback: {
+            "@aws-sdk/client-s3": false
+        }
     },
 };
