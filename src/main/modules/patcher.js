@@ -194,9 +194,9 @@ export async function installMod(callback, { patchType = PatchTypes.DEFAULT, fro
 
     oldYMHash = calcASARHeaderHash(YM_ASAR_PATH).hash;
 
-    await prepareModAsarFile(patchType, asarPath, callback);
-
     const wasYmClosed = await closeYmIfRunning(callback);
+
+    await prepareModAsarFile(patchType, asarPath, callback);
 
     await createBackups(callback, asarPath);
     await replaceAsar(callback, patchType, fromAsarSrc, asarPath);
