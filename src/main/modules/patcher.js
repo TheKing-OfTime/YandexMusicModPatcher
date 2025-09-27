@@ -199,6 +199,7 @@ export async function installMod(callback, { patchType = PatchTypes.DEFAULT, fro
     await prepareModAsarFile(patchType, asarPath, callback);
 
     await createBackups(callback, asarPath);
+
     await replaceAsar(callback, patchType, fromAsarSrc, asarPath);
 
     const isAsarIntegrityBypassed = await bypassAsarIntegrity(YM_PATH, callback);
@@ -209,6 +210,7 @@ export async function installMod(callback, { patchType = PatchTypes.DEFAULT, fro
     }
 
     callback(1, 'Installed!');
+
     logger.log('Installed mod version:', modVersion, 'YM version:', ymMetadata.version, 'Patch type:', patchType);
 
     await clearCaches(callback);
@@ -248,7 +250,7 @@ async function downloadAsar(callback, metadata) {
 
     const downloadPath = shouldDecompress ? (compressionType === 'zst' ? ASAR_ZST_TMP_PATH : ASAR_GZ_TMP_PATH) : ASAR_TMP_PATH;
 
-    await downloadFile(url, path.join(downloadPath),
+    await downloadFile(url, downloadPath,
         (progress, label) => {
             callback(progress*0.6, label);
         }
@@ -286,7 +288,7 @@ async function createDirIfNotExist(target) {
 }
 
 async function decompressFile(target, dest, compressionType) {
-    const compressedData = await fsp.readFile(target);
+    const compressedData = await fso.promises.readFile(target);
 
     const decompressedData = await (compressionType === 'zst' ? zstdDecompressPromise(compressedData) : unzipPromise(compressedData));
 

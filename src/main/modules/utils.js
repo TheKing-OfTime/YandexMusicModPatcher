@@ -1,9 +1,10 @@
 import path from "path";
 import { promisify } from 'util'
+import { pipeline } from 'stream/promises';
 import { exec, spawn } from 'child_process'
 import { app, nativeImage } from "electron";
 import axios from "axios";
-import o_fs from "original-fs";
+import fso from "original-fs";
 import unzipper from "unzipper";
 import fs from "fs";
 import { Logger } from "./Logger.js";
@@ -24,7 +25,7 @@ export const getNativeImg = (relativePath) => {
         : path.join(__dirname, '..', '..', 'assets')
 
     const filePath = path.join(basePath, relativePath);
-    if (!filePath || !o_fs.existsSync(filePath)) {
+    if (!filePath || !fso.existsSync(filePath)) {
         logger.log(`File path is undefined for relative path: ${filePath}`);
     }
     return nativeImage.createFromPath(filePath)
@@ -130,36 +131,19 @@ export async function downloadFile(url, dest, callback) {
         onDownloadProgress: progress => {
             callback(progress.progress, `Downloading ${path.basename(dest)}...`);
         }
-    })
-    return new Promise((resolve, reject) => {
-        const writer = o_fs.createWriteStream(dest);
-
-        response.data.pipe(writer);
-
-        writer.on('finish', () => {
-            writer.close((err)=>{
-                if (err) {
-                    callback(-1, 'Error closing file: ' + err);
-                    reject(err);
-                    return;
-                }
-                callback(1, 'Download completed: ' + path.basename(dest));
-            });
-            resolve(dest);
-        });
-
-        writer.on('error', (error) => {
-            writer.close?.();
-            callback(-1, 'Download error: ' + error);
-            reject(error);
-        });
-
-        response.data.on('error', (error) => {
-            writer.close?.();
-            callback(-1, 'Download error: ' + error);
-            reject(error);
-        });
     });
+
+    const writer = fso.createWriteStream(dest);
+
+    try {
+        await pipeline(response.data, writer);
+        callback(1, 'Download completed: ' + path.basename(dest));
+        return dest;
+    } catch (err) {
+        writer.close();
+        callback(-1, 'Download error: ' + err);
+        throw err;
+    }
 }
 
 export async function checkIfLegacyYMInstalled() {
