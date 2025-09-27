@@ -132,9 +132,9 @@ async function replaceAsar(callback, patchType, fromAsarSrc, asarPath) {
 
 async function closeYmIfRunning(callback) {
     if (await isYandexMusicRunning()) {
-        callback(0.9, 'Yandex Music is running. Closing it...', 'Closing Yandex Music...');
+        callback(0, 'Yandex Music is running. Closing it...', 'Closing Yandex Music...');
         await closeYandexMusic();
-        callback(0.9, 'Yandex Music closed.');
+        callback(0, 'Yandex Music closed.');
         return true;
     }
     return false;
