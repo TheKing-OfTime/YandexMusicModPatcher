@@ -198,7 +198,10 @@ export function formatTimeStampDiff(date1, date2) {
 }
 
 export async function unzipFolder(zipPath, outputFolder) {
-    await fs.createReadStream(zipPath)
-    .pipe(unzipper.Extract({ path: outputFolder }))
-    .promise();
+    await new Promise((resolve, reject) => {
+        fs.createReadStream(zipPath)
+            .pipe(unzipper.Extract({ path: outputFolder }))
+            .on('close', resolve)
+            .on('error', reject);
+    });
 }
