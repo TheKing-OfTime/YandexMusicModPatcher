@@ -169,7 +169,7 @@ async function prepareModAsarFile(patchType, asarPath, callback) {
         }
     );
 
-    callback(0.8, 'Unzipping asar.unpacked file...');
+    callback(0.8, 'Unzipping app.asar.unpacked.zip file...');
 
     await unzipFolder(ASAR_UNPACKED_ZIP_TMP_PATH, path.join(path.dirname(asarPath), 'app.asar.unpacked'));
 
