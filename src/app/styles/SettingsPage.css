@@ -14,8 +14,7 @@
     align-self: flex-start;
     border-radius: 10px;
     width: 100%;
-
-
+    flex-direction: column;
 }
 
 .SettingsList {
@@ -31,4 +30,17 @@
 
 .SettingsListItem {
 
+}
+
+.SettingsFooter {
+    display: flex;
+    justify-content: space-between;
+    align-items: start;
+    margin-top: 20px;
+    color: var(--color-muted-4);
+    flex-direction: column;
+}
+
+.SettingsFooterItem {
+    font-family: inherit;
 }

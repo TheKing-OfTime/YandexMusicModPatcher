@@ -24,6 +24,33 @@ function SettingsListItem({children}) {
     )
 }
 
+// TODO: Сделать секции для настроек
+// function SettingsSection({label, children}) {
+//     return (
+//         <div className="SettingsSection">
+//             {label && <h2 className="SettingsSection_label settings_font">{label}</h2>}
+//             <div className="SettingsSection_content">
+//                 {children}
+//             </div>
+//         </div>
+//     )
+// }
+
+function SettingsFooter() {
+    const PLATFORMS = {
+        win32: 'Windows',
+        darwin: 'macOS',
+        linux: 'Linux',
+    }
+
+    return (
+        <div className="SettingsFooter settings_font">
+            <span className="SettingsFooterItem">YandexMusicModPatcher v{window.CONSTANTS.CONFIG_APP_VERSION}</span>
+            <span className="SettingsFooterItem">{PLATFORMS[window.CONSTANTS.PLATFORM] ?? window.CONSTANTS.PLATFORM} {window.CONSTANTS.ARCH}</span>
+            <span className="SettingsFooterItem">by @TheKingOfTime</span>
+        </div>
+    )
+}
 
 function SettingsPage() {
 
@@ -121,6 +148,7 @@ function SettingsPage() {
                 />
             </SettingsListItem>
         </SettingsList>
+        <SettingsFooter/>
     </div>
     )
 }

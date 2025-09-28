@@ -1,9 +1,13 @@
 import electron from "electron";
 import { Logger } from "./modules/Logger.js";
+import config from './config.js';
 const logger = new Logger("preload");
 
 electron.contextBridge.exposeInMainWorld('CONSTANTS', {
     PLATFORM: process.platform,
+    ARCH: process.arch,
+    DEEPLINK_PROTOCOL: config.deeplinkProtocol,
+    CONFIG_APP_VERSION: config.version,
 });
 
 electron.contextBridge.exposeInMainWorld('desktopEvents', {
