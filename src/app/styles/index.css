@@ -112,7 +112,7 @@ body {
     display: flex;
     align-items: center;
     justify-content: end;
-    margin-bottom: 8px;
+    margin-bottom: 20px;
     gap: 10px;
 }
 
