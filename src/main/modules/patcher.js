@@ -75,13 +75,13 @@ await createDirIfNotExist(TMP_PATH);
 
 async function clearCaches(callback) {
     callback(1, 'Clearing caches...');
-    if (fs.existsSync(ASAR_ZST_TMP_PATH)) await fsp.unlink(ASAR_ZST_TMP_PATH);
-    if (fs.existsSync(ASAR_GZ_TMP_PATH)) await fsp.unlink(ASAR_GZ_TMP_PATH);
-    //if (fs.existsSync(ASAR_TMP_PATH)) await fsp.unlink(ASAR_TMP_PATH); // Отключаю пока не станет понятно почему файл остаётся залочен.
-    if (fs.existsSync(ASAR_UNPACKED_ZIP_TMP_PATH)) await fsp.unlink(ASAR_UNPACKED_ZIP_TMP_PATH);
-    if (fs.existsSync(ASAR_TMP_BACKUP_PATH)) await fsp.unlink(ASAR_TMP_BACKUP_PATH);
-    if (fs.existsSync(YM_EXE_TMP_BACKUP_PATH)) await fsp.unlink(YM_EXE_TMP_BACKUP_PATH);
-    if (fs.existsSync(EXTRACTED_ENTITLEMENTS_PATH)) await fsp.unlink(EXTRACTED_ENTITLEMENTS_PATH);
+    if (fso.existsSync(ASAR_ZST_TMP_PATH)) await fso.promises.unlink(ASAR_ZST_TMP_PATH);
+    if (fso.existsSync(ASAR_GZ_TMP_PATH)) await fso.promises.unlink(ASAR_GZ_TMP_PATH);
+    if (fso.existsSync(ASAR_TMP_PATH)) await fso.promises.unlink(ASAR_TMP_PATH);
+    if (fso.existsSync(ASAR_UNPACKED_ZIP_TMP_PATH)) await fso.promises.unlink(ASAR_UNPACKED_ZIP_TMP_PATH);
+    if (fso.existsSync(ASAR_TMP_BACKUP_PATH)) await fso.promises.unlink(ASAR_TMP_BACKUP_PATH);
+    if (fso.existsSync(YM_EXE_TMP_BACKUP_PATH)) await fso.promises.unlink(YM_EXE_TMP_BACKUP_PATH);
+    if (fso.existsSync(EXTRACTED_ENTITLEMENTS_PATH)) await fso.promises.unlink(EXTRACTED_ENTITLEMENTS_PATH);
     callback(1, 'Caches cleared.');
 }
 
