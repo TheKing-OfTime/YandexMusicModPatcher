@@ -63,7 +63,7 @@ function ActionsBar({ currentPage, setCurrentPage }) {
             <TabSelector
                 tabs={
                 [
-                    { name: 'main', icon: 'home', disabled: true, label: 'Home', tooltipLabel: 'Home' },
+                    { name: 'main', disabled: true, label: 'Home', tooltipLabel: 'Home' },
                     { name: 'settings', icon: 'settings', tooltipLabel: 'Settings' },
                     { name: 'logs', icon: 'logs', tooltipLabel: 'Logs' }
                 ]}
