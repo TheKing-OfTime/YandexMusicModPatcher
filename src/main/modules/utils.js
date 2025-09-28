@@ -202,6 +202,7 @@ export async function unzipFolder(zipPath, outputFolder) {
         fs.createReadStream(zipPath)
             .pipe(unzipper.Extract({ path: outputFolder }))
             .on('close', resolve)
+            .on('finish', resolve)
             .on('error', reject);
     });
 }
