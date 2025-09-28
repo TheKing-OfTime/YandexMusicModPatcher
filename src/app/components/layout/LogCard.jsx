@@ -4,7 +4,7 @@ import InlineButton from '../ui/InlineButton.jsx';
 import Dropdown from '../ui/Dropdown.jsx';
 import Tooltip from '../ui/Tooltip.jsx';
 
-//import '../../styles/LogCard.css';
+import '../../styles/LogCard.css';
 
 
 const OPTIONS = [
