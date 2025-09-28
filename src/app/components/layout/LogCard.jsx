@@ -24,6 +24,7 @@ function LogCard({ logEntries, setFilterLevel, filterLevel }) {
 
     const listRef = useRef(null);
     const [ isAtBottom, setIsAtBottom ] = useState(true);
+    const [ didCopy, setDidCopy ] = useState(false);
 
 
     useEffect(() => {
@@ -35,10 +36,11 @@ function LogCard({ logEntries, setFilterLevel, filterLevel }) {
     return (
     <div className="LogCard">
         <div className="LogCard_header">
-            <Tooltip label="Скопировать все логи" direction="bottom">
+            <Tooltip label={ didCopy ? "Логи скопированы!" : "Скопировать все логи" } direction="bottom" onMouseEnter={ () => setDidCopy(false) }>
                 <InlineButton onClick={
                     () => {
                         const text = logEntries.map(log => {
+                            setDidCopy(true);
                             const d = new Date(log.timestamp);
                             const formatDate = `${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}:${String(d.getSeconds()).padStart(2, '0')}`;
                             return `${formatDate} [${(log.logEntry.logLevel ?? 'log').toUpperCase()}] ${log.logEntry.logLabel}`;

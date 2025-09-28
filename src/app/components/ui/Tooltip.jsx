@@ -9,7 +9,7 @@ const directions = {
     left: 'Tooltip_left',
 };
 
-export default function Tooltip({ label, direction = 'top', enabled=true, children }) {
+export default function Tooltip({ label, direction = 'top', enabled=true, onMouseEnter=undefined, onMouseLeave=undefined, children }) {
     const [visible, setVisible] = useState(false);
 
 
@@ -17,8 +17,14 @@ export default function Tooltip({ label, direction = 'top', enabled=true, childr
     return (
         <span
             className="Tooltip_wrapper"
-            onMouseEnter={() => setVisible(enabled) }
-            onMouseLeave={() => setVisible(false) }
+            onMouseEnter={() => {
+                if (enabled) onMouseEnter?.();
+                return setVisible(enabled);
+            }}
+            onMouseLeave={() => {
+                onMouseLeave?.();
+                return setVisible(false);
+            }}
         >
         { children }
         {
