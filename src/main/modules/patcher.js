@@ -74,7 +74,7 @@ let modVersion = undefined;
 await createDirIfNotExist(TMP_PATH);
 
 async function clearCaches(callback) {
-    callback(1, 'Clearing caches...');
+    callback(1, 'Clearing caches...', undefined, 'vrb');
     if (fso.existsSync(ASAR_ZST_TMP_PATH)) await fso.promises.unlink(ASAR_ZST_TMP_PATH);
     if (fso.existsSync(ASAR_GZ_TMP_PATH)) await fso.promises.unlink(ASAR_GZ_TMP_PATH);
     if (fso.existsSync(ASAR_TMP_PATH)) await fso.promises.unlink(ASAR_TMP_PATH);
@@ -95,7 +95,7 @@ async function postInstallTasks(ymMetadata, wasYmClosed, callback) {
     logger.log(State.get('lastPatchInfo'));
 
     if (!(await isYandexMusicRunning()) && wasYmClosed) {
-        callback(1, 'Yandex Music was closed while mod install. Launching it...', 'Launching Yandex Music...');
+        callback(1, 'Yandex Music was closed while mod install. Launching it...', 'Launching Yandex Music...', 'vrb');
         try {
             launchYandexMusic();
             setTimeout(() => callback(2, 'Yandex Music launched.'), 500);
@@ -119,9 +119,9 @@ async function applyBackups(callback, asarPath) {
 }
 
 async function createBackups(callback, asarPath) {
-    callback(0.9, 'Creating ASAR backup...');
+    callback(0.9, 'Creating ASAR backup...', undefined, 'vrb');
     await copyFile(asarPath, ASAR_TMP_BACKUP_PATH);
-    callback(0.9, 'ASAR backup created.');
+    callback(0.9, 'ASAR backup created.', undefined, 'vrb');
 }
 
 async function replaceAsar(callback, patchType, fromAsarSrc, asarPath) {
@@ -132,7 +132,7 @@ async function replaceAsar(callback, patchType, fromAsarSrc, asarPath) {
 
 async function closeYmIfRunning(callback) {
     if (await isYandexMusicRunning()) {
-        callback(0, 'Yandex Music is running. Closing it...', 'Closing Yandex Music...');
+        callback(0, 'Yandex Music is running. Closing it...', 'Closing Yandex Music...', 'vrb');
         await closeYandexMusic();
         callback(0, 'Yandex Music closed.');
         return true;
@@ -149,7 +149,7 @@ async function prepareModAsarFile(patchType, asarPath, callback) {
 
         if (shouldDecompress) {
             const pathToCompressedFile = compressionType === 'zst' ? ASAR_ZST_TMP_PATH : ASAR_GZ_TMP_PATH;
-            callback(0.6, 'Decompressing...');
+            callback(0.6, 'Decompressing...', undefined, 'vrb');
             await decompressFile(pathToCompressedFile, ASAR_TMP_PATH, compressionType)
             callback(0.6, 'Decompressed.');
         }
@@ -164,12 +164,12 @@ async function prepareModAsarFile(patchType, asarPath, callback) {
     }
 
     await downloadFile(unpackedAsset.browser_download_url, ASAR_UNPACKED_ZIP_TMP_PATH,
-        (progress, label) => {
-            callback(0.6 + (progress * 0.2), label);
+        (progress, label, logLevel='log') => {
+            callback(0.6 + (progress * 0.2), label, undefined, logLevel);
         }
     );
 
-    callback(0.8, 'Unzipping app.asar.unpacked.zip file...');
+    callback(0.8, 'Unzipping app.asar.unpacked.zip file...', undefined, 'vrb');
 
     await unzipFolder(ASAR_UNPACKED_ZIP_TMP_PATH, path.join(path.dirname(asarPath), 'app.asar.unpacked'));
 
@@ -216,7 +216,7 @@ export async function installMod(callback, { patchType = PatchTypes.DEFAULT, fro
     await clearCaches(callback);
     await postInstallTasks(ymMetadata, wasYmClosed, callback);
 
-    setTimeout(()=>callback(0, `Task finished in: ${formatTimeStampDiff(startTime, new Date()) }`), 2000);
+    setTimeout(()=>callback(0, `Task finished in: ${formatTimeStampDiff(startTime, new Date()) }`, undefined, 'vrb'), 2000);
 
 }
 
@@ -251,8 +251,8 @@ async function downloadAsar(callback, metadata) {
     const downloadPath = shouldDecompress ? (compressionType === 'zst' ? ASAR_ZST_TMP_PATH : ASAR_GZ_TMP_PATH) : ASAR_TMP_PATH;
 
     await downloadFile(url, downloadPath,
-        (progress, label) => {
-            callback(progress*0.6, label);
+        (progress, label, logLevel='log') => {
+            callback(progress*0.6, label, undefined, logLevel);
         }
     );
 
@@ -396,7 +396,7 @@ export async function isInstallPossible(callback) {
 // Патчинг exe-файла Яндекс Музыки (Windows)
 async function bypassAsarIntegrityWin(callback) {
     callback(0.9, "Asar integrity enabled. Bypassing...");
-    callback(0.9, `Preparing to replace hash`);
+    callback(0.9, `Preparing to replace hash`, undefined, 'vrb');
     try {
         // 1) Path to the executable file
         const localAppData = process.env.LOCALAPPDATA;
@@ -414,16 +414,16 @@ async function bypassAsarIntegrityWin(callback) {
         // 2) Create a backup
         if (!fs.existsSync(YM_EXE_TMP_BACKUP_PATH)) {
             fs.copyFileSync(YM_EXE_PATH, YM_EXE_TMP_BACKUP_PATH);
-            callback(0.9, `Backup created: ${YM_EXE_TMP_BACKUP_PATH}`, 'Backup created');
+            callback(0.9, `Backup created: ${YM_EXE_TMP_BACKUP_PATH}`, 'Backup created', 'vrb');
         } else {
-            callback(0.9, `Backup already exists: ${YM_EXE_TMP_BACKUP_PATH}`, 'Backup already exists');
+            callback(0.9, `Backup already exists: ${YM_EXE_TMP_BACKUP_PATH}`, 'Backup already exists', 'vrb');
         }
 
         // 3) Patterns (ASCII‑hex)
         const oldHexStr = oldYMHash;
         const newHexStr = calcASARHeaderHash(YM_ASAR_PATH).hash;
 
-        callback(0.9, `Hashes: ${oldHexStr} ${newHexStr} ${oldHexStr.length} ${newHexStr.length}`, 'Extracted hashes');
+        callback(0.9, `Hashes: ${oldHexStr} ${newHexStr} ${oldHexStr.length} ${newHexStr.length}`, 'Extracted hashes', 'vrb');
 
         if (oldHexStr.length !== newHexStr.length) {
             callback(-1, 'Old and new hashes lengths do not match', 'Hashes length mismatch');
@@ -431,7 +431,7 @@ async function bypassAsarIntegrityWin(callback) {
         }
 
         if (oldHexStr === newHexStr) {
-            callback(0.9, 'Old and new hashes are the same, no changes needed', 'Hashes match');
+            callback(0.9, 'Old and new hashes are the same, no changes needed', 'Hashes match', 'vrb');
             return true;
         }
 

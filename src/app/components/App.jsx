@@ -22,20 +22,21 @@ function App() {
     const [isLoading, setIsLoading] = useState(true);
     const [currentPage, setCurrentPage] = useState('main');
     const [logEntries, setLogEntries] = useState([]);
+    const [filterLevel, setFilterLevel] = useState('log');
 
     const addLogEntry = (logEntry) => {
         setLogEntries(prevEntries => [...prevEntries, {
-            message: logEntry,
+            logEntry: logEntry,
             timestamp: new Date()
         }])
     };
 
     const handlePatchProgressEvent = (event, args) => {
-        if (args.logLabel) addLogEntry(args.logLabel);
+        if (args.logLabel) addLogEntry(args);
     };
 
     const handleLogEntryCreateEvent = (event, args) => {
-        addLogEntry(args.logLabel);
+        addLogEntry(args);
     };
 
     useEffect(() => {
@@ -66,9 +67,9 @@ function App() {
             case 'settings':
                 return <SettingsPage/>;
             case 'logs':
-                return <LogsPage logEntries={logEntries} setLogEntries={setLogEntries}/>;
+                return <LogsPage logEntries={logEntries} filterLevel={filterLevel} setFilterLevel={setFilterLevel}/>;
             case 'main':                                                                    //TODO Поменять на main страницу когда она будет готова
-                return <LogsPage logEntries={logEntries} setLogEntries={setLogEntries}/>;
+                return <LogsPage logEntries={logEntries} filterLevel={filterLevel}  setFilterLevel={setFilterLevel}/>;
         }
     };
 

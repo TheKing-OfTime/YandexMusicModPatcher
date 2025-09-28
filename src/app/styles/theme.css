@@ -12,6 +12,11 @@
     --color-text: #ffffff;
     --color-text-on-accent: #232323;
 
+    --text-log: #e1e1e1;
+    --text-verbose: #8d8d8d;
+    --text-warning: #ffcc00;
+    --text-error: #ff4c4c;
+
     --color-muted: #888888;
     --color-muted-2: #999999;
     --color-muted-3: #777777;

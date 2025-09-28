@@ -38,13 +38,15 @@ export const handleApplicationEvents = (window) => {
             const metadata = await getReleaseMetadata();
             const version = metadata?.name;
 
-            const callback = (progress, logLabel, subTaskLabel = undefined) => {
+            const callback = (progress, logLabel, subTaskLabel = undefined, logLevel='log') => {
                 let taskLabel = "";
+                let logLevelFinal = logLevel;
 
                 switch (progress) {
                     case -1:
                         taskLabel = `Error installing YandexMusicModClient`;
                         subTaskLabel = '';
+                        logLevelFinal = 'err';
                         break;
 
                     case 1:
@@ -67,6 +69,7 @@ export const handleApplicationEvents = (window) => {
                     progress: progress,
                     taskLabel: taskLabel,
                     logLabel: logLabel,
+                    logLevel: logLevelFinal,
                     subTaskLabel: subTaskLabel ?? logLabel,
                 })
             }

@@ -53,8 +53,9 @@ export default function Dropdown({
         <div className="Dropdown_container">
             <div className="Dropdown_label_container">
                 {label && <span className="Dropdown_label">{label}</span>}
-                {(description ?? secondaryDescription) &&
-                <span className="Dropdown_description">{description ?? secondaryDescription}</span>}
+                {
+                    (description ?? secondaryDescription) && <span className="Dropdown_description">{description ?? secondaryDescription}</span>
+                }
             </div>
             <button className={`Dropdown_toggle${!selected ? ' Dropdown_placeholder' : ''}`} onClick={handleToggle}
                     disabled={disabled} ref={dropdownRef}>

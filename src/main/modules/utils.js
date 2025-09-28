@@ -129,7 +129,7 @@ export async function downloadFile(url, dest, callback) {
     const response = await axios.get(url, {
         responseType: 'stream',
         onDownloadProgress: progress => {
-            callback(progress.progress, `Downloading ${path.basename(dest)}...`);
+            callback(progress.progress, `Downloading ${path.basename(dest)}... ${Math.ceil(progress.progress*100)}%`, 'vrb');
         }
     });
 

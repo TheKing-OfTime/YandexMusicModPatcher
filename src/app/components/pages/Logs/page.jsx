@@ -1,9 +1,9 @@
 import React from 'react';
 import LogCard from '../../layout/LogCard.jsx';
 
-function LogsPage ({ logEntries, setLogEntries }) {
+function LogsPage ({ logEntries, filterLevel, setFilterLevel }) {
     return (
-        <LogCard logEntries={logEntries} setLogEntries={setLogEntries}/>
+        <LogCard logEntries={logEntries} filterLevel={filterLevel} setFilterLevel={setFilterLevel}/>
     )
 }
 
