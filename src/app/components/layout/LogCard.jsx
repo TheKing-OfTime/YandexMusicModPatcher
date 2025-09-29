@@ -1,8 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { LogMessage } from "../ui/LogMessage.jsx";
-import InlineButton from '../ui/InlineButton.jsx';
+import CopyButton from '../ui/CopyButton.jsx';
 import Dropdown from '../ui/Dropdown.jsx';
-import Tooltip from '../ui/Tooltip.jsx';
 
 import '../../styles/LogCard.css';
 
@@ -24,7 +23,6 @@ function LogCard({ logEntries, setFilterLevel, filterLevel }) {
 
     const listRef = useRef(null);
     const [ isAtBottom, setIsAtBottom ] = useState(true);
-    const [ didCopy, setDidCopy ] = useState(false);
 
 
     useEffect(() => {
@@ -36,19 +34,15 @@ function LogCard({ logEntries, setFilterLevel, filterLevel }) {
     return (
     <div className="LogCard">
         <div className="LogCard_header">
-            <Tooltip label={ didCopy ? "Логи скопированы!" : "Скопировать все логи" } direction="bottom" onMouseEnter={ () => setDidCopy(false) }>
-                <InlineButton onClick={
-                    () => {
-                        const text = logEntries.map(log => {
-                            setDidCopy(true);
-                            const d = new Date(log.timestamp);
-                            const formatDate = `${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}:${String(d.getSeconds()).padStart(2, '0')}`;
-                            return `${formatDate} [${(log.logEntry.logLevel ?? 'log').toUpperCase()}] ${log.logEntry.logLabel}`;
-                        }).join('\n');
-                        navigator.clipboard.writeText(text);
-                    }
-                } icon="file_copy" variant="secondary"/>
-            </Tooltip>
+            <CopyButton icon="file_copy" variant="secondary" tooltipBefore="Скопировать все логи" tooltipAfter="Логи скопированы!" tooltipDirection="bottom" onClick={
+                () => {
+                    return logEntries.map(log => {
+                        const d = new Date(log.timestamp);
+                        const formatDate = `${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}:${String(d.getSeconds()).padStart(2, '0')}`;
+                        return `${formatDate} [${(log.logEntry.logLevel ?? 'log').toUpperCase()}] ${log.logEntry.logLabel}`;
+                    }).join('\n');
+                }
+            }/>
             <div style={{ width: '200px' }}>
                 <Dropdown onSelect={(option)=>setFilterLevel(option.id)} placeholder="Фильтр" defaultOption={OPTIONS.find(x=>x.id===filterLevel)} options={OPTIONS}/>
             </div>
