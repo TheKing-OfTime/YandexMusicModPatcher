@@ -17,6 +17,7 @@ export const handleProcessErrors = () => {
             progress: -1,
             taskLabel: `Uncaught Exception`,
             logLabel: `${error.message} ${error.stack}`,
+            logLevel: 'err',
         })
     });
 
@@ -26,6 +27,7 @@ export const handleProcessErrors = () => {
             progress: -1,
             taskLabel: `Unhandled Rejection`,
             logLabel: `${error.message} ${error.stack}`,
+            logLevel: 'err',
         })
     });
 }
