@@ -6,7 +6,6 @@ import * as fso from 'original-fs';
 import * as yaml from 'yaml';
 import * as zlib from "node:zlib";
 import * as fs from 'fs';
-import * as fsp from 'fs/promises'
 import { execSync } from "child_process";
 import { getRawHeader } from '@electron/asar';
 import plist from 'plist';
@@ -15,7 +14,6 @@ import Events from "../types/Events.js";
 import PatchTypes from '../types/PatchTypes.js';
 import { ASAR_ZST_TMP_PATH, ASAR_GZ_TMP_PATH, ASAR_TMP_PATH, EXTRACTED_ENTITLEMENTS_PATH, TMP_PATH, ASAR_TMP_BACKUP_PATH, YM_EXE_TMP_BACKUP_PATH, ASAR_UNPACKED_ZIP_TMP_PATH, ASAR_UNPACKED_TMP_PATH } from '../constants/paths.js';
 import { Logger } from "./Logger.js";
-import { execFile } from 'child_process';
 
 import {
     checkIfLegacyYMInstalled,
@@ -28,8 +26,8 @@ import {
     launchYandexMusic,
     unzipFolder,
     createDirIfNotExist,
-    copy,
-    decompressFile,
+    copyFile,
+    decompressFile, copy,
 } from "./utils.js";
 import { LATEST_MOD_RELEASE_URL, YM_RELEASE_METADATA_URL } from '../constants/urls.js';
 
@@ -110,25 +108,25 @@ async function postInstallTasks(ymMetadata, wasYmClosed, callback) {
 async function applyBackups(callback, asarPath) {
 
     callback(-1, 'Reverting ASAR replace...');
-    await copy(ASAR_TMP_BACKUP_PATH, asarPath);
+    await copyFile(ASAR_TMP_BACKUP_PATH, asarPath);
     callback(-1, 'ASAR replace reverted.');
 
     if (isWin && YM_EXE_PATH && fs.existsSync(YM_EXE_PATH) && fs.existsSync(YM_EXE_TMP_BACKUP_PATH)) {
         callback(-1, 'Reverting EXE patch...');
-        await copy(YM_EXE_TMP_BACKUP_PATH, YM_EXE_PATH);
+        await copyFile(YM_EXE_TMP_BACKUP_PATH, YM_EXE_PATH);
         callback(-1, 'EXE patch reverted.');
     }
 }
 
 async function createBackups(callback, asarPath) {
     callback(0.9, 'Creating ASAR backup...', undefined, 'vrb');
-    await copy(asarPath, ASAR_TMP_BACKUP_PATH);
+    await copyFile(asarPath, ASAR_TMP_BACKUP_PATH);
     callback(0.9, 'ASAR backup created.', undefined, 'vrb');
 }
 
 async function replaceAsar(callback, patchType, fromAsarSrc, asarPath) {
     callback(0.9, 'Replacing ASAR...');
-    await copy((patchType === PatchTypes.FROM_MOD && fromAsarSrc) ? fromAsarSrc : ASAR_TMP_PATH, asarPath);
+    await copyFile((patchType === PatchTypes.FROM_MOD && fromAsarSrc) ? fromAsarSrc : ASAR_TMP_PATH, asarPath);
     callback(0.9, 'ASAR replaced.');
 }
 
@@ -325,7 +323,7 @@ export async function checkMacPermissions() {
     if (!isMac) return true
     const asarPath = getYMAsarDefaultPath();
     try {
-        await copy(asarPath, asarPath);
+        await copyFile(asarPath, asarPath);
         return true;
     } catch(e) {
         return false

@@ -205,12 +205,26 @@ export function formatTimeStampDiff(date1, date2) {
 
 export async function copy(target, dest) {
     try {
-        await fso.promises.cp(target, dest, { recursive: true });
+        await fso.promises.cp(target, dest, { recursive: true, force: true });
     } catch (error) {
         if (process.platform === 'linux' && error.code === 'EACCES') {
             const encodedTarget = target.replaceAll("'", "\\'");
             const encodedDest = dest.replaceAll("'", "\\'");
             await execFileAsync('pkexec', ['bash', '-c', `cp '-r' '${encodedTarget}' '${encodedDest}'`]);
+        } else {
+            logger.error('Copying failed:', error);
+        }
+    }
+}
+
+export async function copyFile(target, dest) {
+    try {
+        await fso.promises.copyFile(target, dest);
+    } catch (error) {
+        if (process.platform === 'linux' && error.code === 'EACCES') {
+            const encodedTarget = target.replaceAll("'", "\\'");
+            const encodedDest = dest.replaceAll("'", "\\'");
+            await execFileAsync('pkexec', ['bash', '-c', `cp '${encodedTarget}' '${encodedDest}'`]);
         } else {
             logger.error('Copying failed:', error);
         }
