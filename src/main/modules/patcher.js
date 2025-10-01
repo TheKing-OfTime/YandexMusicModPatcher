@@ -26,7 +26,10 @@ import {
     isWin,
     isYandexMusicRunning,
     launchYandexMusic,
-    unzipFolder
+    unzipFolder,
+    createDirIfNotExist,
+    copyFile,
+    decompressFile,
 } from "./utils.js";
 import { LATEST_MOD_RELEASE_URL, YM_RELEASE_METADATA_URL } from '../constants/urls.js';
 
@@ -258,42 +261,6 @@ async function downloadAsar(callback, metadata) {
 
 }
 
-async function copyFile(target, dest) {
-    try {
-        await fso.promises.copyFile(target, dest);
-    } catch (error) {
-        if (process.platform === 'linux' && error.code === 'EACCES') {
-            const encodedTarget = target.replaceAll("'", "\\'");
-            const encodedDest = dest.replaceAll("'", "\\'");
-            await execFileAsync('pkexec', ['bash', '-c', `cp '${encodedTarget}' '${encodedDest}'`]);
-        } else {
-            logger.error('File copying failed:', error);
-        }
-    }
-}
-
-async function createDirIfNotExist(target) {
-    if (!fs.existsSync(target)) {
-        try {
-            await fsp.mkdir(target);
-        } catch (error) {
-            if (process.platform === 'linux' && error.code === 'EACCES') {
-                const encodedTarget = target.replaceAll("'", "\\'");
-                await execFileAsync('pkexec', ['bash', '-c', `mkdir -p '${encodedTarget}'`]);
-            } else {
-                logger.error('Directory creation failed:', error)
-            }
-        }
-    }
-}
-
-async function decompressFile(target, dest, compressionType) {
-    const compressedData = await fso.promises.readFile(target);
-
-    const decompressedData = await (compressionType === 'zst' ? zstdDecompressPromise(compressedData) : unzipPromise(compressedData));
-
-    await fso.promises.writeFile(dest, decompressedData);
-}
 
 export async function getReleaseMetadata(releaseUrl = undefined) {
     try {

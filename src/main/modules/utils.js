@@ -1,18 +1,24 @@
 import path from "path";
 import { promisify } from 'util'
 import { pipeline } from 'stream/promises';
-import { exec, spawn } from 'child_process'
+import { exec, spawn, execFile } from 'child_process'
 import { app, nativeImage } from "electron";
 import axios from "axios";
 import fso from "original-fs";
 import unzipper from "unzipper";
 import fs from "fs";
+import * as fsp from "fs/promises";
 import { Logger } from "./Logger.js";
 import { YM_ASAR_PATH } from './patcher.js';
+import zlib from 'node:zlib';
 
 
 const execAsync = promisify(exec);
+const execFileAsync = promisify(execFile);
 const spawnAsync = promisify(spawn);
+const unzipPromise = promisify(zlib.unzip);
+const zstdDecompressPromise = zlib.zstdDecompress ? promisify(zlib.zstdDecompress) : undefined;
+
 const logger = new Logger("utils");
 
 export const isWin = process.platform === 'win32';
@@ -197,7 +203,47 @@ export function formatTimeStampDiff(date1, date2) {
     return result;
 }
 
+export async function copyFile(target, dest) {
+    try {
+        await fso.promises.copyFile(target, dest);
+    } catch (error) {
+        if (process.platform === 'linux' && error.code === 'EACCES') {
+            const encodedTarget = target.replaceAll("'", "\\'");
+            const encodedDest = dest.replaceAll("'", "\\'");
+            await execFileAsync('pkexec', ['bash', '-c', `cp '${encodedTarget}' '${encodedDest}'`]);
+        } else {
+            logger.error('File copying failed:', error);
+        }
+    }
+}
+
+export async function createDirIfNotExist(target) {
+    if (!fs.existsSync(target)) {
+        try {
+            await fsp.mkdir(target);
+        } catch (error) {
+            if (process.platform === 'linux' && error.code === 'EACCES') {
+                const encodedTarget = target.replaceAll("'", "\\'");
+                await execFileAsync('pkexec', ['bash', '-c', `mkdir -p '${encodedTarget}'`]);
+            } else {
+                logger.error('Directory creation failed:', error)
+            }
+        }
+    }
+}
+
+export async function decompressFile(target, dest, compressionType) {
+    const compressedData = await fso.promises.readFile(target);
+
+    const decompressedData = await (compressionType === 'zst' ? zstdDecompressPromise(compressedData) : unzipPromise(compressedData));
+
+    await fso.promises.writeFile(dest, decompressedData);
+}
+
 export async function unzipFolder(zipPath, outputFolder) {
+
+    await createDirIfNotExist(outputFolder);
+
     await new Promise((resolve, reject) => {
         fs.createReadStream(zipPath)
             .pipe(unzipper.Extract({ path: outputFolder }))
