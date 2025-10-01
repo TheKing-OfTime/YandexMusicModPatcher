@@ -203,16 +203,16 @@ export function formatTimeStampDiff(date1, date2) {
     return result;
 }
 
-export async function copyFile(target, dest) {
+export async function copy(target, dest) {
     try {
-        await fso.promises.copyFile(target, dest);
+        await fso.promises.cp(target, dest, { recursive: true });
     } catch (error) {
         if (process.platform === 'linux' && error.code === 'EACCES') {
             const encodedTarget = target.replaceAll("'", "\\'");
             const encodedDest = dest.replaceAll("'", "\\'");
-            await execFileAsync('pkexec', ['bash', '-c', `cp '${encodedTarget}' '${encodedDest}'`]);
+            await execFileAsync('pkexec', ['bash', '-c', `cp '${encodedTarget}' '${encodedDest}' -r`]);
         } else {
-            logger.error('File copying failed:', error);
+            logger.error('Copying failed:', error);
         }
     }
 }
@@ -241,9 +241,6 @@ export async function decompressFile(target, dest, compressionType) {
 }
 
 export async function unzipFolder(zipPath, outputFolder) {
-
-    await createDirIfNotExist(outputFolder);
-
     await new Promise((resolve, reject) => {
         fs.createReadStream(zipPath)
             .pipe(unzipper.Extract({ path: outputFolder }))
