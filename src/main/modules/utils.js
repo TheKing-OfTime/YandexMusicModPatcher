@@ -210,7 +210,7 @@ export async function copy(target, dest) {
         if (process.platform === 'linux' && error.code === 'EACCES') {
             const encodedTarget = target.replaceAll("'", "\\'");
             const encodedDest = dest.replaceAll("'", "\\'");
-            await execFileAsync('pkexec', ['bash', '-c', `cp '${encodedTarget}' '${encodedDest}' -r`]);
+            await execFileAsync('pkexec', ['bash', '-c', `cp '-r' '${encodedTarget}' '${encodedDest}'`]);
         } else {
             logger.error('Copying failed:', error);
         }

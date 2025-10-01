@@ -55,8 +55,6 @@ const resolveAsarPath = (appPath, platform) => {
     }
 }
 
-const execFileAsync = promisify(execFile);
-
 let YM_PATH = DEFAULT_YM_PATH[os.platform];
 let INFO_PLIST_PATH = path.join(YM_PATH, 'Contents', 'Info.plist');
 export let YM_ASAR_PATH = resolveAsarPath(YM_PATH, os.platform());
@@ -81,7 +79,7 @@ async function clearCaches(callback) {
     if (fso.existsSync(ASAR_ZST_TMP_PATH)) await fso.promises.unlink(ASAR_ZST_TMP_PATH);
     if (fso.existsSync(ASAR_GZ_TMP_PATH)) await fso.promises.unlink(ASAR_GZ_TMP_PATH);
     if (fso.existsSync(ASAR_TMP_PATH)) await fso.promises.unlink(ASAR_TMP_PATH);
-    if (fso.existsSync(ASAR_UNPACKED_TMP_PATH)) await fso.promises.unlink(ASAR_UNPACKED_TMP_PATH);
+    if (fso.existsSync(ASAR_UNPACKED_TMP_PATH)) await fso.promises.rmdir(ASAR_UNPACKED_TMP_PATH, { recursive: true });
     if (fso.existsSync(ASAR_UNPACKED_ZIP_TMP_PATH)) await fso.promises.unlink(ASAR_UNPACKED_ZIP_TMP_PATH);
     if (fso.existsSync(ASAR_TMP_BACKUP_PATH)) await fso.promises.unlink(ASAR_TMP_BACKUP_PATH);
     if (fso.existsSync(YM_EXE_TMP_BACKUP_PATH)) await fso.promises.unlink(YM_EXE_TMP_BACKUP_PATH);
