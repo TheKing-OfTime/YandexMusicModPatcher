@@ -10,6 +10,26 @@ import { Logger } from "./modules/Logger.js";
 const logger = new Logger("events");
 const State = getState();
 
+export const handleProcessErrors = () => {
+    process.on('uncaughtException', (error) => {
+        logger.error('Uncaught Exception:', error, error.stack);
+        sendLogEntryCreate(undefined, {
+            progress: -1,
+            taskLabel: `Uncaught Exception`,
+            logLabel: `${error.message} ${error.stack}`,
+        })
+    });
+
+    process.on('unhandledRejection', (error) => {
+        logger.error('Unhandled Rejection:', error, error.stack);
+        sendLogEntryCreate(undefined, {
+            progress: -1,
+            taskLabel: `Unhandled Rejection`,
+            logLabel: `${error.message} ${error.stack}`,
+        })
+    });
+}
+
 /**
  *
  * @param window {electron.BrowserWindow}
@@ -182,6 +202,11 @@ export const handleApplicationEvents = (window) => {
 export const sendPatchProgress = (window= mainWindow, args) => {
     window.webContents.send(Events.PATCH_PROGRESS, args);
     logger.log('Sent PATCH_PROGRESS', args);
+}
+
+export const sendLogEntryCreate = (window= mainWindow, args) => {
+    window.webContents.send(Events.LOG_ENTRY_CREATE, args);
+    logger.log('Sent LOG_ENTRY_CREATE', args);
 }
 
 export const sendIsModInstallPossible = (window= mainWindow, args) => {

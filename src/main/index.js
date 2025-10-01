@@ -1,5 +1,5 @@
 import installExtension, { REACT_DEVELOPER_TOOLS } from 'electron-devtools-installer';
-import { handleApplicationEvents } from './events.js'
+import { handleApplicationEvents, handleProcessErrors } from './events.js'
 import { handleDeeplink } from './modules/handleDeeplinks.js';
 import { getNativeImg } from './modules/utils.js';
 import { getState } from "./modules/state.js";
@@ -23,6 +23,8 @@ if( isDevelopment ) {
 }
 
 checkForSingleInstance();
+
+handleProcessErrors();
 
 const icon = getNativeImg('icons/icon.ico').resize({
     width: 128,
