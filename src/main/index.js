@@ -13,6 +13,8 @@ Logger.setupLogger();
 
 const logger = new Logger("main");
 
+logger.log(`App startup. isDevelopment: ${isDevelopment}`);
+
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require('electron-squirrel-startup')) {
     app.quit();
@@ -23,8 +25,10 @@ if( isDevelopment ) {
 }
 
 checkForSingleInstance();
+logger.log('Checked for single instance');
 
 handleProcessErrors();
+logger.log('Process error handlers attached');
 
 const icon = getNativeImg('icons/icon.ico').resize({
     width: 128,
@@ -76,12 +80,14 @@ const createWindow = () => {
 const state = getState();
 
 app.whenReady().then(() => {
+    logger.log('Electron.app is ready');
+
     const window = createWindow();
     mainWindow = window;
 
     handleDeeplink(window);
 
-    if(installExtension) installExtension(REACT_DEVELOPER_TOOLS)
+    if(installExtension && isDevelopment) installExtension(REACT_DEVELOPER_TOOLS)
         .then((ext) => logger.log(`Added Extension:  ${ext?.name}`))
         .catch((err) => logger.log('An error occurred: ', err));
 
