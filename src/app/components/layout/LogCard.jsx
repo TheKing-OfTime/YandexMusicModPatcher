@@ -56,7 +56,7 @@ function LogCard({ logEntries, setFilterLevel, filterLevel }) {
             {logEntries.map((log, index) => {
                 if(FILTER_MAP[filterLevel](log.logEntry.logLevel)) return (
                     <li key={ index }>
-                        <LogMessage logLevel={ log.logEntry.logLevel } message={ log.logEntry.logLabel } timestamp={ log.timestamp }/>
+                        <LogMessage logLevel={ log.logEntry.logLevel ?? ((log.logEntry.progress === -1) ? 'err' : undefined) } message={ log.logEntry.logLabel } timestamp={ log.timestamp }/>
                     </li>
                 )
             })}
