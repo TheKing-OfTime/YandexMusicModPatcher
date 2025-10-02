@@ -29,7 +29,6 @@
   - [x] Windows
   - [x] MacOS
   - [x] Linux (Official client)
-  - [ ] Linux ([cucumber-sp/yandex-music-linux](https://github.com/cucumber-sp/yandex-music-linux))
 - [ ] Автоматические обновления
   - [ ] Модификация
   - [ ] Яндекс Музыка
