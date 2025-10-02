@@ -45,6 +45,8 @@ function ActionsBar({ currentPage, setCurrentPage }) {
         })
         const OffIsInstallPossible = useOnIsInstallPossibleResponse((event, args) => {
             setCanInstall(args.isPossible);
+            setIsPatching(false);
+            setIsDepatching(false);
         })
         useSendIsInstallPossible();
 
