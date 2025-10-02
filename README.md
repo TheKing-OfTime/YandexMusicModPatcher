@@ -3,6 +3,10 @@
 [![TotalDownloads](https://img.shields.io/github/downloads/TheKing-OfTime/YandexMusicModPatcher/total?label=Загрузок)](https://github.com/TheKing-OfTime/YandexMusicModPatcher/releases "Download") [![Discord Server](https://img.shields.io/discord/1271568115662061730?logo=discord&label=Сервер)](https://discord.gg/HGNKDxwHEH) [![OS - Windows](https://img.shields.io/badge/OS-Windows-blue)](https://ymmc-api.artem-matvienko0.workers.dev/patcher/download "Download") [![OS - MacOS](https://img.shields.io/badge/OS-Mac-blue)](https://ymmc-api.artem-matvienko0.workers.dev/patcher/download "Download") [![OS - MacOS](https://img.shields.io/badge/OS-Linux-blue)](https://ymmc-api.artem-matvienko0.workers.dev/patcher/download "Download")
 
 ## Это установщик для модификации на Яндекс Музыку [YandexMusicModClient](https://github.com/TheKing-OfTime/YandexMusicModClient)
+
+<img width="832" height="620" alt="image" src="https://github.com/user-attachments/assets/810707c5-6f39-4e11-8101-ecad9808085a" />
+
+
 ### YandexMusicModClient, YandexMusicModPatcher и его разработчик не связаны с Яндексом или какой-либо из их компаний, сотрудников и т.д.
 
 ## Установка
@@ -25,11 +29,20 @@
   - [x] Windows
   - [x] MacOS
   - [x] Linux (Official client)
-  - [ ] Linux ([cucumber-sp/yandex-music-linux](https://github.com/cucumber-sp/yandex-music-linux))
 - [ ] Автоматические обновления
   - [ ] Модификация
   - [ ] Яндекс Музыка
   - [ ] Патчер
+
+## Настройки
+
+<details>
+   <summary>Подробнее</summary>
+Настроить поведение патчера можно на странице настроек
+
+<img width="832" height="809" alt="image" src="https://github.com/user-attachments/assets/8db9447e-79db-4c9f-92bc-6de941dc8af1" />
+
+</details>
 
 ## Поддержка
 Если вам действительно понравился новый опыт использования Яндекс Музыки с этой модификацией, вы можете поддержать мою работу над ней:
