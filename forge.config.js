@@ -1,12 +1,31 @@
 const { FusesPlugin } = require('@electron-forge/plugin-fuses');
 const { FuseV1Options, FuseVersion } = require('@electron/fuses');
 
+const path = require('path');
+const fs = require('fs');
+
+function cleanup(buildPath, electronVersion, platform, arch, callback) {
+    const appPath = path.join(buildPath, '..');
+    const locales = path.join(appPath, 'locales');
+    try {
+        if (fs.existsSync(locales)) {
+            fs.readdirSync(locales)
+            .filter(f => !['en-US.pak', 'ru.pak'].includes(f))
+            .forEach(f => fs.unlinkSync(path.join(locales, f)));
+        }
+    } catch (e) {
+        console.error('cleanup error', e);
+    }
+    callback();
+}
+
 module.exports = {
     packagerConfig: {
         asar: true,
         icon: './assets/icons/icon.ico',
         executableName: 'yandexmusicmodpatcher',
-        extendInfo: 'Info.plist'
+        extendInfo: 'Info.plist',
+        afterCopy: [cleanup],
     },
     rebuildConfig: {},
     makers: [

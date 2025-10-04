@@ -24,6 +24,7 @@ rules.push(
 
 module.exports = {
     // Put your normal webpack config below here
+    mode: process.env.NODE_ENV || 'production',
     //target: "electron35.0-renderer",
     module: {
         rules,
