@@ -94,3 +94,9 @@ out/
 /package-lock.json
 
 !/src/**
+/.idea/copilot.data.migration.agent.xml
+/.idea/copilot.data.migration.ask.xml
+/.idea/copilot.data.migration.ask2agent.xml
+/.idea/copilot.data.migration.edit.xml
+/.idea/codeStyles/Project.xml
+/undefinedelectron-log-preload.js
