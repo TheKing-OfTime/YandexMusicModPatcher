@@ -33,7 +33,7 @@ export default function Dropdown({
     };
 
     const handleClickOutside = useCallback((event) => {
-        if (isOpen && !event.target.closest('.Dropdown_toggle')) {
+        if (isOpen && event.target !== dropdownRef.current) {
             event.stopPropagation();
             event.preventDefault();
             setIsOpen(false);
