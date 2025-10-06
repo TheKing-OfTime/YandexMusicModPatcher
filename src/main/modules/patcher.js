@@ -425,7 +425,7 @@ async function bypassAsarIntegrityWin(callback) {
             return false;
         } else {
             fs.writeFileSync(YM_EXE_PATH, fileBuf);
-            callback(0.99, `Successfully replaced ${count} occurrences.`, 'Hash replaced');
+            callback(0.99, `Successfully replaced ${count} occurrences.`, 'Hash replaced', 'vrb');
         }
         return true;
 
