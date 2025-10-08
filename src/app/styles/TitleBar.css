@@ -5,7 +5,7 @@
     inset-block-start: 0;
     inset-inline-end: 0;
     inset-inline-start: 0;
-    justify-content: flex-end;
+    justify-content: space-between;
     display: flex;
     user-select: none;
     -webkit-app-region: drag;
@@ -14,6 +14,13 @@
     border-bottom-style: solid;
     border-bottom-color: var(--white-transparent-20);
     align-items: center;
+    height: 32px;
+}
+
+.TitleBar_darwin {
+    justify-content: center;
+    display: flex;
+    height: 33px;
 }
 
 .TitleBar div {
@@ -66,6 +73,16 @@
     height: 28px;
 }
 
+.TitleBar_app_name_container {
+    display: flex;
+    flex-direction: column;
+    align-self: end;
+    transition: transform .3s;
+}
+
+.TitleBar_app_name_container_shifted {
+    transform: translateY(32px);
+}
 
 .TitleBar_app_name {
     color: var(--color-text);
@@ -75,4 +92,16 @@
     display: flex;
     align-items: center;
     margin: auto;
+    height: 32px;
+}
+
+.TitleBar_toast {
+    color: var(--color-text);
+    font-family: 'Montserrat', 'Roboto Slab', 'Oswald', 'Poppins', 'Playfair Display', sans-serif;
+    font-size: 1.2rem;
+    font-weight: 400;
+    display: flex;
+    align-items: center;
+    margin: auto;
+    height: 32px;
 }
