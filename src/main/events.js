@@ -1,5 +1,5 @@
 import electron, { shell } from "electron";
-import { installMod, getReleaseMetadata, isInstallPossible, updatePaths, checkMacPermissions } from "./modules/patcher.js";
+import { installMod, getReleaseMetadata, isInstallPossible, updatePaths, checkMacPermissions, clearCaches } from "./modules/patcher.js";
 import { handleDeeplinkOnApplicationStartup } from "./modules/handleDeeplinks.js";
 import { deleteLegacyYM } from "./modules/utils.js";
 import { getState } from "./modules/state.js";
@@ -199,6 +199,60 @@ export const handleApplicationEvents = (window) => {
         logger.log('Received INSTALL_ALL_UPDATES', args);
         electron.ipcMain.emit(Events.PATCH, { patchType: State.get('patchType') || 'default' });
     })
+
+    electron.ipcMain.on(Events.CLEAR_CACHES, (event, args) => {
+        logger.log('Received CLEAR_CACHES', args);
+
+        const callback = (progress, logLabel, subTaskLabel = undefined, logLevel='log') => {
+            let taskLabel = "";
+            let logLevelFinal = logLevel;
+
+            switch (progress) {
+                case -1:
+                    taskLabel = `Error clearing caches`;
+                    subTaskLabel = '';
+                    logLevelFinal = 'err';
+                    break;
+
+                case 1:
+                    taskLabel = `Caches cleared`;
+                    subTaskLabel = '';
+                    break;
+                case 2:
+                    progress = 0;
+                    subTaskLabel = '';
+                case 0:
+                    taskLabel = `Idle`;
+                    break;
+                default:
+                    taskLabel = `Clearing caches...`;
+                    break;
+            }
+
+            sendLogEntryCreate(window, {
+                taskLabel: taskLabel,
+                logLabel: logLabel,
+                logLevel: logLevelFinal,
+                subTaskLabel: subTaskLabel ?? logLabel,
+            })
+        }
+
+        clearCaches(callback)
+            .catch(
+                ()=> {sendShowToast(undefined, { label: 'Не удалось отчистить кеш' });}
+            )
+            .then(
+                ()=> {sendShowToast(undefined, { label: 'Кеш отчищен', duration: 2000 });}
+            )
+
+
+    })
+
+}
+
+export const sendShowToast = (window= mainWindow, args) => {
+    window.webContents.send(Events.SHOW_TOAST, args);
+    logger.log('Sent SHOW_TOAST', args);
 }
 
 export const sendPatchProgress = (window= mainWindow, args) => {

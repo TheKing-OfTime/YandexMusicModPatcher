@@ -72,7 +72,7 @@ let modVersion = undefined;
 
 await createDirIfNotExist(TMP_PATH);
 
-async function clearCaches(callback) {
+export async function clearCaches(callback) {
     callback(1, 'Clearing caches...', undefined, 'vrb');
     if (fso.existsSync(ASAR_ZST_TMP_PATH)) await fso.promises.unlink(ASAR_ZST_TMP_PATH);
     if (fso.existsSync(ASAR_GZ_TMP_PATH)) await fso.promises.unlink(ASAR_GZ_TMP_PATH);

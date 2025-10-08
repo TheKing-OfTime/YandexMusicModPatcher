@@ -50,6 +50,11 @@ const schema = {
         default: true,
         description: 'Use compressed asar'
     },
+    keepCache: {
+        type: 'boolean',
+        default: true,
+        description: 'Keep downloads as cache after patch done'
+    },
     autoUpdate: {
         type: 'boolean',
         default: true,

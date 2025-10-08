@@ -11,5 +11,10 @@
     cursor: pointer;
     padding: 8px;
     width: fit-content;
-    font-weight: 500;
+    font-weight: 400;
+}
+
+.InlineButton_label {
+    font-family: inherit;
+    font-weight: inherit;
 }

@@ -35,12 +35,26 @@
 .SettingsFooter {
     display: flex;
     justify-content: space-between;
-    align-items: start;
+    align-items: center;
     margin-top: 20px;
-    color: var(--color-muted-4);
+    flex-direction: row;
+}
+
+.SettingsFooter_info_container {
+    display: flex;
+    justify-content: space-between;
+    font-family: inherit;
     flex-direction: column;
+}
+
+.SettingsFooter_actions_container {
+    display: flex;
+    justify-content: space-between;
+    font-family: inherit;
+    flex-direction: row;
 }
 
 .SettingsFooterItem {
     font-family: inherit;
+    color: var(--color-muted-4);
 }
