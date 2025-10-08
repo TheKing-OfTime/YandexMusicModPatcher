@@ -1,3 +1,3 @@
-import page from './page.jsx';
+import page from './Loading.jsx';
 
 export default page;

@@ -1,3 +1,3 @@
-import page from './page.jsx';
+import page from './Settings.jsx';
 
 export default page;

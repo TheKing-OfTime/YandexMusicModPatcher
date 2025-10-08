@@ -1,3 +1,3 @@
-import page from './page.jsx';
+import page from './Logs.jsx';
 
 export default page;
