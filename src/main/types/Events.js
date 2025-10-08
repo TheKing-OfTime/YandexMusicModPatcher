@@ -35,6 +35,9 @@ const Events = {
     MOD_UPDATE_PROGRESS: 'MOD_UPDATE_PROGRESS',
     YM_UPDATE_PROGRESS: 'YM_UPDATE_PROGRESS',
 
+    CLEAR_CACHES: "CLEAR_CACHES",
+    SHOW_TOAST: "SHOW_TOAST",
+
 };
 
 export default Events

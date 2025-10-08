@@ -59,6 +59,10 @@ export function useSendReadyToPatch() {
     return window.desktopEvents.send(Events.READY_TO_PATCH);
 }
 
+export function useSendClearCaches() {
+    return window.desktopEvents.send(Events.CLEAR_CACHES);
+}
+
 export function useOnPatchProgress(callback) {
     return window.desktopEvents.on(Events.PATCH_PROGRESS, (event, args) => {
         callback(event, args)
@@ -109,6 +113,12 @@ export function useOnStateInitiated(callback) {
 
 export function useOnRequestLegacyYmAppDeletion(callback) {
     return window.desktopEvents.on(Events.REQUEST_LEGACY_YM_APP_DELETION, (event, args) => {
+        callback(event, args);
+    });
+}
+
+export function useOnShowToast(callback) {
+    return window.desktopEvents.on(Events.SHOW_TOAST, (event, args) => {
         callback(event, args);
     });
 }
