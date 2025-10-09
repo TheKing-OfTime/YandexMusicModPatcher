@@ -39,6 +39,10 @@
     background: var(--color-accent);
 }
 
+.Toggle_input:checked + .Toggle_slider::before  {
+    background: black;
+}
+
 .Toggle_slider::before {
     content: "";
     position: absolute;
@@ -48,8 +52,7 @@
     height: 22px;
     background: var(--color-text);
     border-radius: 50%;
-    transition: transform 0.2s;
-    box-shadow: 0 1px 4px var(--shadow-sm);
+    transition: transform 0.2s, background 0.2s;
 }
 
 .Toggle_input:checked + .Toggle_slider::before {
