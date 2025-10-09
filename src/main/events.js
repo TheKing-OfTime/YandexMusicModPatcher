@@ -237,12 +237,12 @@ export const handleApplicationEvents = (window) => {
             })
         }
 
-        clearCaches(callback)
+        clearCaches(callback, true)
             .catch(
-                ()=> {sendShowToast(undefined, { label: 'Не удалось отчистить кеш' });}
+                ()=> {sendShowToast(undefined, { label: 'Не удалось очистить кеш' });}
             )
             .then(
-                ()=> {sendShowToast(undefined, { label: 'Кеш отчищен', duration: 2000 });}
+                ()=> {sendShowToast(undefined, { label: 'Кеш очищен', duration: 2000 });}
             )
 
 

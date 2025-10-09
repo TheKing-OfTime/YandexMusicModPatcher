@@ -12,7 +12,10 @@ import plist from 'plist';
 import { getState } from "./state.js";
 import Events from "../types/Events.js";
 import PatchTypes from '../types/PatchTypes.js';
-import { ASAR_ZST_TMP_PATH, ASAR_GZ_TMP_PATH, ASAR_TMP_PATH, EXTRACTED_ENTITLEMENTS_PATH, TMP_PATH, ASAR_TMP_BACKUP_PATH, YM_EXE_TMP_BACKUP_PATH, ASAR_UNPACKED_ZIP_TMP_PATH, ASAR_UNPACKED_TMP_PATH } from '../constants/paths.js';
+import {
+    ASAR_ZST_TMP_PATH, ASAR_GZ_TMP_PATH, ASAR_TMP_PATH, EXTRACTED_ENTITLEMENTS_PATH, TMP_PATH, ASAR_TMP_BACKUP_PATH,
+    YM_EXE_TMP_BACKUP_PATH, ASAR_UNPACKED_ZIP_TMP_PATH, ASAR_UNPACKED_TMP_PATH, DEVTOOLS_ONLY_ASAR_GZ_TMP_PATH, DEVTOOLS_ONLY_ASAR_ZST_TMP_PATH, ONLY_IF_FORCED_CACHE, DEFAULT_CACHE
+} from '../constants/paths.js';
 import { Logger } from "./Logger.js";
 
 import {
@@ -28,6 +31,7 @@ import {
     createDirIfNotExist,
     copyFile,
     decompressFile, copy,
+    isFileCached, unlinkIfExists,
 } from "./utils.js";
 import { LATEST_MOD_RELEASE_URL, YM_RELEASE_METADATA_URL } from '../constants/urls.js';
 
@@ -72,17 +76,32 @@ let modVersion = undefined;
 
 await createDirIfNotExist(TMP_PATH);
 
-export async function clearCaches(callback) {
+export async function clearCaches(callback, forced=false) {
     callback(1, 'Clearing caches...', undefined, 'vrb');
-    if (fso.existsSync(ASAR_ZST_TMP_PATH)) await fso.promises.unlink(ASAR_ZST_TMP_PATH);
-    if (fso.existsSync(ASAR_GZ_TMP_PATH)) await fso.promises.unlink(ASAR_GZ_TMP_PATH);
-    if (fso.existsSync(ASAR_TMP_PATH)) await fso.promises.unlink(ASAR_TMP_PATH);
+
+    if (forced) {
+        for (const cachePath of ONLY_IF_FORCED_CACHE) {
+            if (await unlinkIfExists(cachePath))
+                callback(1, `${path.basename(cachePath)} cleared`, undefined, 'vrb');
+        }
+    }
+
+    for (const cachePath of DEFAULT_CACHE) {
+        if (await unlinkIfExists(cachePath))
+            callback(1, `${path.basename(cachePath)} cleared`, undefined, 'vrb');
+    }
+
     if (fso.existsSync(ASAR_UNPACKED_TMP_PATH)) await fso.promises.rmdir(ASAR_UNPACKED_TMP_PATH, { recursive: true });
-    if (fso.existsSync(ASAR_UNPACKED_ZIP_TMP_PATH)) await fso.promises.unlink(ASAR_UNPACKED_ZIP_TMP_PATH);
-    if (fso.existsSync(ASAR_TMP_BACKUP_PATH)) await fso.promises.unlink(ASAR_TMP_BACKUP_PATH);
-    if (fso.existsSync(YM_EXE_TMP_BACKUP_PATH)) await fso.promises.unlink(YM_EXE_TMP_BACKUP_PATH);
-    if (fso.existsSync(EXTRACTED_ENTITLEMENTS_PATH)) await fso.promises.unlink(EXTRACTED_ENTITLEMENTS_PATH);
     callback(1, 'Caches cleared.');
+}
+
+async function handleCache(filePath, targetHash, forced=false) {
+
+    if (!targetHash || forced || !(await isFileCached(filePath, targetHash))) {
+        if (fso.existsSync(filePath)) await fso.promises.unlink(filePath);
+        return false;
+    }
+    return true;
 }
 
 async function postInstallTasks(ymMetadata, wasYmClosed, callback) {
@@ -148,7 +167,15 @@ async function prepareModAsarFile(patchType, asarPath, callback) {
         await downloadAsar(callback, metadata);
 
         if (shouldDecompress) {
-            const pathToCompressedFile = compressionType === 'zst' ? ASAR_ZST_TMP_PATH : ASAR_GZ_TMP_PATH;
+
+            let GZ_TMP_PATH = ASAR_GZ_TMP_PATH, ZST_TMP_PATH = ASAR_ZST_TMP_PATH;
+
+            if (State.get('patchType') === 'devtoolsOnly') {
+                GZ_TMP_PATH = DEVTOOLS_ONLY_ASAR_GZ_TMP_PATH;
+                ZST_TMP_PATH = DEVTOOLS_ONLY_ASAR_ZST_TMP_PATH;
+            }
+
+            const pathToCompressedFile = compressionType === 'zst' ? ZST_TMP_PATH : GZ_TMP_PATH;
             callback(0.6, 'Decompressing...', undefined, 'vrb');
             await decompressFile(pathToCompressedFile, ASAR_TMP_PATH, compressionType)
             callback(0.6, 'Decompressed.');
@@ -161,6 +188,10 @@ async function prepareModAsarFile(patchType, asarPath, callback) {
     if (!unpackedAsset) {
         logger.warn('No app.asar.unpacked.zip asset found in the release. Skipping unpacked files download.');
         return;
+    }
+
+    if ((await handleCache(ASAR_UNPACKED_ZIP_TMP_PATH, unpackedAsset.digest?.replace('sha256:', ''), !State.get('keepCache')))) {
+        return callback(0.8, `${path.basename(ASAR_UNPACKED_ZIP_TMP_PATH)} is cached and up to date. Redownload skipped`, undefined, 'log');
     }
 
     await downloadFile(unpackedAsset.browser_download_url, ASAR_UNPACKED_ZIP_TMP_PATH,
@@ -218,7 +249,7 @@ export async function installMod(callback, { patchType = PatchTypes.DEFAULT, fro
 
     logger.log('Installed mod version:', modVersion, 'YM version:', ymMetadata.version, 'Patch type:', patchType);
 
-    await clearCaches(callback);
+    await clearCaches(callback, !State.get('keepCache'));
     await postInstallTasks(ymMetadata, wasYmClosed, callback);
 
     setTimeout(()=>callback(0, `Task finished in: ${formatTimeStampDiff(startTime, new Date()) }`, undefined, 'vrb'), 2000);
@@ -227,6 +258,14 @@ export async function installMod(callback, { patchType = PatchTypes.DEFAULT, fro
 
 async function downloadAsar(callback, metadata) {
     const filenamePrefix = State.get('patchType') === 'default' ? 'app.asar' : 'appDevTools.asar';
+
+    let GZ_TMP_PATH = ASAR_GZ_TMP_PATH, ZST_TMP_PATH = ASAR_ZST_TMP_PATH;
+
+    if (State.get('patchType') === 'devtoolsOnly') {
+        GZ_TMP_PATH = DEVTOOLS_ONLY_ASAR_GZ_TMP_PATH;
+        ZST_TMP_PATH = DEVTOOLS_ONLY_ASAR_ZST_TMP_PATH;
+    }
+
     const priorityFiles = [filenamePrefix];
     if (State.get('useZIP')) {
         priorityFiles.unshift(`${filenamePrefix}.gz`);
@@ -237,6 +276,7 @@ async function downloadAsar(callback, metadata) {
     modVersion = metadata?.name;
 
     let url = undefined;
+    let hash = undefined;
 
     for (const filename of priorityFiles) {
         const asset = assets.find((a) => a?.name === filename);
@@ -249,11 +289,16 @@ async function downloadAsar(callback, metadata) {
                 compressionType = 'zst';
             }
             url = asset.browser_download_url;
+            hash = asset.digest?.replace('sha256:', '');
             break;
         }
     }
 
-    const downloadPath = shouldDecompress ? (compressionType === 'zst' ? ASAR_ZST_TMP_PATH : ASAR_GZ_TMP_PATH) : ASAR_TMP_PATH;
+    const downloadPath = shouldDecompress ? (compressionType === 'zst' ? ZST_TMP_PATH : GZ_TMP_PATH) : ASAR_TMP_PATH;
+
+    if ((await handleCache(downloadPath, hash, !State.get('keepCache')))) {
+        return callback(0.6, `${path.basename(downloadPath)} is cached and up to date. Redownload skipped`, undefined, 'log');
+    }
 
     await downloadFile(url, downloadPath,
         (progress, label, logLevel='log') => {

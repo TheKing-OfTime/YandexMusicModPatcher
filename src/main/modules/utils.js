@@ -11,6 +11,8 @@ import * as fsp from "fs/promises";
 import { Logger } from "./Logger.js";
 import { YM_ASAR_PATH } from './patcher.js';
 import zlib from 'node:zlib';
+import { createHash } from 'crypto';
+import { ASAR_ZST_TMP_PATH } from '../constants/paths.js';
 
 
 const execAsync = promisify(exec);
@@ -262,4 +264,30 @@ export async function unzipFolder(zipPath, outputFolder) {
             .on('finish', resolve)
             .on('error', reject);
     });
+}
+
+export async function getSHA256FromFile(filePath) {
+    const hash = createHash('sha256');
+    const stream = fso.createReadStream(filePath);
+
+    for await (const chunk of stream) {
+        hash.update(chunk);
+    }
+
+    return hash.digest('hex');
+}
+
+export async function isFileCached(filePath, targetHash) {
+
+    if(!fso.existsSync(filePath)) return false;
+
+    return await getSHA256FromFile(filePath) === targetHash;
+}
+
+export async function unlinkIfExists(filePath) {
+    if (fso.existsSync(filePath)) {
+        await fso.promises.unlink(filePath);
+        return true;
+    }
+    return false;
 }
