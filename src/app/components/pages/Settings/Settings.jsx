@@ -58,7 +58,7 @@ function SettingsFooter() {
                 <span className="SettingsFooterItem">by @TheKingOfTime</span>
             </div>
             <div className="SettingsFooter_actions_container">
-                <InlineButton label="Отчистить Кеш" variant="secondary" onClick={sendClearCaches}/>
+                <InlineButton label="Очистить Кеш" variant="secondary" onClick={sendClearCaches}/>
             </div>
         </div>
     )
