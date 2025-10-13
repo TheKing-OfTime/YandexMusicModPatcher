@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import TitleBar from './layout/TitleBar.jsx'
 import MainProgressBar from './layout/MainProgressBar.jsx'

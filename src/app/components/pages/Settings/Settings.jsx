@@ -135,6 +135,9 @@ function SettingsPage() {
                         label="Пользовательский путь до Яндекс Музыки"
                         description="Используйте если патчер не нашёл путь до Яндекс Музыки сам"
                         path={customYMPath}
+                        setPath={(value)=> {
+                            handleExplorerDialogResponse(undefined, {path: value})
+                        }}
                         onExploreClick={sendOpenExploreDialog}
                     />
                 </SettingsListItem>

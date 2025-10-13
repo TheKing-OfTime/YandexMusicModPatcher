@@ -6,7 +6,7 @@ import InlineButton from '../ui/InlineButton.jsx';
 import Tooltip from '../ui/Tooltip.jsx';
 
 
-function InlinePathChooser({ label, description, path, onExploreClick, pathTextboxDisabled=true, ...props }) {
+function InlinePathChooser({ label, description, path, setPath, onExploreClick, pathTextboxDisabled=true, ...props }) {
 
     const withLabel = label ? <label className={`InlinePathChooser_label`}>{label}</label> : undefined;
     const withDescription = description ? <span className={`InlinePathChooser_description`}>{description}</span> : undefined;
@@ -16,7 +16,7 @@ function InlinePathChooser({ label, description, path, onExploreClick, pathTextb
         <div className="InlinePathChooser_container">
             {withLabelContainer}
             <div className="InlinePathChooser" {...props}>
-                <TextInput value={path} disabled={pathTextboxDisabled}/>
+                <TextInput value={path} disabled={pathTextboxDisabled} setValue={setPath} showClearButton={true}/>
                 <Tooltip label="Обзор" direction="top">
                     <InlineButton onClick={onExploreClick} icon="folder" variant="secondary"></InlineButton>
                 </Tooltip>

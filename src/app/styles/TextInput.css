@@ -1,5 +1,11 @@
 @import './theme.css';
 
+.TextInput_wrapper {
+    position: relative;
+    display: inline-block;
+    width: 100%;
+}
+
 .TextInput {
     width: 100%;
     padding: 8px 12px;
@@ -25,4 +31,22 @@
     border-color: var(--color-border-muted);
     cursor: default;
     opacity: 0.7;
+}
+
+.TextInput_clearButton {
+    display: flex;
+    position: absolute;
+    padding: 10px;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    color: var(--color-muted);
+    transition: color 0.2s;
+}
+
+.TextInput_clearButton:hover {
+    color: var(--color-text);
 }

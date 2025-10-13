@@ -68,7 +68,7 @@ function CustomPathModal() {
         <TextBox>
             Не удалось найти яндекс музыку автоматически. Укажите путь вручную.
         </TextBox>
-        <InlinePathChooser path={customPath} onExploreClick={sendOpenExploreDialog} />
+        <InlinePathChooser path={customPath} setPath={setCustomPath} onExploreClick={sendOpenExploreDialog} />
     </Modal>
     )
 }
