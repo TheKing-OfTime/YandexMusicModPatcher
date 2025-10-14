@@ -368,7 +368,8 @@ export async function checkMacPermissions() {
     if (!isMac) return true
     const asarPath = getYMAsarDefaultPath();
     try {
-        await copyFile(asarPath, asarPath);
+        await fso.promises.copyFile(asarPath, asarPath);
+        await fso.promises.copyFile(INFO_PLIST_PATH, INFO_PLIST_PATH);
         return true;
     } catch(e) {
         return false
