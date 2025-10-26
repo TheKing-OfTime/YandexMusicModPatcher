@@ -20,6 +20,7 @@ const execFileAsync = promisify(execFile);
 const spawnAsync = promisify(spawn);
 const unzipPromise = promisify(zlib.unzip);
 const zstdDecompressPromise = zlib.zstdDecompress ? promisify(zlib.zstdDecompress) : undefined;
+const appVersion = app.getVersion();
 
 const logger = new Logger("utils");
 
@@ -133,9 +134,16 @@ export async function openExternalDetached(url) {
     (await spawnAsync(command, args, { detached: true, stdio: 'ignore', })).unref();
 }
 
-export async function downloadFile(url, dest, callback) {
+export async function downloadFile(url, dest, callback, userAgent=undefined) {
+
+    const headers = {
+        'User-Agent': userAgent ?? `Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) YandexMusicModPatcher/${appVersion} Chrome/140.0.7339.133 Electron/38.2.1 Safari/537.36`,
+        'Accept': 'application/octet-stream'
+    };
+
     const response = await axios.get(url, {
         responseType: 'stream',
+        headers,
         onDownloadProgress: progress => {
             callback(progress.progress, `Downloading ${path.basename(dest)}... ${Math.ceil(progress.progress*100)}%`, 'vrb');
         }
