@@ -142,8 +142,17 @@
    <a href="https://github.com/Ryto0">
       <img width="50" alt="Ryto0" src="https://avatars.githubusercontent.com/u/113520566?v=4">
    </a>
-   <a href=" https://github.com/Rubikoid">
+   <a href="https://github.com/Rubikoid">
       <img width="50" alt="Rubikoid" src="https://avatars.githubusercontent.com/u/5082689?v=4">
+   </a>
+   <a href="https://github.com/NeoDaniil">
+      <img width="50" alt="NeoDaniil" src="https://avatars.githubusercontent.com/u/242981313?v=4">
+   </a>
+   <a href="https://github.com/ethermawe">
+      <img width="50" alt="ethermawe" src="https://avatars.githubusercontent.com/u/173939481?v=4">
+   </a>
+   <a href="https://github.com/mfoxru">
+      <img width="50" alt="mfoxru" src="https://avatars.githubusercontent.com/u/5925970?v=4">
    </a>
 </p>
 
