@@ -55,6 +55,9 @@
 ## Спонсоры
 Большое спасибо спонсорам, которые позволяют мне активно работать над этим проектом.
 <p align="left">
+   <a href="https://github.com/rufus20145">
+      <img width="50" alt="rufus20145" src="https://avatars.githubusercontent.com/u/35730338?v=4">
+   </a>
    <a href="https://github.com/Nulliik">
       <img width="50" alt="Nulliik" src="https://avatars.githubusercontent.com/u/37436671?v=4">
    </a>
