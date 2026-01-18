@@ -22,9 +22,8 @@
     text-align: left;
 }
 
-.Dropdown_toggle:focus {
-    border-color: var(--color-accent);
-    box-shadow: 0 0 0 2px rgba(var(--color-accent-rgb), 0.2);
+.Dropdown_toggle:hover {
+    border-color: var(--color-border-strong);
 }
 
 .Dropdown_toggle:disabled {
@@ -67,8 +66,7 @@
 }
 
 .Dropdown_item:hover {
-    background: var(--color-accent);
-    color: var(--color-text-on-accent);
+    background: var(--color-border);
 }
 
 .Dropdown_placeholder {

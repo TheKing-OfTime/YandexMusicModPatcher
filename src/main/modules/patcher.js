@@ -34,6 +34,8 @@ import {
     isFileCached, unlinkIfExists,
 } from "./utils.js";
 import { LATEST_MOD_RELEASE_URL, YM_RELEASE_METADATA_URL } from '../constants/urls.js';
+import electron from 'electron';
+import { getStore } from './store.js';
 
 const State = getState();
 const logger = new Logger("patcher");
@@ -252,7 +254,12 @@ export async function installMod(callback, { patchType = PatchTypes.DEFAULT, fro
     await clearCaches(callback, !State.get('keepCache'));
     await postInstallTasks(ymMetadata, wasYmClosed, callback);
 
-    setTimeout(()=>callback(0, `Task finished in: ${formatTimeStampDiff(startTime, new Date()) }`, undefined, 'vrb'), 2000);
+    callback(0, `Task finished in: ${formatTimeStampDiff(startTime, new Date()) }`, undefined, 'vrb')
+
+    if (State.get('autoCloseInUpdateFlow') ?? true) {
+        callback(0, 'Auto quit enabled. Will quit in 5 seconds', undefined)
+        setTimeout(() => { electron.app.quit() }, 5000);
+    }
 
 }
 

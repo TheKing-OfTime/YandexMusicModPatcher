@@ -70,6 +70,11 @@ const schema = {
         default: false,
         description: 'Ignore legacy Yandex Music app'
     },
+    autoCloseInUpdateFlow: {
+        type: 'boolean',
+        default: true,
+        description: 'Auto close app after mod update'
+    },
 };
 
 class Store {

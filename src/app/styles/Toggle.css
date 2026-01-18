@@ -39,10 +39,6 @@
     background: var(--color-accent);
 }
 
-.Toggle_input:checked + .Toggle_slider::before  {
-    background: black;
-}
-
 .Toggle_slider::before {
     content: "";
     position: absolute;

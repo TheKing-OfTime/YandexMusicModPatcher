@@ -79,6 +79,7 @@ function SettingsPage() {
     const [updatesControl, setUpdatesControl] = useState(state.controlYMUpdates ?? true);
     const [updatePatcher, setUpdatePatcher] = useState(state.autoUpdate ?? true);
     const [customYMPath, setCustomYMPath] = useState(state.customYMPath ?? '');
+    const [autoCloseInUpdateFlow, setAutoCloseInUpdateFlow] = useState(state.autoCloseInUpdateFlow ?? true);
 
     const handleSelect = useCallback((option) => {
         setSelectedType(option);
@@ -108,6 +109,12 @@ function SettingsPage() {
         setKeepCache(enabled);
         useSendUpdateState({ key: 'keepCache', value: enabled });
         console.log('Toggled keepCache:', enabled);
+    }, []);
+
+    const handleAutoCloseInUpdateFlow = useCallback((enabled) => {
+        setAutoCloseInUpdateFlow(enabled);
+        useSendUpdateState({ key: 'autoCloseInUpdateFlow', value: enabled });
+        console.log('Toggled autoCloseInUpdateFlow:', enabled);
     }, []);
 
     const sendOpenExploreDialog = useCallback(() => {
@@ -173,6 +180,13 @@ function SettingsPage() {
                         description="Обновлять ли патчер автоматически. Рекомендуется не выключать"
                         disabled={true}
                         onChange={handleUpdatePatcherToggle}
+                    />
+                </SettingsListItem>
+                <SettingsListItem>
+                    <Toggle
+                        checked={autoCloseInUpdateFlow} label="Закрывать патчер автоматически"
+                        description="После успешной установки мода, патчер закроется автоматически"
+                        onChange={handleAutoCloseInUpdateFlow}
                     />
                 </SettingsListItem>
             </SettingsList>
