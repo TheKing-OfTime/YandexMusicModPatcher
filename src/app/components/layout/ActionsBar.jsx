@@ -65,11 +65,11 @@ function ActionsBar({ currentPage, setCurrentPage }) {
             <TabSelector
                 tabs={
                 [
-                    { name: 'main', disabled: true, label: 'Home', tooltipLabel: 'Home' },
+                    { name: 'main', label: 'Home', tooltipLabel: 'Home' },
                     { name: 'settings', icon: 'settings', tooltipLabel: 'Settings' },
                     { name: 'logs', icon: 'logs', tooltipLabel: 'Logs' }
                 ]}
-                defaultActiveTabName={ 'logs' }
+                defaultActiveTabName={ currentPage }
                 onTabSelect={ onTabSelectorToggled }
             />
             {/* TODO: Вернуть кнопку удаления модификации в каком то ином виде

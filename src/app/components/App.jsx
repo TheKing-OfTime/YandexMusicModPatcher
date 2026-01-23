@@ -14,6 +14,7 @@ import {
 } from "./Events.jsx";
 
 import LogsPage from './pages/Logs';
+import MainPage from './pages/Main';
 import SettingsPage from "./pages/Settings";
 import LoadingPage from './pages/Loading';
 
@@ -68,8 +69,8 @@ function App() {
                 return <SettingsPage/>;
             case 'logs':
                 return <LogsPage logEntries={logEntries} filterLevel={filterLevel} setFilterLevel={setFilterLevel}/>;
-            case 'main':                                                                    //TODO Поменять на main страницу когда она будет готова
-                return <LogsPage logEntries={logEntries} filterLevel={filterLevel}  setFilterLevel={setFilterLevel}/>;
+            case 'main':
+                return <MainPage/>;
         }
     };
 
