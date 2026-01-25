@@ -122,3 +122,83 @@ export function useOnShowToast(callback) {
         callback(event, args);
     });
 }
+
+export function useSendInstallAllUpdates() {
+    return window.desktopEvents.send(Events.INSTALL_ALL_UPDATES);
+}
+
+export function useSendInstallSelfUpdate() {
+    return window.desktopEvents.send(Events.INSTALL_SELF_UPDATE);
+}
+
+export function useOnModUpdaterStatus(callback) {
+    return window.desktopEvents.on(Events.MOD_UPDATER_STATUS, (event, args) => {
+        callback(event, args);
+    });
+}
+
+export function useOnYMUpdaterStatus(callback) {
+    return window.desktopEvents.on(Events.YM_UPDATER_STATUS, (event, args) => {
+        callback(event, args);
+    });
+}
+
+export function useOnSelfUpdaterStatus(callback) {
+    return window.desktopEvents.on(Events.SELF_UPDATER_STATUS, (event, args) => {
+        callback(event, args);
+    });
+}
+
+export function useOnModUpdateProgress(callback) {
+    return window.desktopEvents.on(Events.MOD_UPDATE_PROGRESS, (event, args) => {
+        callback(event, args);
+    });
+}
+
+export function useOnYMUpdateProgress(callback) {
+    return window.desktopEvents.on(Events.YM_UPDATE_PROGRESS, (event, args) => {
+        callback(event, args);
+    });
+}
+
+export function useOnSelfUpdateProgress(callback) {
+    return window.desktopEvents.on(Events.SELF_UPDATE_PROGRESS, (event, args) => {
+        callback(event, args);
+    });
+}
+
+export function useOnModUpdaterCheckStarted(callback) {
+    return window.desktopEvents.on(Events.MOD_UPDATER_STATUS, (event, args) => {
+        if (args.isChecking) callback(event, args);
+    });
+}
+
+export function useOnYMUpdaterCheckStarted(callback) {
+    return window.desktopEvents.on(Events.YM_UPDATER_STATUS, (event, args) => {
+        if (args.isChecking) callback(event, args);
+    });
+}
+
+export function useOnSelfUpdaterCheckStarted(callback) {
+    return window.desktopEvents.on(Events.SELF_UPDATER_STATUS, (event, args) => {
+        if (args.isChecking) callback(event, args);
+    });
+}
+
+export function useOnModUpdaterCheckFailed(callback) {
+    return window.desktopEvents.on(Events.MOD_UPDATER_STATUS, (event, args) => {
+        if (args.isCheckFailed) callback(event, args);
+    });
+}
+
+export function useOnYMUpdaterCheckFailed(callback) {
+    return window.desktopEvents.on(Events.YM_UPDATER_STATUS, (event, args) => {
+        if (args.isCheckFailed) callback(event, args);
+    });
+}
+
+export function useOnSelfUpdaterCheckFailed(callback) {
+    return window.desktopEvents.on(Events.SELF_UPDATER_STATUS, (event, args) => {
+        if (args.isCheckFailed) callback(event, args);
+    });
+}

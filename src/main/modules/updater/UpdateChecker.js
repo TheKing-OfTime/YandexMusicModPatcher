@@ -24,9 +24,12 @@ export default class UpdateChecker extends EventEmitter {
     }
 
     async checkForUpdates(force = false) {
+        this.emit('checkStarted');
+
         const response = await fetch(this.feedUrl);
         if (!response.ok) {
-            logger.warn('Update check failed. Updater:', name, 'Response:', response.status, response.statusText, await response.text());
+            logger.warn('Update check failed. Updater:', this.name, 'Response:', response.status, response.statusText, await response.text());
+            this.emit('updateCheckFailed', { errorCode: 'FETCH_FAILED', errorMessage: `${response.status} ${response.statusText}` });
             return false;
         }
 
@@ -34,18 +37,20 @@ export default class UpdateChecker extends EventEmitter {
 
         if (!version) {
             logger.warn('Update check failed. Updater:', this.name, 'Response handler did not return a version.');
+            this.emit('updateCheckFailed', { errorCode: 'PARSE_ERROR', errorMessage: 'Failed to parse response' });
             return false;
         }
 
         if(!(force || (this.installedVersion && semver.lt(this.installedVersion, version )))) {
             logger.debug('No updates available for', this.name, 'version:', this.installedVersion, 'is up to date');
+            this.emit('noUpdatesAvailable', this.installedVersion);
             return false;
         }
 
         this.latestVersion = version;
         this.updateAvailable = true;
 
-        this.emit('updateAvailable', { version, downloadUrl });
+        this.emit('updateAvailable', version, downloadUrl);
 
         return { version, downloadUrl };
     }
@@ -60,7 +65,7 @@ export default class UpdateChecker extends EventEmitter {
 
             await this.checkForUpdates();
 
-            setInterval(async () => {
+            this.intervalId = setInterval(async () => {
                 await this.checkForUpdates();
             }, interval);
         } else {

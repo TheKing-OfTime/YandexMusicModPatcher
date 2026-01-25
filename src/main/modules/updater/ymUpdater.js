@@ -1,6 +1,6 @@
 import UpdateChecker from './UpdateChecker.js';
 import path from 'path';
-import { sendYMUpdateAvailable, sendYMUpdateProgress } from '../../events.js'
+import { sendYMUpdateAvailable, sendYMUpdateUpToDate, sendYMUpdateProgress, sendYMUpdateCheckStarted, sendYMUpdateCheckFailed } from '../../events.js'
 import { getState } from '../state.js';
 import { getInstalledYmMetadata } from '../utils.js';
 import { EventEmitter } from 'events';
@@ -12,6 +12,7 @@ import fsp from 'fs/promises';
 
 import { Logger } from "../Logger.js";
 import electron from 'electron';
+import fs from 'fs';
 
 const State = getState();
 const ymMetadata = await getInstalledYmMetadata();
@@ -23,8 +24,12 @@ class ymUpdater extends EventEmitter {
         this.logger.info('Initializing ymUpdater');
         this.downloadUrl = null;
         this.downloadFileName = null;
-        this.updateChecker = new UpdateChecker('ymUpdater', YM_RELEASE_METADATA_URL, ymMetadata.buildInfo?.version);
+        this.newVersion = null;
+        this.updateChecker = new UpdateChecker('ymUpdater', YM_RELEASE_METADATA_URL, ymMetadata.version);
         this.updateChecker.on('updateAvailable', (version, downloadUrl) => { this.onUpdateAvailable(version, downloadUrl) })
+        this.updateChecker.on('noUpdatesAvailable', (version) => { this.onNoUpdatesAvailable(version) })
+        this.updateChecker.on('checkStarted', () => { this.onCheckStarted() })
+        this.updateChecker.on('updateCheckFailed', (error) => { this.onCheckFailed(error) })
         this.updateChecker.responseHandler = async (response) => {
             const releaseText = await response.text();
             const releaseData = yaml.parse(releaseText);
@@ -42,8 +47,24 @@ class ymUpdater extends EventEmitter {
     }
 
     onUpdateAvailable(version, downloadUrl) {
-        sendYMUpdateAvailable(undefined, version);
+        this.newVersion = version;
+        sendYMUpdateAvailable(undefined, ymMetadata.buildInfo?.version, version);
         this.emit('updateAvailable', version, downloadUrl);
+    }
+
+    onNoUpdatesAvailable(version) {
+        sendYMUpdateUpToDate(undefined, version);
+        this.emit('noUpdatesAvailable', version);
+    }
+
+    onCheckStarted() {
+        sendYMUpdateCheckStarted(undefined);
+        this.emit('checkStarted');
+    }
+
+    onCheckFailed(error) {
+        sendYMUpdateCheckFailed(undefined, error);
+        this.emit('checkFailed', error);
     }
 
     async installUpdate() {
@@ -78,6 +99,7 @@ class ymUpdater extends EventEmitter {
 
     async clearCaches() {
         try {
+            if (!fs.existsSync(this.YM_UPDATER_TMP)) return;
             this.logger.info('ClearCaches: Clearing caches in: ', YM_UPDATER_TMP);
             const files = await fsp.readdir(YM_UPDATER_TMP, { withFileTypes: true });
             if (files.length === 0) return true;

@@ -1,6 +1,6 @@
 import UpdateChecker from './UpdateChecker.js';
 import path from 'path';
-import { sendSelfUpdateAvailable, sendSelfUpdateProgress } from '../../events.js'
+import { sendSelfUpdateAvailable, sendSelfUpdateUpToDate, sendSelfUpdateProgress, sendSelfUpdateCheckStarted, sendSelfUpdateCheckFailed } from '../../events.js'
 import { getState } from '../state.js';
 import { EventEmitter } from 'events';
 import Config from '../../config.js';
@@ -11,6 +11,7 @@ import { downloadFile, openExternalDetached } from "../utils.js";
 import { Logger } from "../Logger.js";
 import electron from 'electron';
 import fsp from 'fs/promises';
+import fs from 'fs';
 
 const State = getState();
 const selfVersion = Config.version;
@@ -22,8 +23,12 @@ class selfUpdater extends EventEmitter {
         this.logger.info('Initializing selfUpdater');
         this.downloadUrl = null;
         this.downloadFileName = null;
+        this.newVersion = null;
         this.updateChecker = new UpdateChecker('selfUpdater', LATEST_SELF_RELEASE_URL, selfVersion);
         this.updateChecker.on('updateAvailable', (version, downloadUrl) => { this.onUpdateAvailable(version, downloadUrl) })
+        this.updateChecker.on('noUpdatesAvailable', (version) => { this.onNoUpdatesAvailable(version) })
+        this.updateChecker.on('checkStarted', () => { this.onCheckStarted() })
+        this.updateChecker.on('updateCheckFailed', (error) => { this.onCheckFailed(error) })
         this.updateChecker.responseHandler = async (response) => {
             const releaseData = await response.json();
             this.downloadUrl = this.parseAssets(releaseData.assets);
@@ -41,8 +46,24 @@ class selfUpdater extends EventEmitter {
     }
 
     onUpdateAvailable(version, downloadUrl) {
-        sendSelfUpdateAvailable(undefined, version);
+        this.newVersion = version;
+        sendSelfUpdateAvailable(undefined, selfVersion, version);
         this.emit('updateAvailable', version, downloadUrl);
+    }
+
+    onNoUpdatesAvailable(version) {
+        sendSelfUpdateUpToDate(undefined, version);
+        this.emit('noUpdatesAvailable', version);
+    }
+
+    onCheckStarted() {
+        sendSelfUpdateCheckStarted(undefined);
+        this.emit('checkStarted');
+    }
+
+    onCheckFailed(error) {
+        sendSelfUpdateCheckFailed(undefined, error);
+        this.emit('checkFailed', error);
     }
 
     async installUpdate() {
@@ -97,6 +118,9 @@ class selfUpdater extends EventEmitter {
 
     async clearCaches() {
         try {
+
+            if (!fs.existsSync(this.SELF_UPDATER_TMP)) return;
+
             this.logger.info('ClearCaches: Clearing caches in: ', SELF_UPDATER_TMP);
             const files = await fsp.readdir(SELF_UPDATER_TMP, { withFileTypes: true });
             if (files.length === 0) return true;

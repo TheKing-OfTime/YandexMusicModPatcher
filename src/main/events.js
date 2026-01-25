@@ -6,6 +6,9 @@ import { getState } from "./modules/state.js";
 import { mainWindow } from "./index.js";
 import Events from "./types/Events.js";
 import { Logger } from "./modules/Logger.js";
+import { getSelfUpdater } from "./modules/updater/selfUpdater.js";
+import { getModUpdater } from "./modules/updater/modUpdater.js";
+import { getYmUpdater } from "./modules/updater/ymUpdater.js";
 
 const logger = new Logger("events");
 const State = getState();
@@ -187,6 +190,20 @@ export const handleApplicationEvents = (window) => {
     electron.ipcMain.on(Events.INIT, (event, args) => {
         logger.log('Received INIT', args);
         sendStateInitiated(undefined, State.state);
+
+
+        // Initialize updaters
+        const selfUpdater = getSelfUpdater();
+        const modUpdater = getModUpdater();
+        const ymUpdater = getYmUpdater();
+
+        // Hack to restart update checkers in case of renderer reload
+        selfUpdater.updateChecker.stopCheckerLoop();
+        modUpdater.updateChecker.stopCheckerLoop();
+        ymUpdater.updateChecker.stopCheckerLoop();
+
+        logger.log('Update checkers stopped');
+
     })
     electron.ipcMain.on(Events.READY_TO_PATCH, (event, args) => {
         logger.log('Received READY_TO_PATCH', args);
@@ -194,6 +211,19 @@ export const handleApplicationEvents = (window) => {
         State.get('onReadyEventsQueue').forEach((event) => {
             event();
         })
+
+        // Initialize updaters
+        const selfUpdater = getSelfUpdater();
+        const modUpdater = getModUpdater();
+        const ymUpdater = getYmUpdater();
+
+        // Start checking for updates
+        const updateCheckInterval = 1000 * 60 * 60; // 1 hour
+        selfUpdater.updateChecker.startCheckerLoop(updateCheckInterval);
+        modUpdater.updateChecker.startCheckerLoop(updateCheckInterval);
+        ymUpdater.updateChecker.startCheckerLoop(updateCheckInterval);
+
+        logger.log('Update checkers started');
     })
     electron.ipcMain.on(Events.INSTALL_ALL_UPDATES, (event, args) => {
         logger.log('Received INSTALL_ALL_UPDATES', args);
@@ -244,8 +274,12 @@ export const handleApplicationEvents = (window) => {
             .then(
                 ()=> {sendShowToast(undefined, { label: 'Кеш очищен', duration: 2000 });}
             )
+    })
 
-
+    electron.ipcMain.on(Events.INSTALL_SELF_UPDATE, (event, args) => {
+        logger.log('Received INSTALL_SELF_UPDATE');
+        const selfUpdater = getSelfUpdater();
+        selfUpdater.installUpdate();
     })
 
 }
@@ -297,17 +331,64 @@ export const sendStateInitiated = (window= mainWindow, state) => {
     window.webContents.send(Events.STATE_INITIATED, state);
     logger.log('Sent STATE_INITIATED', state);
 }
-export const sendModUpdateAvailable = (window= mainWindow, version) => {
-    window.webContents.send(Events.MOD_UPDATE_AVAILABLE, version);
-    logger.log('Sent MOD_UPDATE_AVAILABLE', version);
+export const sendModUpdateAvailable = (window= mainWindow, version, newVersion) => {
+    window.webContents.send(Events.MOD_UPDATER_STATUS, { isUpdateAvailable: true, version, newVersion });
+    logger.log('Sent MOD_UPDATER_STATUS', { isUpdateAvailable: true, version, newVersion });
 }
-export const sendSelfUpdateAvailable = (window= mainWindow, version) => {
-    window.webContents.send(Events.SELF_UPDATE_AVAILABLE, version);
-    logger.log('Sent SELF_UPDATE_AVAILABLE', version);
+
+export const sendModUpdateUpToDate = (window= mainWindow, version) => {
+    window.webContents.send(Events.MOD_UPDATER_STATUS, { isUpdateAvailable: false, version });
+    logger.log('Sent MOD_UPDATER_STATUS', { isUpdateAvailable: false, version });
 }
-export const sendYMUpdateAvailable = (window= mainWindow, version) => {
-    window.webContents.send(Events.YM_UPDATE_AVAILABLE, version);
-    logger.log('Sent YM_UPDATE_AVAILABLE', version);
+
+export const sendSelfUpdateAvailable = (window= mainWindow, version, newVersion) => {
+    window.webContents.send(Events.SELF_UPDATER_STATUS, { isUpdateAvailable: true, version, newVersion });
+    logger.log('Sent SELF_UPDATER_STATUS', { isUpdateAvailable: true, version, newVersion });
+}
+
+export const sendSelfUpdateUpToDate = (window= mainWindow, version) => {
+    window.webContents.send(Events.SELF_UPDATER_STATUS, { isUpdateAvailable: false, version });
+    logger.log('Sent SELF_UPDATER_STATUS', { isUpdateAvailable: false, version });
+}
+
+export const sendYMUpdateAvailable = (window= mainWindow, version, newVersion) => {
+    window.webContents.send(Events.YM_UPDATER_STATUS, { isUpdateAvailable: true, version, newVersion });
+    logger.log('Sent YM_UPDATER_STATUS', { isUpdateAvailable: true, version, newVersion });
+}
+
+export const sendYMUpdateUpToDate = (window= mainWindow, version) => {
+    window.webContents.send(Events.YM_UPDATER_STATUS, { isUpdateAvailable: false, version });
+    logger.log('Sent YM_UPDATER_STATUS', { isUpdateAvailable: false, version });
+}
+
+export const sendSelfUpdateCheckStarted = (window= mainWindow) => {
+    window.webContents.send(Events.SELF_UPDATER_STATUS, { isChecking: true });
+    logger.log('Sent SELF_UPDATER_STATUS - checking started');
+}
+
+export const sendYMUpdateCheckStarted = (window= mainWindow) => {
+    window.webContents.send(Events.YM_UPDATER_STATUS, { isChecking: true });
+    logger.log('Sent YM_UPDATER_STATUS - checking started');
+}
+
+export const sendModUpdateCheckStarted = (window= mainWindow) => {
+    window.webContents.send(Events.MOD_UPDATER_STATUS, { isChecking: true });
+    logger.log('Sent MOD_UPDATER_STATUS - checking started');
+}
+
+export const sendSelfUpdateCheckFailed = (window= mainWindow, error) => {
+    window.webContents.send(Events.SELF_UPDATER_STATUS, { isCheckFailed: true, error });
+    logger.log('Sent SELF_UPDATER_STATUS - check failed', error);
+}
+
+export const sendYMUpdateCheckFailed = (window= mainWindow, error) => {
+    window.webContents.send(Events.YM_UPDATER_STATUS, { isCheckFailed: true, error });
+    logger.log('Sent YM_UPDATER_STATUS - check failed', error);
+}
+
+export const sendModUpdateCheckFailed = (window= mainWindow, error) => {
+    window.webContents.send(Events.MOD_UPDATER_STATUS, { isCheckFailed: true, error });
+    logger.log('Sent MOD_UPDATER_STATUS - check failed', error);
 }
 export const sendModUpdateProgress = (window= mainWindow, version) => {
     window.webContents.send(Events.MOD_UPDATE_PROGRESS, version);

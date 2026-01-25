@@ -8,6 +8,9 @@ import { checkForSingleInstance } from './modules/singleInstance.js';
 import electron, { app, BrowserWindow } from 'electron';
 import config from './config.js';
 import { Logger } from "./modules/Logger.js";
+import { getSelfUpdater } from './modules/updater/selfUpdater.js';
+import { getModUpdater } from './modules/updater/modUpdater.js';
+import { getYmUpdater } from './modules/updater/ymUpdater.js';
 
 Logger.setupLogger();
 

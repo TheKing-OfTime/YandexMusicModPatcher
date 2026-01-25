@@ -5,6 +5,9 @@
     height: 20px;
     background-color: var(--color-bg);
     border-radius: 20px;
+
+    /* Важно для indeterminate, чтобы “бегущая” полоса не выходила за края */
+    overflow: hidden;
 }
 
 .ProgressBar_progress {
@@ -12,7 +15,12 @@
     height: 100%;
     background-color: var(--color-progress);
     border-radius: 20px;
+
+    /* determinate по умолчанию */
     transition: width 0.3s ease-in-out;
+
+    /* Чуть лучше производительность для анимаций transform */
+    will-change: transform;
 }
 
 @keyframes ProgressBar_indeterminate {
@@ -25,5 +33,4 @@
     100% {
         opacity: 0;
     }
-
 }
