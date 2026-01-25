@@ -72,9 +72,9 @@ function ModWidget() {
 
     const getVersionDisplay = (version, newVersion) => {
         if (newVersion) {
-            return `v${version} -> v${newVersion}`;
+            return `${version} -> ${newVersion}`;
         }
-        return version ? `v${version}` : '';
+        return version ? `${version}` : '';
     };
 
     useEffect(() => {
