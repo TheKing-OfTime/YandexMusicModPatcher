@@ -5,6 +5,7 @@ import MainProgressBar from './layout/MainProgressBar.jsx'
 import ActionsBar from "./layout/ActionsBar.jsx";
 import ModalsContainer from "./layout/modals/ModalsContainer.jsx";
 import { StateProvider } from "./StateContext.jsx";
+import { UpdaterStateProvider } from "./UpdaterStateContext.jsx";
 import {
     useOnIsInstallPossibleResponse, useOnLogEntryCreate, useOnPatchProgress,
     useOnStateInitiated,
@@ -76,20 +77,22 @@ function App() {
 
     return (
         <StateProvider>
-            <TitleBar platform={window.PLATFORM}/>
-            {
-                isLoading
-                ? <LoadingPage/>
-                : (<>
-                    <main className="App">
-                        <MainProgressBar/>
-                        {renderPage()}
-                        <ActionsBar currentPage={currentPage} setCurrentPage={setCurrentPage}/>
-                    </main>
-                    <ModalsContainer/>
-                    <LoadingPage disappear={true}/>
-                </>)
-            }
+            <UpdaterStateProvider>
+                <TitleBar platform={window.PLATFORM}/>
+                {
+                    isLoading
+                    ? <LoadingPage/>
+                    : (<>
+                        <main className="App">
+                            <MainProgressBar/>
+                            {renderPage()}
+                            <ActionsBar currentPage={currentPage} setCurrentPage={setCurrentPage}/>
+                        </main>
+                        <ModalsContainer/>
+                        <LoadingPage disappear={true}/>
+                    </>)
+                }
+            </UpdaterStateProvider>
         </StateProvider>
     );
 }
