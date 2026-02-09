@@ -1,5 +1,9 @@
 # YandexMusicModPatcher
 
+> [!CAUTION]
+> ### Проект заархивирован в пользу слияния с [PulseSync](https://pulsesync.dev).
+> Несмотря на то, что репозиторий будет оставаться доступным, он больше не будет поддерживаться и обновляться. Рекомендуется перейти на PulseSync для получения новых функций и улучшений.
+
 [![TotalDownloads](https://img.shields.io/github/downloads/TheKing-OfTime/YandexMusicModPatcher/total?label=Загрузок)](https://github.com/TheKing-OfTime/YandexMusicModPatcher/releases "Download") [![Discord Server](https://img.shields.io/discord/1271568115662061730?logo=discord&label=Сервер)](https://discord.gg/HGNKDxwHEH) [![OS - Windows](https://img.shields.io/badge/OS-Windows-blue)](https://ymmc-api.artem-matvienko0.workers.dev/patcher/download "Download") [![OS - MacOS](https://img.shields.io/badge/OS-Mac-blue)](https://ymmc-api.artem-matvienko0.workers.dev/patcher/download "Download") [![OS - MacOS](https://img.shields.io/badge/OS-Linux-blue)](https://ymmc-api.artem-matvienko0.workers.dev/patcher/download "Download")
 
 ## Это установщик для модификации на Яндекс Музыку [YandexMusicModClient](https://github.com/TheKing-OfTime/YandexMusicModClient)
